@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9F5B26D9-191A-4E42-8EAA-3D34A116FEF6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CoScheduling.Core</RootNamespace>
+    <AssemblyName>CoScheduling.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.3DAnalyst, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.AxControls, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
+    <Reference Include="ESRI.ArcGIS.Carto, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Controls, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.DataSourcesFile, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.DataSourcesGDB, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.DataSourcesRaster, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Display, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Geometry, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.GlobeCore, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Output, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.System, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.Version, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAL\AssemblyPoint.cs" />
+    <Compile Include="DAL\Barries.cs" />
+    <Compile Include="DAL\Color.cs" />
+    <Compile Include="DAL\Company.cs" />
+    <Compile Include="DAL\CompanyUAV.cs" />
+    <Compile Include="DAL\DisaAreaInfo.cs" />
+    <Compile Include="DAL\DisaCrossPoint.cs" />
+    <Compile Include="DAL\DisaGatherPoint.cs" />
+    <Compile Include="DAL\DisaParameter.cs" />
+    <Compile Include="DAL\ImgLayoutTempTimewindow.cs" />
+    <Compile Include="DAL\IMG_LAYOUT_POSITION.cs" />
+    <Compile Include="DAL\IMG_LAYOUT_RESULT.cs" />
+    <Compile Include="DAL\LAYOUT_SATELLITE_TIMEWINDOW.cs" />
+    <Compile Include="DAL\MonitorTask.cs" />
+    <Compile Include="DAL\PlanResult.cs" />
+    <Compile Include="DAL\PlanString.cs" />
+    <Compile Include="DAL\Satellite.cs" />
+    <Compile Include="DAL\SatelliteAltitude.cs" />
+    <Compile Include="DAL\SatelliteBand.cs" />
+    <Compile Include="DAL\SatelliteOrbit.cs" />
+    <Compile Include="DAL\SatelliteResault.cs" />
+    <Compile Include="DAL\SatelliteSensor.cs" />
+    <Compile Include="DAL\SATELLITE_SENSOR_FOV.cs" />
+    <Compile Include="DAL\SATELLITE_SENSOR_SELECTED.cs" />
+    <Compile Include="DAL\SATELLITE_TEMP.cs" />
+    <Compile Include="DAL\SATELLITE_UPDATE.cs" />
+    <Compile Include="DAL\ScheduleResult.cs" />
+    <Compile Include="DAL\TaskAreas.cs" />
+    <Compile Include="DAL\TASKSCHEME_PRIVATE_ORBIT.cs" />
+    <Compile Include="DAL\TASKSCHEME_PRIVATE_SATELLITE.cs" />
+    <Compile Include="DAL\TASKSCHEME_PRIVATE_SENSOR.cs" />
+    <Compile Include="DAL\TaskState.cs" />
+    <Compile Include="DAL\TASK_LAYOUT_LIST.cs" />
+    <Compile Include="DAL\TASK_SCHEME_LIST.cs" />
+    <Compile Include="DAL\T_PUB_NEWORBIT.cs" />
+    <Compile Include="DAL\T_PUB_SATELLITE.cs" />
+    <Compile Include="DAL\T_PUB_SATELLITEPARA.cs" />
+    <Compile Include="DAL\T_PUB_SENSOR.cs" />
+    <Compile Include="DAL\UAV.cs" />
+    <Compile Include="DAL\UAVBD.cs" />
+    <Compile Include="DAL\UAVCurrentTask.cs" />
+    <Compile Include="DAL\UAVFinishEvents.cs" />
+    <Compile Include="DAL\UAVGPSInfor.cs" />
+    <Compile Include="DAL\UAVInfo.cs" />
+    <Compile Include="DAL\UAVPlan.cs" />
+    <Compile Include="DAL\UAVRoadAcc.cs" />
+    <Compile Include="DAL\UAVSignIn.cs" />
+    <Compile Include="DAL\UAVTaskApply.cs" />
+    <Compile Include="DAL\UAVTaskState.cs" />
+    <Compile Include="DAL\UAVTeam.cs" />
+    <Compile Include="DAL\VolDisaInfo.cs" />
+    <Compile Include="DAL\VolLifeLine.cs" />
+    <Compile Include="DAL\VUser.cs" />
+    <Compile Include="DAL\V_VolDisaInfo.cs" />
+    <Compile Include="DAL\V_VolLifeLine.cs" />
+    <Compile Include="DBUtility\ConServer.cs" />
+    <Compile Include="DBUtility\DbHelperOra.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DBUtility\DbHelperSQL.cs" />
+    <Compile Include="DBUtility\ImageServer.cs" />
+    <Compile Include="DBUtility\PubConstant.cs" />
+    <Compile Include="DBUtility\PubConstantOra.cs" />
+    <Compile Include="DEncrypt\DEncrypt.cs" />
+    <Compile Include="DEncrypt\HashEncode.cs" />
+    <Compile Include="DEncrypt\RSACryption.cs" />
+    <Compile Include="Generic\Convert.cs" />
+    <Compile Include="Generic\myXML.cs" />
+    <Compile Include="Generic\SysEnviriment.cs" />
+    <Compile Include="Map\MapHelper.cs" />
+    <Compile Include="Model\AssemblyPoint.cs" />
+    <Compile Include="Model\Barries.cs" />
+    <Compile Include="Model\Color.cs" />
+    <Compile Include="Model\Company.cs" />
+    <Compile Include="Model\CompanyUAV.cs" />
+    <Compile Include="Model\DisaAreaInfo.cs" />
+    <Compile Include="Model\DisaCrossPoint.cs" />
+    <Compile Include="Model\DisaGatherPoint.cs" />
+    <Compile Include="Model\DisaParameter.cs" />
+    <Compile Include="Model\ImgLayoutTempTimewindow.cs" />
+    <Compile Include="Model\IMG_LAYOUT_POSITION.cs" />
+    <Compile Include="Model\IMG_LAYOUT_RESULT.cs" />
+    <Compile Include="Model\LAYOUT_SATELLITE_TIMEWINDOW.cs" />
+    <Compile Include="Model\MonitorTask.cs" />
+    <Compile Include="Model\PlanResult.cs" />
+    <Compile Include="Model\PlanString.cs" />
+    <Compile Include="Model\Satellite.cs" />
+    <Compile Include="Model\SatelliteAltitude.cs" />
+    <Compile Include="Model\SatelliteBand.cs" />
+    <Compile Include="Model\SatelliteOrbit.cs" />
+    <Compile Include="Model\SatelliteResault.cs" />
+    <Compile Include="Model\SatelliteSensor.cs" />
+    <Compile Include="Model\SATELLITE_DATA.cs" />
+    <Compile Include="Model\SATELLITE_SENSOR_FOV.cs" />
+    <Compile Include="Model\SATELLITE_SENSOR_SELECTED.cs" />
+    <Compile Include="Model\SATELLITE_TEMP.cs" />
+    <Compile Include="Model\SATELLITE_UPDATE.cs" />
+    <Compile Include="Model\ScheduleResult.cs" />
+    <Compile Include="Model\STKObject.cs" />
+    <Compile Include="Model\STKTarget.cs" />
+    <Compile Include="Model\TaskAreas.cs" />
+    <Compile Include="Model\TASKSCHEME_PRIVATE_ORBIT.cs" />
+    <Compile Include="Model\TASKSCHEME_PRIVATE_SATELLITE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\TASKSCHEME_PRIVATE_SENSOR.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\TaskState.cs" />
+    <Compile Include="Model\TASK_LAYOUT_LIST.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\TASK_SCHEME_LIST.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\T_PUB_NEWORBIT.cs" />
+    <Compile Include="Model\T_PUB_SATELLITE.cs" />
+    <Compile Include="Model\T_PUB_SATELLITEPARA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\T_PUB_SENSOR.cs" />
+    <Compile Include="Model\UAV.cs" />
+    <Compile Include="Model\UAVBD.cs" />
+    <Compile Include="Model\UAVCurrentTask.cs" />
+    <Compile Include="Model\UAVFinishEvents.cs" />
+    <Compile Include="Model\UAVGPSInfor.cs" />
+    <Compile Include="Model\UAVGroup.cs" />
+    <Compile Include="Model\UAVInfo.cs" />
+    <Compile Include="Model\UAVPlan.cs" />
+    <Compile Include="Model\UAVRoadAcc.cs" />
+    <Compile Include="Model\UAVSignIn.cs" />
+    <Compile Include="Model\UAVTaskApply.cs" />
+    <Compile Include="Model\UAVTaskState.cs" />
+    <Compile Include="Model\UAVTeam.cs" />
+    <Compile Include="Model\VolDisaInfo.cs" />
+    <Compile Include="Model\VolLifeLine.cs" />
+    <Compile Include="Model\VUser.cs" />
+    <Compile Include="Model\V_VolDisaInfo.cs" />
+    <Compile Include="Model\V_VolLifeLine.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BLL\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TPC.WinFormsUI\CP.WinFormsUI.csproj">
+      <Project>{C75532C4-765B-418E-B09B-46D36B2ABDB1}</Project>
+      <Name>CP.WinFormsUI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

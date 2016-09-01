@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CoScheduling>
+  <DataBase>
+    <Server>(local)</Server>
+    <DataBase>CoScheduling</DataBase>
+    <GeoDataBase>CoScheduling_GDB</GeoDataBase>
+    <User>sa</User>
+    <!--DR6fPbundQU=    PlUOxpz5/q4KJakeVvOXKA==-->
+    <Password>123</Password>
+    <Domain>0</Domain>
+  </DataBase>
+  <DataBaseOra>
+    <Server>(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=127.0.0.1)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)))</Server>
+    <User>lhf</User>
+    <Password>lhf</Password>
+    <Domain>0</Domain>
+  </DataBaseOra>
+  <MapServices>
+   <!--  <Count>2</Count>
+    <URL0>http://202.197.58.203:6080/arcgis/rest/services/TPCMap/ExpMap/MapServer</URL0> -->
+    <!--URL0>http://localhost:6080/arcgis/rest/services/TPCMap/ExpMap/MapServer</URL0-->
+    <!--URL1>http://202.197.58.203:6080/arcgis/rest/services/TPCIma/LuDianIma/ImageServer</URL1-->
+  </MapServices>
+  <MapData>
+    <Resident>.\Map\HnResident.shp</Resident>
+    <Road>
+    </Road>
+    <Hydrographic>
+    </Hydrographic>
+  </MapData>
+  <MapDocument>
+    <RoadNetData>\Map\HnRoadNetWork.mxd</RoadNetData>
+  </MapDocument>
+  <FilterPara>
+    <RoadType>1,2,3,4,6,8,9,10</RoadType>
+    <MaxTime>10</MaxTime>
+  </FilterPara>
+  <PlanPara>
+    <Coefficient>0.5</Coefficient>
+    <Resolution>1</Resolution>
+  </PlanPara>
+  <TaskPara>
+    <Col>36</Col>
+    <Row>36</Row>
+    <GridWidth>0.00898315240853716</GridWidth>
+    <GridHeight>0.00898315240853716</GridHeight>
+    <AreaFilter>0</AreaFilter>
+    <BufferRadius>800</BufferRadius>
+    <RoadBuffer>200</RoadBuffer>
+    <RSlopefilterParm>30</RSlopefilterParm>
+    <lSlopefilterParm>35</lSlopefilterParm>
+    <LakerBuffer>80</LakerBuffer>
+    <RoadLengthFilter>10</RoadLengthFilter>
+    <ShapeCluster>100</ShapeCluster>
+    <ShapeClusterFilter>100</ShapeClusterFilter>
+    <isResidentChecked>True</isResidentChecked>
+    <isDEMChecked>False</isDEMChecked>
+    <isRoadChecked>False</isRoadChecked>
+    <isLakeChecked>False</isLakeChecked>
+  </TaskPara>
+  <Shape>
+    <Count>1</Count>
+    <Shp0>.\Map\nation.shp</Shp0>
+  </Shape>
+  <RDEM>
+    <Count>1</Count>
+    <Dem0>.\Map\LDRaster.tif</Dem0>
+  </RDEM>
+  <InitExtent>
+   <!--  <Xmin>96.93</Xmin>
+    <Ymin>25.38</Ymin>
+    <Xmax>108.72</Xmax>
+    <Ymax>35.02</Ymax> -->
+  </InitExtent>
+  <FilePath>
+    <Scenario>.\satellite\TaskSchemeLayoutScenario\</Scenario>
+    <SatelliteWord>.\卫星订单模板.doc</SatelliteWord>
+    <FromViewLat>-15</FromViewLat>
+    <FromViewLon>15</FromViewLon>
+    <FromViewAlt>3000000</FromViewAlt>
+    <TargetColor>White</TargetColor>
+  </FilePath>
+</CoScheduling>

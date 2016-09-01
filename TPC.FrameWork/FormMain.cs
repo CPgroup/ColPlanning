@@ -22,6 +22,7 @@ namespace CP.FrameWork
             InitializeComponent();
         }
 
+
         /// <summary>
         /// Ö÷´°Ìå¼ÓÔØ
         /// </summary>

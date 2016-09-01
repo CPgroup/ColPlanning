@@ -72,17 +72,17 @@ namespace CoScheduling.Main.Map
         /// <param name="e"></param>
         private void myMap_OnMouseDown(object sender, ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e)
         {
-            //try
-            //{
-            //    if (e.button == 4)
-            //        myMap.Pan();
+            try
+            {
+                if (e.button == 4)
+                    myMap.Pan();
 
-            //    IActiveView pActiveView = myMap.ActiveView;
-            //    IGraphicsContainer pGraphicsContainer = pActiveView.GraphicsContainer;
-            //    IPoint Click_Point = new PointClass();
-            //    IEnumElement pEnumEle;
-            //    IElement pElement;
-            //    Click_Point.PutCoords(e.mapX, e.mapY);
+                IActiveView pActiveView = myMap.ActiveView;
+                IGraphicsContainer pGraphicsContainer = pActiveView.GraphicsContainer;
+                IPoint Click_Point = new PointClass();
+                IEnumElement pEnumEle;
+                IElement pElement;
+                Click_Point.PutCoords(e.mapX, e.mapY);
 
             //    //无人机单位添加--获取图上经纬度
             //    if (e.button == 1 && MainInterface.company != null && MainInterface.company.Text != "")
@@ -252,11 +252,11 @@ namespace CoScheduling.Main.Map
             //            }
             //        }
             //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("错误：" + ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("错误：" + ex.Message);
+            }
         }
 
 

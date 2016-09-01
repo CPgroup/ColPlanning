@@ -37,8 +37,8 @@ namespace CP.FrameWork
                                                     this.tslProgress,
                                                     this.DockPanel,
                                                     this.tslCoor);
-           
-            this.ribbonControl.SelectedPage.Name = "CoScheduling";//设置主页
+
+            this.ribbonControl.SelectedPage.Name = "resourceManage";//设置主页
 
             //加载控件
             CP.Interface.Subsys1.MainInterface.AddFrameworkControl();      //此函数加载初始化地图等     

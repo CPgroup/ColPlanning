@@ -44,8 +44,7 @@ namespace CP.FrameWork
             CP.Interface.Subsys1.MainInterface.AddFrameworkControl();      //此函数加载初始化地图等     
 
         }
-
-
+        
         private static int op = 1;//当前控件；1-resourceManage，2-OptimalAllocation，3-taskManage，4-CoScheduling
         /// <summary>
         /// 当切换页面时加载控件

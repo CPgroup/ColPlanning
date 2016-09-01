@@ -17,6 +17,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoScheduling.MonitorTask", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CP.Interface", "TPC.Interface\CP.Interface.csproj", "{F02C56D1-F92A-41F6-9D24-891221F44C43}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bin", "bin", "{F55DD061-EC90-44EA-BBB7-9CA2DDACA292}"
+	ProjectSection(SolutionItems) = preProject
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\license.txt = E:\Cooperative monitoring\program\CP\ColPlanning\bin\license.txt
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\office.xml = E:\Cooperative monitoring\program\CP\ColPlanning\bin\office.xml
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Setting.xml = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Setting.xml
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\卫星订单模板.doc = E:\Cooperative monitoring\program\CP\ColPlanning\bin\卫星订单模板.doc
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Report", "Report", "{C35348BF-E869-4FB8-B66A-F25BB865CB39}"
+	ProjectSection(SolutionItems) = preProject
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\任务规划方案模板.docx = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\任务规划方案模板.docx
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\无人机任务匹配模板.docx = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\无人机任务匹配模板.docx
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\无人机申请模板.docx = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Report\无人机申请模板.docx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{017D33E2-B0C2-478C-B3EC-FE16EE8A465D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Map", "Map", "{0B4AF210-1F78-42BE-8517-29CFDF4B259D}"
+	ProjectSection(SolutionItems) = preProject
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.dbf = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.dbf
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shp = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shp
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shp.xml = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shp.xml
+		E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shx = E:\Cooperative monitoring\program\CP\ColPlanning\bin\Map\nation.shx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,5 +126,8 @@ Global
 		{6C34073D-EEA1-4617-976A-49CD36664BD4} = {A1E010FB-7BBB-4945-9E8B-5210B54333EB}
 		{9F5B26D9-191A-4E42-8EAA-3D34A116FEF6} = {A1E010FB-7BBB-4945-9E8B-5210B54333EB}
 		{D02E9F98-DD37-4250-B522-06AC1274ED0A} = {A1E010FB-7BBB-4945-9E8B-5210B54333EB}
+		{C35348BF-E869-4FB8-B66A-F25BB865CB39} = {F55DD061-EC90-44EA-BBB7-9CA2DDACA292}
+		{017D33E2-B0C2-478C-B3EC-FE16EE8A465D} = {F55DD061-EC90-44EA-BBB7-9CA2DDACA292}
+		{0B4AF210-1F78-42BE-8517-29CFDF4B259D} = {F55DD061-EC90-44EA-BBB7-9CA2DDACA292}
 	EndGlobalSection
 EndGlobal

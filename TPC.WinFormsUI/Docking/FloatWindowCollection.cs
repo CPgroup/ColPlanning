@@ -19,7 +19,7 @@ namespace CP.WinFormsUI.Docking
                 return Items.IndexOf(fw);
 
             Items.Add(fw);
-            return Count - 1;
+            return Count - 1;             
         }
 
         internal void Dispose()

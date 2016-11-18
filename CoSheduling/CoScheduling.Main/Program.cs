@@ -138,10 +138,12 @@ namespace CoScheduling.Main
         /// 图层列表
         /// </summary>
         internal static Map.DummyTOC formTOC;
+
+        internal static Map.taskDis formTaskdis;
         /// <summary>
         /// 显示地图控件
         /// </summary>
-        internal static void ShowMapControl()
+        internal static void ShowMapControl() //设置DockPanel主面板显示
         {
             InitMap();
             if (formTOC == null) formTOC = new Map.DummyTOC();
@@ -151,8 +153,20 @@ namespace CoScheduling.Main
             if (formMap == null) formMap = new Map.DummyMap();
             else if (formMap.IsDisposed) formMap = new Map.DummyMap();
             formMap.Show(gDockPane, DockState.Document);
+
+            if (formTaskdis == null) formTaskdis = new Map.taskDis();
+            else if (formTaskdis.IsDisposed) formTaskdis = new Map.taskDis();
+            formTaskdis.Show(gDockPane, DockState.DockRight);
+            formTaskdis.AutoHidePortion = 0.25;
+            formTaskdis.IsFloat = false;
+            formTaskdis.IsHidden = true;
+
+            gDockPane.DockRightPortion = 0.2;
+            gDockPane.DockLeftPortion = 0.2;
             formTOC.AxTOCControl.SetBuddyControl(formMap.MapControl);
+            //formMap.MapControl.DocumentFilename = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\data.mxd";
         }
+       
         #endregion
         
       

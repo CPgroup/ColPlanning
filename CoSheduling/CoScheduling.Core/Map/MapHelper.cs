@@ -40,6 +40,7 @@ namespace CoScheduling.Core.Map
 
         #region 全局变量
         IMapDocument pMapDcument;
+        IMapDocument pDcument;
         #endregion
 
         /// <summary>
@@ -182,6 +183,43 @@ namespace CoScheduling.Core.Map
                     else
                         continue;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                xml = null;
+            }
+        }
+
+        /// <summary>
+        /// 打开mxd地图文档
+        /// </summary>
+        public void LoadMapDocument()
+        {
+            Core.Generic.myXML xml = new Core.Generic.myXML(System.Windows.Forms.Application.StartupPath + "\\Setting.xml");
+            pDcument = new MapDocumentClass();
+            try
+            {
+                string mxdData = xml.GetElement("MapDocument", "mxd");
+                //将数据载入pDocument并与map控件联系起来
+                mxdData = System.Windows.Forms.Application.StartupPath + mxdData;
+                pDcument.Open(mxdData, "");
+                //Load the same pre-authored map document into the MapControl.
+                mapControl.LoadMxFile(mxdData, null, null);
+                //Set the extent of the MapControl to the full extent of the data.
+                mapControl.Extent = mapControl.FullExtent;
+
+                //int i;
+                //for (i = 0; i <= pDcument.MapCount - 1; i++)
+                //{
+                //    //一个IMapDocument对象中可能有多个Map对象，遍历每个map对象
+                //    mapControl.Map = pDcument.get_Map(i);
+
+                //}
+                mapControl.Refresh();
             }
             catch (Exception ex)
             {

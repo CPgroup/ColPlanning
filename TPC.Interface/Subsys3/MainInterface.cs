@@ -17,6 +17,13 @@ namespace CP.Interface.Subsys3
         /// </summary>
         public static void AddFrameworkControl3() 
         {
+            CoScheduling.Main.MainInterface.SetFrameworkControl(Globe.m_MainForm,
+                                                               Globe.m_SplashForm,
+                                                                Globe.m_StatusStrip,
+                                                                Globe.m_StatusLabel,
+                                                                Globe.m_ProgressBar,
+                                                                Globe.m_DockPane,
+                                                                Globe.m_LabelCoor);          
 
 
         }

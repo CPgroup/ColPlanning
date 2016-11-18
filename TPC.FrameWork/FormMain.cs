@@ -11,7 +11,7 @@ using DevExpress.UserSkins;
 using DevExpress.XtraEditors;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
-
+using CoScheduling.Main;
 
 namespace CP.FrameWork
 {
@@ -19,7 +19,7 @@ namespace CP.FrameWork
     {
         public FormMain()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
         
         /// <summary>
@@ -72,7 +72,7 @@ namespace CP.FrameWork
                 op = 3;
             }
             //加载任务规划与调度控件
-            else if (this.ribbonControl.SelectedPage.Name == "CoScheduling")
+            else if (this.ribbonControl.SelectedPage.Name == "PlanCoScheduling")
             {
                 CP.Interface.Subsys4.MainInterface.AddFrameworkControl4();//根据管理内容修改控件
                 op = 4;
@@ -94,6 +94,8 @@ namespace CP.FrameWork
             CP.Interface.Subsys1.MainInterface.UAVlist();
 
         }
+
+      
 
         //按照以上格式通过CP.Interface接口在CoScheduling.Main中完成核心程序
 
@@ -157,13 +159,32 @@ namespace CP.FrameWork
         #endregion
 
         #region  任务规划与调度
-
+        internal static CoScheduling.Main.Map.taskDis formTaskDis;
         #region  任务规划
+        /// <summary>
+        /// 任务分解 即子任务生成
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void taskDisButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {            
+            //taskDisPanel.Visible = true;//打开控制面板
+           // CoScheduling.Main.Map.taskDis taskdisBut = new CoScheduling.Main.Map.taskDis();
+            if (formTaskDis == null) formTaskDis = new CoScheduling.Main.Map.taskDis();
+            else if (formTaskDis.IsDisposed) formTaskDis = new CoScheduling.Main.Map.taskDis();         
+           formTaskDis.Show(this.DockPanel,WinFormsUI.Docking.DockState.DockRight);  
+            formTaskDis.IsHidden = false;
+            formTaskDis.Text = "任务分解";
+            
 
+        }
 
-
-
+       
         #endregion
+     
+    
+
+     
 
         #region  动态资源规划
 
@@ -173,7 +194,27 @@ namespace CP.FrameWork
         #endregion
 
         #region  综合管理
+        /// <summary>
+        /// 实现panel拖动
+        /// </summary>
+        //Point pt;
+        //private void taskDisPanel_MouseDown(object sender, MouseEventArgs e)
+        //{
+        //    pt = Cursor.Position;
+        //}
 
+        //private void taskDisPanel_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Left)
+        //    {
+        //        int px = Cursor.Position.X - pt.X;
+        //        int py = Cursor.Position.Y - pt.Y;
+        //        //taskDisPanel.Location = new Point(taskDisPanel.Location.X + px, taskDisPanel.Location.Y + py);
+
+
+        //        pt = Cursor.Position;
+        //    }
+        //}
 
 
 

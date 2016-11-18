@@ -30,6 +30,7 @@
   </MapData>
   <MapDocument>
     <RoadNetData>\Map\HnRoadNetWork.mxd</RoadNetData>
+	<mxd>\Data\data.mxd</mxd>
   </MapDocument>
   <FilterPara>
     <RoadType>1,2,3,4,6,8,9,10</RoadType>
@@ -67,10 +68,10 @@
     <Dem0>.\Map\LDRaster.tif</Dem0>
   </RDEM>
   <InitExtent>
-   <!--  <Xmin>96.93</Xmin>
-    <Ymin>25.38</Ymin>
-    <Xmax>108.72</Xmax>
-    <Ymax>35.02</Ymax> -->
+    <Xmin>243073</Xmin>
+    <Ymin>4363929</Ymin>
+    <Xmax>763440</Xmax>
+    <Ymax>4735680</Ymax>
   </InitExtent>
   <FilePath>
     <Scenario>.\satellite\TaskSchemeLayoutScenario\</Scenario>

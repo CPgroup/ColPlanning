@@ -17,16 +17,21 @@ namespace CP.Interface.Subsys4
         /// </summary>
         public static void AddFrameworkControl4()
         {
-
+            CoScheduling.Main.MainInterface.SetFrameworkControl(Globe.m_MainForm,
+                                                                Globe.m_SplashForm,
+                                                                 Globe.m_StatusStrip,
+                                                                 Globe.m_StatusLabel,
+                                                                 Globe.m_ProgressBar,
+                                                                 Globe.m_DockPane,
+                                                                 Globe.m_LabelCoor); 
+       
 
         }
 
       
 
         #region  任务规划
-
-
-
+        //在CoScheduling.Main\Map\taskDis.cs中，右侧小窗口的任务分解面板实现
 
         #endregion
 

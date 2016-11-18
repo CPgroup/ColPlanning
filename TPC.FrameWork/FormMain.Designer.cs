@@ -30,21 +30,21 @@ namespace CP.FrameWork
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            CP.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new CP.WinFormsUI.Docking.DockPanelSkin();
-            CP.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new CP.WinFormsUI.Docking.AutoHideStripSkin();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient1 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new CP.WinFormsUI.Docking.DockPaneStripSkin();
-            CP.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new CP.WinFormsUI.Docking.DockPaneStripGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient2 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient3 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient4 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient5 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient6 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient7 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new CP.WinFormsUI.Docking.DockPanelSkin();
+            CP.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new CP.WinFormsUI.Docking.AutoHideStripSkin();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient8 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin2 = new CP.WinFormsUI.Docking.DockPaneStripSkin();
+            CP.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient2 = new CP.WinFormsUI.Docking.DockPaneStripGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient9 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient5 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient10 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient11 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient12 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient13 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient14 = new CP.WinFormsUI.Docking.TabGradient();
             this.navbarImageListLarge = new System.Windows.Forms.ImageList(this.components);
             this.navbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
@@ -180,6 +180,7 @@ namespace CP.FrameWork
             this.barButtonItem44 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem45 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem46 = new DevExpress.XtraBars.BarButtonItem();
+            this.taskDisButton = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection(this.components);
             this.resourceManage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rpgUAV = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -191,7 +192,7 @@ namespace CP.FrameWork
             this.taskManage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.CoScheduling = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.PlanCoScheduling = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rpgTaskPlanning = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -213,6 +214,7 @@ namespace CP.FrameWork
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslCoor = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.DockPanel = new CP.WinFormsUI.Docking.DockPanel();
             this.vS2012LightTheme1 = new CP.WinFormsUI.Docking.VS2012LightTheme();
             this.vS2005Theme1 = new CP.WinFormsUI.Docking.VS2005Theme();
@@ -393,17 +395,18 @@ namespace CP.FrameWork
             this.barButtonItem43,
             this.barButtonItem44,
             this.barButtonItem45,
-            this.barButtonItem46});
+            this.barButtonItem46,
+            this.taskDisButton});
             this.ribbonControl.LargeImages = this.ribbonImageCollectionLarge;
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ribbonControl.MaxItemId = 294;
+            this.ribbonControl.MaxItemId = 295;
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.resourceManage,
             this.OptimalAllocation,
             this.taskManage,
-            this.CoScheduling});
+            this.PlanCoScheduling});
             this.ribbonControl.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemProgressBar1,
             this.repositoryItemComboBox1,
@@ -1518,6 +1521,15 @@ namespace CP.FrameWork
             this.barButtonItem46.Name = "barButtonItem46";
             this.barButtonItem46.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             // 
+            // taskDisButton
+            // 
+            this.taskDisButton.Caption = "任务分解";
+            this.taskDisButton.Id = 294;
+            this.taskDisButton.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("taskDisButton.LargeGlyph")));
+            this.taskDisButton.Name = "taskDisButton";
+            this.taskDisButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.taskDisButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.taskDisButton_ItemClick);
+            // 
             // ribbonImageCollectionLarge
             // 
             this.ribbonImageCollectionLarge.ImageSize = new System.Drawing.Size(32, 32);
@@ -1621,14 +1633,14 @@ namespace CP.FrameWork
             this.ribbonPageGroup6.Name = "ribbonPageGroup6";
             this.ribbonPageGroup6.Text = "任务分析";
             // 
-            // CoScheduling
+            // PlanCoScheduling
             // 
-            this.CoScheduling.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.PlanCoScheduling.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.rpgTaskPlanning,
             this.ribbonPageGroup7,
             this.ribbonPageGroup2});
-            this.CoScheduling.Name = "CoScheduling";
-            this.CoScheduling.Text = "任务规划与调度";
+            this.PlanCoScheduling.Name = "PlanCoScheduling";
+            this.PlanCoScheduling.Text = "任务规划与调度";
             // 
             // rpgTaskPlanning
             // 
@@ -1636,6 +1648,7 @@ namespace CP.FrameWork
             this.rpgTaskPlanning.ItemLinks.Add(this.barEditItem3);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem42);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem43);
+            this.rpgTaskPlanning.ItemLinks.Add(this.taskDisButton);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem34);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem35);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem36);
@@ -1720,7 +1733,7 @@ namespace CP.FrameWork
             this.galleryControl1.Controls.Add(this.galleryControlClient1);
             this.galleryControl1.DesignGalleryGroupIndex = 0;
             this.galleryControl1.DesignGalleryItemIndex = 0;
-            this.galleryControl1.Location = new System.Drawing.Point(13, 158);
+            this.galleryControl1.Location = new System.Drawing.Point(133, 239);
             this.galleryControl1.LookAndFeel.SkinName = "Office 2016 Colorful";
             this.galleryControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.galleryControl1.Name = "galleryControl1";
@@ -1772,11 +1785,13 @@ namespace CP.FrameWork
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslMain,
             this.toolStripStatusLabel2,
             this.tslCoor,
-            this.tslProgress});
+            this.tslProgress,
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 693);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1354, 23);
@@ -1819,6 +1834,12 @@ namespace CP.FrameWork
             this.tslProgress.Name = "tslProgress";
             this.tslProgress.Size = new System.Drawing.Size(150, 17);
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 18);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // DockPanel
             // 
             this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1827,52 +1848,52 @@ namespace CP.FrameWork
             this.DockPanel.Location = new System.Drawing.Point(0, 150);
             this.DockPanel.Name = "DockPanel";
             this.DockPanel.Size = new System.Drawing.Size(1354, 543);
-            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient1.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
-            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient1.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin1.TabGradient = tabGradient1;
-            autoHideStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
-            tabGradient2.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
-            tabGradient2.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient2.TextColor = System.Drawing.Color.White;
-            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
-            tabGradient3.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
-            tabGradient3.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient3.TextColor = System.Drawing.Color.Black;
-            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
-            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-            dockPaneStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            tabGradient4.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient4.TextColor = System.Drawing.Color.White;
-            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
-            tabGradient5.EndColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient5.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient5.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
-            dockPanelGradient3.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient3.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
-            tabGradient6.EndColor = System.Drawing.SystemColors.ControlDark;
-            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient6.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient6.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
-            tabGradient7.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient7.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient7.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
-            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
-            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-            this.DockPanel.Skin = dockPanelSkin1;
+            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
+            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient8.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin2.TabGradient = tabGradient8;
+            autoHideStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
+            tabGradient9.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
+            tabGradient9.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient9.TextColor = System.Drawing.Color.White;
+            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
+            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
+            tabGradient10.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
+            tabGradient10.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient10.TextColor = System.Drawing.Color.Black;
+            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
+            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
+            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            tabGradient11.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient11.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient11.TextColor = System.Drawing.Color.White;
+            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
+            tabGradient12.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
+            dockPanelGradient6.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient6.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
+            tabGradient13.EndColor = System.Drawing.SystemColors.ControlDark;
+            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient13.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient13.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
+            tabGradient14.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient14.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient14.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
+            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
+            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
+            this.DockPanel.Skin = dockPanelSkin2;
             this.DockPanel.TabIndex = 17;
             this.DockPanel.Theme = this.vS2012LightTheme1;
             // 
@@ -1944,7 +1965,7 @@ namespace CP.FrameWork
         #endregion
 
         private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl;
-        private DevExpress.XtraBars.Ribbon.RibbonPage CoScheduling;
+        private DevExpress.XtraBars.Ribbon.RibbonPage CoSchedulingpage;
         private DevExpress.XtraBars.Ribbon.ApplicationMenu appMenu;
         private DevExpress.Utils.ImageCollection ribbonImageCollection;
         private DevExpress.Utils.ImageCollection ribbonImageCollectionLarge;
@@ -2119,6 +2140,9 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem barButtonItem45;
         private DevExpress.XtraBars.BarButtonItem barButtonItem46;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup7;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private DevExpress.XtraBars.BarButtonItem taskDisButton;
+        private DevExpress.XtraBars.Ribbon.RibbonPage PlanCoScheduling;
 
     }
 }

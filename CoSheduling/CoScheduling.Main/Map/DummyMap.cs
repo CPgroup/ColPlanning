@@ -9,6 +9,8 @@ using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.esriSystem;
+using CP.WinFormsUI;
+
 
 namespace CoScheduling.Main.Map
 {
@@ -45,13 +47,22 @@ namespace CoScheduling.Main.Map
                 pMapHelper.LoadMapService();
 
                 //加载配置文件中的SHP文件列表
-                pMapHelper.LoadShape();
+                //pMapHelper.LoadShape();
+
+                //在规划调度模块中加载地图
+                //if (CP.WinFormsUI.Docking.FloatWindow.ribbonControl.SelectedPage.Name == "CoScheduling")
+                //{
+                //加载配置文件中的mxd
+                pMapHelper.LoadMapDocument();
+                //}
+                
                 //利用配置文件中的InitExten信息初始化地图范围    
-                pMapHelper.InitExtent();
+                //pMapHelper.InitExtent();
                 //加载DEM
                 //pMapHelper.LoadDEM();
                 //将地图控件传到Program
                 Main.Program.myMap = this.myMap;
+
             }
             catch (Exception ex)
             {

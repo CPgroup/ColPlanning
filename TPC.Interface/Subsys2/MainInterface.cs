@@ -16,7 +16,14 @@ namespace CP.Interface.Subsys2
         /// </summary>
         public static void AddFrameworkControl2() //CoScheduling.Main文件中函数SetFrameworkControl设置初始框架
         {
-           
+            CoScheduling.Main.MainInterface.SetFrameworkControl(Globe.m_MainForm,
+                                                                Globe.m_SplashForm,
+                                                                 Globe.m_StatusStrip,
+                                                                 Globe.m_StatusLabel,
+                                                                 Globe.m_ProgressBar,
+                                                                 Globe.m_DockPane,
+                                                                 Globe.m_LabelCoor);          
+
 
         }
 

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Geometry;
@@ -15,6 +16,12 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesRaster;
 using System.Runtime.InteropServices;
+using ESRI.ArcGIS.DataManagementTools;
+using ESRI.ArcGIS.Geoprocessor;
+using ESRI.ArcGIS.Geoprocessing;
+using ESRI.ArcGIS.esriSystem;
+using ESRI.ArcGIS.AnalysisTools;
+using CP.WinFormsUI;
 
 namespace CoScheduling.Main
 {
@@ -96,7 +103,85 @@ namespace CoScheduling.Main
             System.Diagnostics.Debug.WriteLine("Load ok!");
             Program.gStatusLabel.Text = "就绪.";
         }
+        
+        /// <summary>
+        /// 清空指定的文件夹，但不删除文件夹
+        /// </summary>
+        /// <param name="dir"></param>
+        public static void DeleteFolder(string dir)
+        {
+            foreach (string d in Directory.GetFileSystemEntries(dir))
+            {
+                if (File.Exists(d))
+                {
+                    FileInfo fi = new FileInfo(d);
+                    if (fi.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                        fi.Attributes = FileAttributes.Normal;
+                    File.Delete(d);//直接删除其中的文件  
+                }
+                else
+                {
+                    DirectoryInfo d1 = new DirectoryInfo(d);
+                    if (d1.GetFiles().Length != 0)
+                    {
+                        DeleteFolder(d1.FullName);////递归删除子文件夹
+                    }
+                    Directory.Delete(d);
+                }
+            }
+        }        /// <summary>
+        /// 删除文件夹及其内容
+        /// </summary>
+        /// <param name="dir"></param>
+        public static void DeleteFolder1(string dir)
+        {
+            foreach (string d in Directory.GetFileSystemEntries(dir))
+            {
+                if (File.Exists(d))
+                {
+                    FileInfo fi = new FileInfo(d);
+                    if (fi.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                        fi.Attributes = FileAttributes.Normal;
+                    File.Delete(d);//直接删除其中的文件  
+                }
+                else
+                    DeleteFolder(d);////递归删除子文件夹
+                Directory.Delete(d);
+            }
+        }
 
+        /// <summary>
+        /// 根据图层名获取图层
+        /// </summary>
+        /// <param name="IN_Name"></param>
+        /// <returns></returns>
+        private static ILayer PRV_GetLayersByName(string IN_Name)
+        {
+            IEnumLayer Temp_AllLayer = Program.myMap.Map.Layers;
+            ILayer Each_Layer = Temp_AllLayer.Next();
+            while (Each_Layer != null)
+            {
+                if (Each_Layer.Name.Contains(IN_Name))
+                    return Each_Layer;
+                Each_Layer = Temp_AllLayer.Next();
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 根据图层名获取图层序号
+        /// </summary>
+        /// <param name="IN_LayerName"></param>
+        /// <returns></returns>
+        private static int PRV_GetIndexOfLayer(string IN_LayerName)
+        {
+            for (int i = 0; i < Program.myMap.LayerCount; i++)
+            {
+                if (Program.myMap.get_Layer(i).Name == IN_LayerName)
+                    return i;
+            }
+            return -1;
+        }  
         #endregion
 
         #region 观测资源管理
@@ -115,6 +200,126 @@ namespace CoScheduling.Main
         #endregion 
         #endregion
 
+        #region 任务规划调度
+
+        #region 任务规划
+       
+        /// <summary>
+        /// 任务分解 子任务生成
+        /// 输入为卫星、无人机、飞艇、车的图层序号
+        /// </summary>
+        public static void taskDis(int satLayNO,int UAVLayNO,int ASLayNO,int CarLayNO)
+        {
+            IMapLayers mapLayers = Program.myMap.Map as IMapLayers;
+            IFeatureLayer pFeatureLayer;
+            ILayer layer;
+            layer = mapLayers.get_Layer(satLayNO);
+            
+            pFeatureLayer = layer as IFeatureLayer;//可用此获取属性表
+
+            DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
+            //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
+           string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\"+layer.Name+"BF.shp";
+           
+           BufferTool(PRV_GetLayersByName(layer.Name),BufferPath,5000) ;
+           layer = mapLayers.get_Layer(UAVLayNO + 1);
+           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
+           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+           layer = mapLayers.get_Layer(ASLayNO + 2);
+           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
+           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+           layer = mapLayers.get_Layer(CarLayNO +3);
+           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + mapLayers.get_Layer(CarLayNO+3).Name + "BF.shp";
+           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+
+            Program.myMap.Extent = Program.myMap.FullExtent;
+            
+
+            Program.myMap.Refresh();
+            Program.myMap.Update();
+           
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // STEP 2: Execute SelectLayerByLocation using the feature layers to select all wells that intersect the bedrock geology.
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Initialize the SelectLayerByLocation tool
+            //SelectLayerByLocation SelectByLocation = new SelectLayerByLocation();
+
+            //SelectByLocation.in_layer = "Wells_Lyr";
+            //SelectByLocation.select_features = "bedrock_Lyr";
+            //SelectByLocation.overlap_type = "INTERSECT";
+            //RunTool(GP, SelectByLocation, null);
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+            // STEP 3: Execute SelectLayerByAttribute to select all wells that have a well yield > 150 L/min.
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Initialize the SelectLayerByAttribute tool
+            //SelectLayerByAttribute SelectByAttribute = new SelectLayerByAttribute();
+
+            //SelectByAttribute.in_layer_or_view = "Wells_Lyr";
+            //SelectByAttribute.selection_type = "NEW_SELECTION";
+            //SelectByAttribute.where_clause = "WELL_YIELD > 150";
+            //RunTool(GP, SelectByAttribute, null);
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // STEP 4: Execute CopyFeatures tool to create a new feature class of wells with well yield > 150 L/min.
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Initialize the CopyFeatures tool
+            //CopyFeatures CopyFeatures = new CopyFeatures();
+
+            //CopyFeatures.in_features = "Wells_Lyr";
+            //CopyFeatures.out_feature_class = @"C:\data\nfld.gdb\high_yield_wells";
+
+
+            //RunTool(GP, CopyFeatures, null);
+        }
+        private static void BufferTool(ILayer in_features, string out_features, int distance)
+        {
+
+           
+            try
+            {
+                // Initialize the Geoprocessor 
+                Geoprocessor GP = new Geoprocessor();
+               
+                // Initialize the MakeFeatureLayer tool
+                ESRI.ArcGIS.AnalysisTools.Buffer buffertool = new ESRI.ArcGIS.AnalysisTools.Buffer();
+
+                buffertool.in_features = in_features; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //
+                buffertool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
+                buffertool.buffer_distance_or_field = distance;
+                // buffertool.dissolve_option = "ALL";
+                // RunTool(GP, buffertool, null);
+                GP.Execute(buffertool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                OpenShape(out_features);
+                Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);               
+            }
+        }
+
+        // Function for returning the tool messages.
+        private static void ReturnMessages(Geoprocessor gp)
+        {
+            if (gp.MessageCount > 0)
+            {
+                for (int Count = 0; Count <= gp.MessageCount - 1; Count++)
+                {
+                    Console.WriteLine(gp.GetMessage(Count));
+                }
+            }
+
+        }
+
+        #endregion
+        #endregion
 
 
         #region 注释代码 可参考
@@ -1041,47 +1246,47 @@ namespace CoScheduling.Main
 
         //    }
         //}
-        ///// <summary>
-        ///// 加载SHP文件
-        ///// </summary>
-        ///// <param name="shpFile"></param>
-        ///// <returns></returns>
-        //public static IFeatureLayer OpenShape(string shpFile)
-        //{
-        //    IWorkspaceFactory pWorkspaceFactory;
-        //    IFeatureWorkspace pFeatureWorkspace;
-        //    IFeatureLayer pFeatureLayer;
-        //    try
-        //    {
-        //        string strFullPath = shpFile;
-        //        if (strFullPath == "") return null;
-        //        int Index = strFullPath.LastIndexOf("\\");
-        //        string filePath = strFullPath.Substring(0, Index);
-        //        string fileName = strFullPath.Substring(Index + 1);
+        /// <summary>
+        /// 加载SHP文件
+        /// </summary>
+        /// <param name="shpFile"></param>
+        /// <returns></returns>
+        public static IFeatureLayer OpenShape(string shpFile)
+        {
+            IWorkspaceFactory pWorkspaceFactory;
+            IFeatureWorkspace pFeatureWorkspace;
+            IFeatureLayer pFeatureLayer;
+            try
+            {
+                string strFullPath = shpFile;
+                if (strFullPath == "") return null;
+                int Index = strFullPath.LastIndexOf("\\");
+                string filePath = strFullPath.Substring(0, Index);
+                string fileName = strFullPath.Substring(Index + 1);
 
-        //        //打开工作空间并添加shp文件
-        //        pWorkspaceFactory = (IWorkspaceFactory)(new ShapefileWorkspaceFactory());
-        //        //注意此处的路径是不能带文件名的
-        //        pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(filePath, 0) as IFeatureWorkspace;
-        //        pFeatureLayer = new FeatureLayer();
-        //        //注意这里的文件名是不能带路径的
-        //        fileName = fileName.ToUpper().Replace(".SHP", "");
-        //        pFeatureLayer.FeatureClass = pFeatureWorkspace.OpenFeatureClass(fileName);
-        //        pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;
-        //        Program.myMap.Map.AddLayer(pFeatureLayer);
-        //        Program.myMap.ActiveView.Refresh();
-        //        return pFeatureLayer;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (ex);
-        //    }
-        //    finally
-        //    {
-        //        pWorkspaceFactory = null;
-        //        pFeatureWorkspace = null;
-        //    }
-        //}
+                //打开工作空间并添加shp文件
+                pWorkspaceFactory = (IWorkspaceFactory)(new ShapefileWorkspaceFactory());
+                //注意此处的路径是不能带文件名的
+                pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(filePath, 0) as IFeatureWorkspace;
+                pFeatureLayer = new FeatureLayer();
+                //注意这里的文件名是不能带路径的
+                fileName = fileName.ToUpper().Replace(".SHP", "");
+                pFeatureLayer.FeatureClass = pFeatureWorkspace.OpenFeatureClass(fileName);
+                pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;
+                Program.myMap.Map.AddLayer(pFeatureLayer);
+                Program.myMap.ActiveView.Refresh();
+                return pFeatureLayer;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                pWorkspaceFactory = null;
+                pFeatureWorkspace = null;
+            }
+        }
 
         //#endregion
         

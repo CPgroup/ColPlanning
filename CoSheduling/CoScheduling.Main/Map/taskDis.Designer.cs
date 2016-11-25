@@ -59,6 +59,7 @@
             CP.WinFormsUI.Docking.TabGradient tabGradient6 = new CP.WinFormsUI.Docking.TabGradient();
             CP.WinFormsUI.Docking.TabGradient tabGradient7 = new CP.WinFormsUI.Docking.TabGradient();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBox10 = new System.Windows.Forms.ComboBox();
             this.comboBox9 = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -83,6 +84,7 @@
             this.dockPanel1 = new CP.WinFormsUI.Docking.DockPanel();
             this.resetbutton = new System.Windows.Forms.Button();
             this.TaskDisOkbuttoon = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +93,8 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.LightGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.comboBox10);
             this.panel1.Controls.Add(this.comboBox9);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.label9);
@@ -118,13 +122,21 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(242, 464);
+            this.panel1.Size = new System.Drawing.Size(242, 507);
             this.panel1.TabIndex = 0;
+            // 
+            // comboBox10
+            // 
+            this.comboBox10.FormattingEnabled = true;
+            this.comboBox10.Location = new System.Drawing.Point(103, 182);
+            this.comboBox10.Name = "comboBox10";
+            this.comboBox10.Size = new System.Drawing.Size(121, 20);
+            this.comboBox10.TabIndex = 31;
             // 
             // comboBox9
             // 
             this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Location = new System.Drawing.Point(103, 296);
+            this.comboBox9.Location = new System.Drawing.Point(103, 356);
             this.comboBox9.Name = "comboBox9";
             this.comboBox9.Size = new System.Drawing.Size(121, 20);
             this.comboBox9.TabIndex = 28;
@@ -133,7 +145,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.BackColor = System.Drawing.Color.Snow;
-            this.label10.Location = new System.Drawing.Point(11, 299);
+            this.label10.Location = new System.Drawing.Point(11, 359);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(89, 12);
             this.label10.TabIndex = 27;
@@ -143,7 +155,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Snow;
-            this.label9.Location = new System.Drawing.Point(35, 197);
+            this.label9.Location = new System.Drawing.Point(35, 257);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(53, 12);
             this.label9.TabIndex = 24;
@@ -152,7 +164,7 @@
             // comboBox5
             // 
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(103, 369);
+            this.comboBox5.Location = new System.Drawing.Point(103, 429);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(121, 20);
             this.comboBox5.TabIndex = 23;
@@ -161,7 +173,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Snow;
-            this.label5.Location = new System.Drawing.Point(8, 372);
+            this.label5.Location = new System.Drawing.Point(8, 432);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(89, 12);
             this.label5.TabIndex = 22;
@@ -170,7 +182,7 @@
             // comboBox6
             // 
             this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(103, 332);
+            this.comboBox6.Location = new System.Drawing.Point(103, 392);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(121, 20);
             this.comboBox6.TabIndex = 21;
@@ -179,7 +191,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Snow;
-            this.label6.Location = new System.Drawing.Point(35, 335);
+            this.label6.Location = new System.Drawing.Point(35, 395);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 20;
@@ -188,7 +200,7 @@
             // comboBox7
             // 
             this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(103, 261);
+            this.comboBox7.Location = new System.Drawing.Point(103, 321);
             this.comboBox7.Name = "comboBox7";
             this.comboBox7.Size = new System.Drawing.Size(121, 20);
             this.comboBox7.TabIndex = 19;
@@ -197,7 +209,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.Snow;
-            this.label7.Location = new System.Drawing.Point(35, 264);
+            this.label7.Location = new System.Drawing.Point(35, 324);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(65, 12);
             this.label7.TabIndex = 18;
@@ -206,7 +218,7 @@
             // comboBox8
             // 
             this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(103, 225);
+            this.comboBox8.Location = new System.Drawing.Point(103, 285);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(121, 20);
             this.comboBox8.TabIndex = 17;
@@ -215,7 +227,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Snow;
-            this.label8.Location = new System.Drawing.Point(35, 228);
+            this.label8.Location = new System.Drawing.Point(35, 288);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(53, 12);
             this.label8.TabIndex = 16;
@@ -226,7 +238,7 @@
             this.dockPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dockPanel2.BackColor = System.Drawing.Color.White;
-            this.dockPanel2.Location = new System.Drawing.Point(3, 188);
+            this.dockPanel2.Location = new System.Drawing.Point(3, 243);
             this.dockPanel2.Name = "dockPanel2";
             this.dockPanel2.Size = new System.Drawing.Size(232, 222);
             dockPanelGradient7.EndColor = System.Drawing.SystemColors.ControlLight;
@@ -372,7 +384,7 @@
             this.dockPanel1.BackColor = System.Drawing.Color.White;
             this.dockPanel1.Location = new System.Drawing.Point(3, 3);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(232, 179);
+            this.dockPanel1.Size = new System.Drawing.Size(232, 234);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -423,7 +435,7 @@
             // 
             // resetbutton
             // 
-            this.resetbutton.Location = new System.Drawing.Point(116, 428);
+            this.resetbutton.Location = new System.Drawing.Point(128, 471);
             this.resetbutton.Name = "resetbutton";
             this.resetbutton.Size = new System.Drawing.Size(75, 23);
             this.resetbutton.TabIndex = 3;
@@ -433,7 +445,7 @@
             // 
             // TaskDisOkbuttoon
             // 
-            this.TaskDisOkbuttoon.Location = new System.Drawing.Point(10, 428);
+            this.TaskDisOkbuttoon.Location = new System.Drawing.Point(22, 471);
             this.TaskDisOkbuttoon.Name = "TaskDisOkbuttoon";
             this.TaskDisOkbuttoon.Size = new System.Drawing.Size(75, 23);
             this.TaskDisOkbuttoon.TabIndex = 2;
@@ -441,13 +453,23 @@
             this.TaskDisOkbuttoon.UseVisualStyleBackColor = true;
             this.TaskDisOkbuttoon.Click += new System.EventHandler(this.TaskDisOkbuttoon_Click);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.Snow;
+            this.label11.Location = new System.Drawing.Point(35, 185);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 12);
+            this.label11.TabIndex = 34;
+            this.label11.Text = "区域任务";
+            // 
             // taskDis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(242, 464);
+            this.ClientSize = new System.Drawing.Size(242, 507);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "taskDis";
@@ -484,5 +506,7 @@
         private CP.WinFormsUI.Docking.DockPanel dockPanel2;
         private System.Windows.Forms.ComboBox comboBox9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox comboBox10;
+        private System.Windows.Forms.Label label11;
     }
 }

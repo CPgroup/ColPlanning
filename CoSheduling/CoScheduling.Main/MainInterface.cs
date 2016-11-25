@@ -103,7 +103,7 @@ namespace CoScheduling.Main
             System.Diagnostics.Debug.WriteLine("Load ok!");
             Program.gStatusLabel.Text = "就绪.";
         }
-        
+
         /// <summary>
         /// 清空指定的文件夹，但不删除文件夹
         /// </summary>
@@ -181,7 +181,7 @@ namespace CoScheduling.Main
                     return i;
             }
             return -1;
-        }  
+        }
         #endregion
 
         #region 观测资源管理
@@ -197,93 +197,324 @@ namespace CoScheduling.Main
         }
 
 
-        #endregion 
+        #endregion
         #endregion
 
         #region 任务规划调度
 
         #region 任务规划
-       
+
         /// <summary>
         /// 任务分解 子任务生成
         /// 输入为卫星、无人机、飞艇、车的图层序号
         /// </summary>
-        public static void taskDis(int satLayNO,int UAVLayNO,int ASLayNO,int CarLayNO)
+        public static void taskDis(int satLayNO, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
         {
-            IMapLayers mapLayers = Program.myMap.Map as IMapLayers;
-            IFeatureLayer pFeatureLayer;
+            string tStart = "0700";//开始观测时间 格式4位数 前两位小时 后两位分钟
+            double conRadixi = 0.7;//半径折损系数 与数据属性表中半径属性一致
+            IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
             ILayer layer;
-            layer = mapLayers.get_Layer(satLayNO);
-            
-            pFeatureLayer = layer as IFeatureLayer;//可用此获取属性表
+            IList<R_TInfo> RTinfoList = new List<R_TInfo>();
+            DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
+            //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
+            layer = mapLayers.get_Layer(UAVLayNO);
+            IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
+            string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
+
+
+            string distan = UAVFeatureLayer.FeatureClass.Fields.get_Field(6).Name.ToString();//获取续航半径字段 第6个字段
+            GPBufferTool(layer, BufferPath, distan);
+            OpenShape(BufferPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+            Program.myMap.Refresh();
+            //Program.myMap.Extent = Program.myMap.FullExtent;
+            //Program.myMap.Refresh();
+            IFeatureLayer UAVbuFeatureLayer = (IFeatureLayer)mapLayers.get_Layer(0);//得到刚生成的无人机最大缓冲区
+
+
+            //pFeatureLayer = layer as IFeatureLayer;//可用此获取属性表
+
+            //获取每一个面状任务区  并且使无人机根据此面状任务task生成缓冲区，为了简化计算，先根据无人机的最大航程范围确定无人机可能会观测到的任务集，在根据每一个无人机和他的任务集进行缓冲区构建
+            IFeatureLayer ptaskFeatureLayer = (IFeatureLayer)mapLayers.get_Layer(PolygonTaskNO + 1);
+            //IFeatureLayerDefinition pFeatureLayerDefinition = (IFeatureLayerDefinition)pFeatureLayer;
+            //pFeatureLayer.FeatureClass.Indexes(1)
+
+            IQueryFilter pQueryFilter = new QueryFilter();//实例化一个查询条件对象 
+            pQueryFilter.WhereClause = "Id > 0";//将查询条件赋值     选择所有的无人机 为每一个无人机构建可能观测到的任务集
+            IFeatureCursor featureCursor = UAVbuFeatureLayer.Search(pQueryFilter, false);
+            IFeature Feature = featureCursor.NextFeature();//遍历查询结果  无人机缓冲区
+            //获取每一个无人机
+            while (Feature != null)
+            {
+                //选择和当前无人机缓冲区Feature相交的任务区
+                ISpatialFilter pSpatialFilter = new SpatialFilterClass();
+                pSpatialFilter.Geometry = Feature.Shape;
+                pSpatialFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;//空间关系选择条件 这里用相交
+                IFeatureCursor taskfeatureCursor = ptaskFeatureLayer.FeatureClass.Search(pSpatialFilter, false);
+                IFeature pFeature = taskfeatureCursor.NextFeature();//查询的当前无人机缓冲区内 相交的面状任务区
+                while (pFeature != null)
+                {
+                    R_TInfo Rinfo = new R_TInfo() { ResouceID = Feature.get_Value(2).ToString(), TaskID = pFeature.get_Value(2).ToString() };
+                    RTinfoList.Add(Rinfo);//存储无人机ID和面状任务区ID对应关系，表明无人机可能观测到此任务区（空间上）
+                    //验证是否获取到当前无人机缓冲区内的面状任务区
+                    //string hehe = pFeature.get_Value(2).ToString();
+                    //string he = pFeature.get_Value(3).ToString();
+                    //MessageBox.Show("id:"+hehe+"+area:"+he);
+                    pFeature = taskfeatureCursor.NextFeature();
+                }
+                Feature = featureCursor.NextFeature();
+            }
+
+
+
+            //求每一个无人机相对于每一个任务区的交集
+            // R_TInfo Rinfor = new R_TInfo();
+            //Rinfor.ResouceID
+            IFeatureLayer UAVlayer = (FeatureLayer)layer;
+            string UavToTaskpath;//根据每一个任务确定的无人机缓冲区路径
+            string seleceUavPath;//选择每一个无人机路径
+            string selTaskPath;//选择每一个任务路径
+            string UavBfToTaskPath;//第i组无人机和任务组合  无人机观测到当前任务的区域存储路径
+            //IFeatureCursor pFeatureCursor;             
+            IFeatureLayer UavEveryLayer;//选择出的每一个无人机 作为一个要素图层
+            IFeatureLayer TaskEveryLayer;//选择出的每一个任务 作为一个要素图层
+            IFeature UavEveryFeature;//选择出的每一个无人机 作为一个要素
+            IFeature TaskEveryFeature;//选择出的每一个任务 作为一个要素
+            IFeatureLayer UavEBFLayer;//每一个无人机相对于当前任务形成的缓冲区 要素图层
+            string Mileage;//无人机续航里程
+            string Vuav;//无人机续航速度 km/h
+            string TsakWinS;//任务时间窗口开始时间 格式4位数 前两位小时 后两位分钟
+            string TaskWinE;//任务时间窗口结束时间 格式4位数 前两位小时 后两位分钟
+            int TWEhour;//任务时间窗口结束时间 小时
+            int TWEmin;//任务时间窗口结束时间 分钟
+            int SThour;//开始观测时间 小时
+            int STmin;//开始观测时间 分钟
+            double urad;//每一个UAV相对于每一个任务的观测半径           
+            List<IFeatureLayer> lstFC = new List<IFeatureLayer>();//存储每个无人机相对于每个任务的时间观测区域要素图层
+            for (int i = 0; i < RTinfoList.Count; i++)
+            {
+
+
+                //IFeature Uavf = UAVlayer.FeatureClass.GetFeature(int.Parse(RTinfoList[i].ResouceID) - 1);
+                seleceUavPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "sl.shp";
+                GPselectTool(UAVlayer, seleceUavPath, int.Parse(RTinfoList[i].ResouceID));//选出单个无人机 以便根据具体任务区构建缓冲区
+                selTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + ptaskFeatureLayer.Name + "sl.shp";
+                GPselectTool(ptaskFeatureLayer, selTaskPath, int.Parse(RTinfoList[i].TaskID));//选出单个无人机 以便根据具体任务区构建缓冲区
+                UavEveryLayer = OpenFile_LayerFile(seleceUavPath);// mapLayers.get_Layer(0) as FeatureLayer;
+                TaskEveryLayer = OpenFile_LayerFile(selTaskPath);
+
+
+                UavToTaskpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + UavEveryLayer.Name + "BF.shp";
+                //计算在当前无人机和当前任务时间约束下的 无人机半径
+                //string Mileage=UAVlayer.FeatureClass.Fields.get_Field(int.Parse(RTinfoList[i].ResouceID);
+                //通过Ifeature获取属性值 http://blog.163.com/song_zhuyue/blog/static/17343278720101074524281/  http://blog.sina.com.cn/s/blog_84f7fbbb0101975m.html                 
+                //pFeatureCursor = UavEveryLayer.FeatureClass.Search(null, false);
+                //pFeature= pFeatureCursor.NextFeature();
+                UavEveryFeature = UavEveryLayer.FeatureClass.GetFeature(0);
+                TaskEveryFeature = TaskEveryLayer.FeatureClass.GetFeature(0);
+                Mileage = UavEveryFeature.get_Value(7).ToString();
+                Vuav = UavEveryFeature.get_Value(5).ToString();
+                TsakWinS = TaskEveryFeature.get_Value(4).ToString();
+                TaskWinE = TaskEveryFeature.get_Value(5).ToString();
+                if (TaskWinE.Length > 3)
+                {
+                    TWEhour = int.Parse(TaskWinE.Substring(0, 2));//任务结束时间 小时                 
+                }
+                else
+                {
+                    TWEhour = int.Parse(TaskWinE.Substring(0, 1));//任务结束时间 小时
+                }
+                TWEmin = int.Parse(TaskWinE.Substring(TaskWinE.Length - 2, 2));//任务结束时间 分钟 
+                if (tStart.Length > 3)
+                {
+                    SThour = int.Parse(tStart.Substring(0, 2));//开始观测时间 小时        
+                }
+                else
+                {
+                    SThour = int.Parse(tStart.Substring(0, 1));//开始观测时间 小时
+                }
+                STmin = int.Parse(tStart.Substring(tStart.Length - 2, 2));//开始观测时间 分钟
+                double SinMaxT = int.Parse(Mileage) / (2 * int.Parse(Vuav) * 0.2777778) / 60; //最远单程飞行时间 分钟
+                if (int.Parse(tStart) < int.Parse(TaskWinE))//保证开始观测时间（无人机出发时间）小于任务结束时间
+                {
+                    if (TWEhour * 60 + TWEmin - SinMaxT - (SThour * 60 + STmin) > 0)
+                    {
+                        urad = double.Parse(Mileage);
+                    }
+                    else
+                        urad = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin)) * 60 * double.Parse(Vuav) * 3.6;
+                }
+                else
+                { urad = 0; }
+                //-----------------------------------------------以上是可覆盖半径 实际观测半径如下（折损系数）----------------------------------------------------------------------------------------
+                urad = urad / 2 * conRadixi;//实际观测半径
+                //根据当前无人机和当前任务时间约束下的 无人机半径 构建缓冲区
+                GPBufferTool((ILayer)UavEveryLayer, UavToTaskpath, urad.ToString());
+                //OpenShape(UavToTaskpath);
+                //Program.myMap.Refresh();
+                UavEBFLayer = OpenFile_LayerFile(UavToTaskpath);
+                //根据缓冲区和对应任务区构建此无人机能够观测到的此任务区  （Intersect工具 无人机观测范围和任务的重叠部分）
+                //IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
+                //ILayer layer;
+                //ILayer la2;               
+                //DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
+                ////卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
+                //layer = mapLayers.get_Layer(8);
+                //la2 = mapLayers.get_Layer(12);
+                //IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
+                //IFeatureLayer FeatureLayer = (IFeatureLayer)la2;
+                UavBfToTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "To" + ptaskFeatureLayer.Name + ".shp";
+                //当前第i组无人机任务   每一个无人机相对于每一个任务区的交集----------------------------------------------------------------------------------------------
+                GPIntersectTool(UavEBFLayer.FeatureClass, TaskEveryLayer.FeatureClass, UavBfToTaskPath);
+                //OpenShape(UavBfToTaskPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+                //Program.myMap.Refresh();
+                IFeatureLayer UavToTTrueObe = OpenFile_LayerFile(UavBfToTaskPath);
+                lstFC.Add(UavToTTrueObe);
+            }
+            //将无人机观测到任务的实际区域交叉分割 形成最终的子任务   每一次叠加操作 都要更新每个任务的观测资源集
+            string UavToTasdfkUnionPath ;
+            IFeatureLayer replaceLayer = lstFC[0];
+            List<IFeatureLayer> lstTWOFC = new List<IFeatureLayer>();//Union工具只能输入两个图层 以后可修改
+            for (int i =1; i < lstFC.Count; i++)
+            {
+                UavToTasdfkUnionPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\"+i.ToString() + "UToTaUni.shp";
+                lstTWOFC.Add(replaceLayer);
+                lstTWOFC.Add(lstFC[i]);
+                GPUnionTool(lstTWOFC, UavToTasdfkUnionPath);
+                replaceLayer = OpenFile_LayerFile(UavToTasdfkUnionPath);
+                lstTWOFC.Clear();
+                if (i == lstFC.Count - 1)
+                {
+                    Program.myMap.AddLayer(replaceLayer as ILayer, 0);
+                    //OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+                }
+            }
+
+           
+
+           // OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+            Program.myMap.Refresh();
+            //地图缩放到阿克苏地区
+            ILayer akesulayer = PRV_GetLayersByName("AkesuCity");
+            IFeatureLayer ss = akesulayer as FeatureLayer;
+            IFeature Akesu = ss.FeatureClass.GetFeature(0) as IFeature;
+            Program.myMap.Extent = Akesu.Shape.Envelope;// Program.myMap.FullExtent;
+            Program.myMap.Refresh();
+            Program.myMap.Update();
+
+            //IEnumFeature pEnumFeature = UAVbuFeatureLayer as IEnumFeature;
+            //IEnumFeature pEnumFeature = Program.myMap.Map.FeatureSelection as IEnumFeature;
+            //IEnumFeatureSetup pEnumFeatureSetup = pEnumFeature as IEnumFeatureSetup;
+            //pEnumFeatureSetup.AllFields = true;
+            //IFeature Feature = pEnumFeature.Next();
+
+
+
+
+
+
+
+            //int ss = pFeatureLayer.FeatureClass.Indexes;
+            //for (int Ti = 1; Ti < pFeatureLayer.FeatureClass.FeatureCount; Ti++)
+            //    pFeatureLayerDefinition.DefinitionExpression = "Id=" + i;//"FID<10";
+            //pActiveView.Refresh();
+            //IQueryFilter pQueryFilter = new QueryFilterClass();
+            //pQueryFilter.WhereClause = "AREA<10";
+            //IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
+            //pFeatureSelection.SelectFeatures(pQueryFilter, esriSelectionResultEnum.esriSelectionResultNew, false);
+            //pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphicSelection, null, null);
+            //IFeatureLayer pNew = pFeatureLayerDefinition.CreateSelectionLayer("new", true, null, null);
+            //pFeatureSelection.Clear();
+            //pMap.AddLayer(pNew);
+            //MessageBox.Show(Convert.ToString(pMap.LayerCount));
+
+
+
+
+
+
+
+
+            // layer = mapLayers.get_Layer(satLayNO);
+            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+            //layer = mapLayers.get_Layer(UAVLayNO + 1);
+            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
+            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+            //layer = mapLayers.get_Layer(ASLayNO + 2);
+            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
+            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+            //layer = mapLayers.get_Layer(CarLayNO +3);
+            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + mapLayers.get_Layer(CarLayNO+3).Name + "BF.shp";
+            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+
+
+        }
+
+        /// <summary>
+        /// 测试 可删
+        /// </summary>
+        /// <param name="satLayNO"></param>
+        /// <param name="UAVLayNO"></param>
+        /// <param name="ASLayNO"></param>
+        /// <param name="CarLayNO"></param>
+        /// <param name="PolygonTaskNO"></param>
+        public static void delete(int satLayNO, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
+        {
+            IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
+            ILayer layer;
+            ILayer la2;
+            //IWorkspaceFactory pWorkspaceFactory;
+            //IFeatureWorkspace pFeatureWorkspace;
+            //pWorkspaceFactory = (IWorkspaceFactory)(new ShapefileWorkspaceFactory());
+            ////注意此处的路径是不能带文件名的
+            //string datapath = System.AppDomain.CurrentDomain.BaseDirectory + "Data";
+            //string sWorkPath;
+            //pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(datapath, 0) as IFeatureWorkspace;
+
+
+            //IWorkspace sWordkPath = pFeatureWorkspace as IWorkspace;
+            //sWorkPath = sWordkPath.PathName;
+
 
             DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
             //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
-           string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\"+layer.Name+"BF.shp";
-           
-           BufferTool(PRV_GetLayersByName(layer.Name),BufferPath,5000) ;
-           layer = mapLayers.get_Layer(UAVLayNO + 1);
-           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
-           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-           layer = mapLayers.get_Layer(ASLayNO + 2);
-           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
-           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-           layer = mapLayers.get_Layer(CarLayNO +3);
-           BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + mapLayers.get_Layer(CarLayNO+3).Name + "BF.shp";
-           BufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
+            layer = mapLayers.get_Layer(8);
+            la2 = mapLayers.get_Layer(12);
+            IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
+            IFeatureLayer FeatureLayer = (IFeatureLayer)la2;
+            string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
 
-            Program.myMap.Extent = Program.myMap.FullExtent;
-            
-
+            GPIntersectTool(UAVFeatureLayer.FeatureClass, FeatureLayer.FeatureClass, BufferPath);
+            OpenShape(BufferPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
             Program.myMap.Refresh();
-            Program.myMap.Update();
-           
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // STEP 2: Execute SelectLayerByLocation using the feature layers to select all wells that intersect the bedrock geology.
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            // Initialize the SelectLayerByLocation tool
-            //SelectLayerByLocation SelectByLocation = new SelectLayerByLocation();
-
-            //SelectByLocation.in_layer = "Wells_Lyr";
-            //SelectByLocation.select_features = "bedrock_Lyr";
-            //SelectByLocation.overlap_type = "INTERSECT";
-            //RunTool(GP, SelectByLocation, null);
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////
-            // STEP 3: Execute SelectLayerByAttribute to select all wells that have a well yield > 150 L/min.
-            /////////////////////////////////////////////////////////////////////////////////////////////////
-
-            // Initialize the SelectLayerByAttribute tool
-            //SelectLayerByAttribute SelectByAttribute = new SelectLayerByAttribute();
-
-            //SelectByAttribute.in_layer_or_view = "Wells_Lyr";
-            //SelectByAttribute.selection_type = "NEW_SELECTION";
-            //SelectByAttribute.where_clause = "WELL_YIELD > 150";
-            //RunTool(GP, SelectByAttribute, null);
-
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // STEP 4: Execute CopyFeatures tool to create a new feature class of wells with well yield > 150 L/min.
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            // Initialize the CopyFeatures tool
-            //CopyFeatures CopyFeatures = new CopyFeatures();
-
-            //CopyFeatures.in_features = "Wells_Lyr";
-            //CopyFeatures.out_feature_class = @"C:\data\nfld.gdb\high_yield_wells";
-
-
-            //RunTool(GP, CopyFeatures, null);
         }
-        private static void BufferTool(ILayer in_features, string out_features, int distance)
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    IMap pMap = axMapControl1.ActiveView.FocusMap;
+        //    IActiveView pActiveView = axMapControl1.ActiveView;
+        //    IFeatureLayer pFeatureLayer = (IFeatureLayer)pMap.get_Layer(0);
+        //    IFeatureLayerDefinition pFeatureLayerDefinition = (IFeatureLayerDefinition)pFeatureLayer;
+        //    pFeatureLayerDefinition.DefinitionExpression = "FID<10";
+        //    pActiveView.Refresh();
+        //    IQueryFilter pQueryFilter = new QueryFilterClass();
+        //    pQueryFilter.WhereClause = "AREA<10";
+        //    IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
+        //    pFeatureSelection.SelectFeatures(pQueryFilter, esriSelectionResultEnum.esriSelectionResultNew, false);
+        //    pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphicSelection, null, null);
+        //    IFeatureLayer pNew = pFeatureLayerDefinition.CreateSelectionLayer("new", true, null, null);
+        //    pFeatureSelection.Clear();
+        //    pMap.AddLayer(pNew);
+        //    MessageBox.Show(Convert.ToString(pMap.LayerCount));
+        //}
+
+        private static void GPBufferTool(ILayer in_features, string out_features, string distance)
         {
 
-           
+
             try
             {
                 // Initialize the Geoprocessor 
                 Geoprocessor GP = new Geoprocessor();
-               
+
                 // Initialize the MakeFeatureLayer tool
                 ESRI.ArcGIS.AnalysisTools.Buffer buffertool = new ESRI.ArcGIS.AnalysisTools.Buffer();
 
@@ -295,16 +526,140 @@ namespace CoScheduling.Main
                 GP.Execute(buffertool, null);
                 //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
                 //Program.myMap.Map.AddLayer(mFeatureClass);
-                OpenShape(out_features);
-                Program.myMap.Refresh();
+                //OpenShape(out_features);
+                //Program.myMap.Refresh();
 
             }
             catch (Exception err)
             {
-                Console.WriteLine(err.Message);               
+                Console.WriteLine(err.Message);
             }
         }
 
+        private static void GPselectTool(IFeatureLayer in_features, string out_features, int idvalue)
+        {
+
+
+            try
+            {
+                // Initialize the Geoprocessor 
+                Geoprocessor GP = new Geoprocessor();
+
+                // Initialize the MakeFeatureLayer tool
+                ESRI.ArcGIS.AnalysisTools.Select selecetool = new ESRI.ArcGIS.AnalysisTools.Select();
+
+                selecetool.in_features = in_features; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //
+                selecetool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
+                selecetool.where_clause = "id=" + idvalue;
+                // buffertool.dissolve_option = "ALL";
+                // RunTool(GP, buffertool, null);
+                GP.Execute(selecetool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                //return OpenShape(out_features);
+                //Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
+
+        private static void GPIntersectTool(IFeatureClass inputFeatClass, IFeatureClass clipFeatClass, string out_features)
+        {
+
+
+            try
+            {
+                IGpValueTableObject valTbl = new GpValueTableObjectClass();
+                valTbl.SetColumns(2);
+                object row = "";
+                object rank = 1;
+
+                row = inputFeatClass;
+                valTbl.SetRow(0, ref row);
+                valTbl.SetValue(0, 1, ref rank);
+
+                row = clipFeatClass;
+                valTbl.SetRow(1, ref row);
+                rank = 2;
+                valTbl.SetValue(1, 1, ref rank);
+
+                // Initialize the Geoprocessor 
+                Geoprocessor GP = new Geoprocessor();
+
+                // Initialize the MakeFeatureLayer tool
+                ESRI.ArcGIS.AnalysisTools.Intersect interSetool = new ESRI.ArcGIS.AnalysisTools.Intersect();
+                GP.OverwriteOutput = true;
+                interSetool.in_features = valTbl; // @"E:\Cooperative monitoring\program\CPclone\bin\Data\UAV_Buffer.shp;E:\Cooperative monitoring\program\CPclone\bin\Data\TaskArea.shp";//datapath + "\\"+in_features+".shp;" + datapath + "\\"+clipFeat+".shp"; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //                
+                interSetool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
+                interSetool.join_attributes = "ALL";  // = "id=" + idvalue;
+                interSetool.output_type = "INPUT";
+                // buffertool.dissolve_option = "ALL";
+                // RunTool(GP, buffertool, null);
+                GP.Execute(interSetool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                //return OpenShape(out_features);
+                //Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
+
+
+        private static void GPUnionTool(List<IFeatureLayer> lstFeatureClass, string out_features)
+        {
+
+            try
+            {
+                //IVariantArray parameters = new VarArrayClass();
+                IGpValueTableObject valTbl = new GpValueTableObjectClass();
+                valTbl.SetColumns(1);
+                IFeatureClass ff;
+
+                object row = "";
+                object rank = 1;
+                for (int i = 0; i < lstFeatureClass.Count; i++)
+                {
+                    ff = lstFeatureClass[i].FeatureClass;
+                    row = ff;
+                    //valTbl.SetRow(i, ref row);
+                    valTbl.AddRow(row);
+                    //valTbl.SetValue(i, 1, ref rank);
+                    //parameters.Add(filePath + lstFeatureClass[i].Name+ ".shp" );
+                }
+
+
+
+                Geoprocessor GP = new Geoprocessor();
+
+                // Initialize the MakeFeatureLayer tool
+                ESRI.ArcGIS.AnalysisTools.Union Uniontool = new ESRI.ArcGIS.AnalysisTools.Union();
+                GP.OverwriteOutput = true;
+
+                Uniontool.in_features = valTbl; // @"E:\Cooperative monitoring\program\CPclone\bin\Data\UAV_Buffer.shp;E:\Cooperative monitoring\program\CPclone\bin\Data\TaskArea.shp";//datapath + "\\"+in_features+".shp;" + datapath + "\\"+clipFeat+".shp"; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //                
+                Uniontool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
+                Uniontool.join_attributes = "ONLY_FID";  // = "id=" + idvalue;
+
+                // buffertool.dissolve_option = "ALL";
+                // RunTool(GP, buffertool, null);
+                GP.Execute(Uniontool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                //return OpenShape(out_features);
+                //Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
         // Function for returning the tool messages.
         private static void ReturnMessages(Geoprocessor gp)
         {
@@ -1287,12 +1642,49 @@ namespace CoScheduling.Main
                 pFeatureWorkspace = null;
             }
         }
+        /// <summary>
+        /// 打开shp但不加载
+        /// </summary>
+        /// <param name="aFileName"></param>
+        /// <returns></returns>
+        public static IFeatureLayer OpenFile_LayerFile(string aFileName)//打开shapefile文件
+        {
+            string fullPath;
+            string path;//路径
+            string fileName;//文件名
 
+            IWorkspaceFactory pWorkspaceFactory = new ShapefileWorkspaceFactory();
+
+            fullPath = aFileName;
+            path = System.IO.Path.GetDirectoryName(fullPath);//路径
+            fileName = System.IO.Path.GetFileName(fullPath);//文件名
+
+            IWorkspace pWorkspace = pWorkspaceFactory.OpenFromFile(path, 0);
+            IFeatureWorkspace pFeatureWorkspace = pWorkspace as IFeatureWorkspace;
+            IFeatureClass pFeatureClass = pFeatureWorkspace.OpenFeatureClass(fileName);
+
+            IFeatureLayer pFeatureLayer = new FeatureLayerClass();
+            pFeatureLayer.FeatureClass = pFeatureClass;
+            pFeatureLayer.Name = pFeatureClass.AliasName;
+            return pFeatureLayer;
+        }
         //#endregion
-        
+
         #endregion
-       
+
 
 
     }
+
+    #region 公共类
+    /// <summary>
+    /// 资源_任务ID对应关系 
+    /// </summary>
+    public class R_TInfo
+    {
+        public string ResouceID { get; set; }
+        public string TaskID { get; set; }
+
+    }
+    #endregion
 }

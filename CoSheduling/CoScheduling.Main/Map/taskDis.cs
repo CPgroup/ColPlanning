@@ -29,6 +29,8 @@ namespace CoScheduling.Main.Map
             comboBox3.SelectedIndex = ASNO;//飞艇
             bindCboxLayer(comboBox4);
             comboBox4.SelectedIndex = CarNO;//车
+            bindCboxLayer(comboBox10);
+            comboBox10.SelectedIndex = TaskNO;//车
 
             bindCboxTable(comboBox8, comboBox1.SelectedIndex);
             bindCboxTable(comboBox7, comboBox2.SelectedIndex);
@@ -44,6 +46,7 @@ namespace CoScheduling.Main.Map
         int UAVNO = 0;
         int ASNO = 3;
         int CarNO = 1;
+        int TaskNO = 12;
         /// <summary>
         /// 任务分解开始执行
         /// </summary>
@@ -51,7 +54,8 @@ namespace CoScheduling.Main.Map
         /// <param name="e"></param>
         private void TaskDisOkbuttoon_Click(object sender, EventArgs e)
         {
-            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex);
+            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
+            //CoScheduling.Main.MainInterface.delete(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
         }
         /// <summary>
         /// 窗口信息重置
@@ -64,6 +68,7 @@ namespace CoScheduling.Main.Map
             comboBox2.SelectedIndex = UAVNO;//无人机 
             comboBox3.SelectedIndex = ASNO;//飞艇
             comboBox4.SelectedIndex = CarNO;//车
+            comboBox10.SelectedIndex = TaskNO;//车
         }
 
 
@@ -112,7 +117,7 @@ namespace CoScheduling.Main.Map
             IFeatureLayer pFeatureLayer;
             ILayer layer;
 
-            IList<Info> infoList = new List<Info>();
+            //IList<Info> infoList = new List<Info>();
 
 
             layer = mapLayers.get_Layer(LayerNO);

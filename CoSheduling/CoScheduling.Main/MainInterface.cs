@@ -211,10 +211,10 @@ namespace CoScheduling.Main
         public static void taskDis(int satLayNO, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
         {
             string tStart = "0700";//开始观测时间 格式4位数 前两位小时 后两位分钟
-            double conRadixi = 0.7;//半径折损系数 与数据属性表中半径属性一致
+            //double conRadixi = 0.7;//半径折损系数 与数据属性表中半径属性一致
             IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
             ILayer layer;
-            IList<R_TInfo> RTinfoList = new List<R_TInfo>();
+            IList<R_TInfo> RTinfoList = new List<R_TInfo>();//存储每一个无人机和任务id初步筛选匹配结果
             DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
             //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
             layer = mapLayers.get_Layer(UAVLayNO);
@@ -222,7 +222,7 @@ namespace CoScheduling.Main
             string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
 
 
-            string distan = UAVFeatureLayer.FeatureClass.Fields.get_Field(6).Name.ToString();//获取续航半径字段 第6个字段
+            string distan = UAVFeatureLayer.FeatureClass.Fields.get_Field(6).Name.ToString();//获取续航半径字段 第6个字段 最大半径为航程一半
             GPBufferTool(layer, BufferPath, distan);
             OpenShape(BufferPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
             Program.myMap.Refresh();
@@ -280,20 +280,24 @@ namespace CoScheduling.Main
             IFeature UavEveryFeature;//选择出的每一个无人机 作为一个要素
             IFeature TaskEveryFeature;//选择出的每一个任务 作为一个要素
             IFeatureLayer UavEBFLayer;//每一个无人机相对于当前任务形成的缓冲区 要素图层
-            string Mileage;//无人机续航里程
-            string Vuav;//无人机续航速度 km/h
+            double Mileage;//无人机续航里程
+            double MaxConObeT;//无人机最大连续观测时间
+            double Vuav;//无人机续航速度 km/h
+            double tu_one;//单次观测的观测时间
+            double Sone;//单次观测面积
+            double UavWidth;//无人机幅宽
+            double Scstr;//在时间窗口约束下能够完成的面积
             string TsakWinS;//任务时间窗口开始时间 格式4位数 前两位小时 后两位分钟
             string TaskWinE;//任务时间窗口结束时间 格式4位数 前两位小时 后两位分钟
             int TWEhour;//任务时间窗口结束时间 小时
             int TWEmin;//任务时间窗口结束时间 分钟
             int SThour;//开始观测时间 小时
             int STmin;//开始观测时间 分钟
-            double urad;//每一个UAV相对于每一个任务的观测半径           
+            double ober_urad = 0;//每一个UAV相对于每一个任务的观测半径    
+            IFeatureLayer subTaskLayer;//最终的任务子集-------★★★★★------
             List<IFeatureLayer> lstFC = new List<IFeatureLayer>();//存储每个无人机相对于每个任务的时间观测区域要素图层
             for (int i = 0; i < RTinfoList.Count; i++)
             {
-
-
                 //IFeature Uavf = UAVlayer.FeatureClass.GetFeature(int.Parse(RTinfoList[i].ResouceID) - 1);
                 seleceUavPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "sl.shp";
                 GPselectTool(UAVlayer, seleceUavPath, int.Parse(RTinfoList[i].ResouceID));//选出单个无人机 以便根据具体任务区构建缓冲区
@@ -301,20 +305,39 @@ namespace CoScheduling.Main
                 GPselectTool(ptaskFeatureLayer, selTaskPath, int.Parse(RTinfoList[i].TaskID));//选出单个无人机 以便根据具体任务区构建缓冲区
                 UavEveryLayer = OpenFile_LayerFile(seleceUavPath);// mapLayers.get_Layer(0) as FeatureLayer;
                 TaskEveryLayer = OpenFile_LayerFile(selTaskPath);
-
-
-                UavToTaskpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + UavEveryLayer.Name + "BF.shp";
-                //计算在当前无人机和当前任务时间约束下的 无人机半径
-                //string Mileage=UAVlayer.FeatureClass.Fields.get_Field(int.Parse(RTinfoList[i].ResouceID);
-                //通过Ifeature获取属性值 http://blog.163.com/song_zhuyue/blog/static/17343278720101074524281/  http://blog.sina.com.cn/s/blog_84f7fbbb0101975m.html                 
-                //pFeatureCursor = UavEveryLayer.FeatureClass.Search(null, false);
-                //pFeature= pFeatureCursor.NextFeature();
                 UavEveryFeature = UavEveryLayer.FeatureClass.GetFeature(0);
                 TaskEveryFeature = TaskEveryLayer.FeatureClass.GetFeature(0);
-                Mileage = UavEveryFeature.get_Value(7).ToString();
-                Vuav = UavEveryFeature.get_Value(5).ToString();
-                TsakWinS = TaskEveryFeature.get_Value(4).ToString();
-                TaskWinE = TaskEveryFeature.get_Value(5).ToString();
+                Mileage = double.Parse(UavEveryFeature.get_Value(7).ToString());//续航里程
+                Vuav = double.Parse(UavEveryFeature.get_Value(5).ToString());//巡航速度
+                MaxConObeT = double.Parse(UavEveryFeature.get_Value(9).ToString());//最大连续开机时间 小时
+                UavWidth = double.Parse(UavEveryFeature.get_Value(8).ToString());//无人机幅宽
+                TsakWinS = TaskEveryFeature.get_Value(4).ToString();//任务开始时间
+                TaskWinE = TaskEveryFeature.get_Value(5).ToString();//任务结束时间
+
+                //首先用无人机最大半径切割当前任务区 获取能够覆盖的最大任务范围    
+                string UavMaxBF = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + "UMaxBF.shp";//选择当前无人机缓冲区
+                GPselectTool(UAVbuFeatureLayer, UavMaxBF, int.Parse(RTinfoList[i].ResouceID));//UAVbuFeatureLayer是已生成的所有无人机最大半径缓冲区
+                IFeatureLayer ifluav = OpenFile_LayerFile(UavMaxBF);//获取当前无人机最大缓冲区
+                string UavMaxTask = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + "UMaxT.shp";//当前无人机最大缓冲区半径内能够观测的任务区域
+                GPIntersectTool(ifluav.FeatureClass, TaskEveryLayer.FeatureClass, UavMaxTask);
+                IFeatureLayer UavMaxToTaskFeatureLayer = OpenFile_LayerFile(UavMaxTask);
+                string featureToPointPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + "FeaToPo.shp";//将当前无人机最大缓冲区半径内能够观测的任务区域转成点目标，为了求无人机基站到质心距离  
+                GPFeatureToPointTool(UavMaxToTaskFeatureLayer, featureToPointPath);
+                IFeatureLayer PointFeatureLayer = OpenFile_LayerFile(featureToPointPath);
+                IPoint pointfe = PointFeatureLayer.FeatureClass.GetFeature(0).Shape as IPoint;//将当前无人机最大缓冲区半径内能够观测的任务区域转成的点目标
+                IPoint UavPoint = UavEveryLayer.FeatureClass.GetFeature(0).Shape as IPoint;//将当前无人机转成的点目标
+                double dcen = Math.Sqrt(Math.Pow(pointfe.X - UavPoint.X, 2) + Math.Pow(pointfe.Y - UavPoint.Y, 2));//无人机基地到无人机最大缓冲区半径内能够观测的任务区域的质心距离 米？
+                double TLongUToT = (Mileage - 2 * dcen) / 1000 / Vuav; //当前无人机相对于当前任务单次观测最长时间 距离考虑用质心距离统一代替 小时
+                if (TLongUToT < MaxConObeT)//小时
+                { tu_one = TLongUToT; } //小时
+                else
+                { tu_one = MaxConObeT; }
+                Sone = tu_one * Vuav * UavWidth * 1000;//单次观测面积 平方米
+                IPolygon UavMaxTaskPolygon = UavMaxToTaskFeatureLayer.FeatureClass.GetFeature(0).Shape as IPolygon;
+                IArea Uarea = UavMaxTaskPolygon as IArea;
+                int K_Ober = (int)Math.Ceiling(Uarea.Area / Sone); //无人机观测次数k 平方米 向上取整
+
+                //时间确定 
                 if (TaskWinE.Length > 3)
                 {
                     TWEhour = int.Parse(TaskWinE.Substring(0, 2));//任务结束时间 小时                 
@@ -333,65 +356,139 @@ namespace CoScheduling.Main
                     SThour = int.Parse(tStart.Substring(0, 1));//开始观测时间 小时
                 }
                 STmin = int.Parse(tStart.Substring(tStart.Length - 2, 2));//开始观测时间 分钟
-                double SinMaxT = int.Parse(Mileage) / (2 * int.Parse(Vuav) * 0.2777778) / 60; //最远单程飞行时间 分钟
+                //double SinMaxT = (Mileage) / (2 * (Vuav) * 0.2777778) / 60; //最远单程飞行时间 分钟
+
+
                 if (int.Parse(tStart) < int.Parse(TaskWinE))//保证开始观测时间（无人机出发时间）小于任务结束时间
                 {
-                    if (TWEhour * 60 + TWEmin - SinMaxT - (SThour * 60 + STmin) > 0)
+                    if (K_Ober == 1) //飞行一次即可完成的任务
                     {
-                        urad = double.Parse(Mileage);
+                        if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60 - tu_one * 60 > 0)
+                        {
+                            ober_urad = Mileage / 2;//满足时间约束 半径等于续航里程/2
+                        }
+                        else  //不满足时间窗口约束 则确定在时间窗口约束下能够完成的面积
+                        {
+                            Scstr = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60) / 60 * Vuav * 1000 * UavWidth;
+                            //根据Scstr确定半径ober_urad 
+                            ///////////////////////////////////////////算法A///////////////////////////////////////////////////////////////////
+                            ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
+                        }
                     }
-                    else
-                        urad = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin)) * 60 * double.Parse(Vuav) * 3.6;
+                    else if (K_Ober > 1)//飞行多次才可完成的任务
+                    {
+                        double Tdut = 2 * dcen / 1000 / Vuav + tu_one;//每次任务持续时间 小时   （大于1次） 
+                        double chageRate = Math.Abs(double.Parse(UavEveryFeature.get_Value(10).ToString()));//充电斜率 电量与时间 小时
+                        double consumRate = Math.Abs(double.Parse(UavEveryFeature.get_Value(11).ToString()));//耗电斜率 电量与时间 小时
+                        double tk; //执行k次任务所需时间 小时
+                        //观测次数大于1的情况                        
+                        tk = (K_Ober - 1) * Tdut + (K_Ober - 1) * (Tdut * consumRate / chageRate) + dcen / 1000 / Vuav + tu_one;
+
+                        if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - tk * 60 > 0)
+                        {
+                            ober_urad = Mileage / 2;//满足时间约束 半径等于续航里程/2
+                        }
+                        else //不满足时间窗口约束 则首先确定满足时间窗口的最大观测面积Scstr
+                        {
+                            if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60 < 0)
+                            {//一次都不满足情况 
+                                Scstr = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60) / 60 * Vuav * 1000 * UavWidth;
+                                //根据Scstr确定半径ober_urad  
+                                /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
+                                ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
+                            }
+                            else//能够满足至少一次观测情况
+                            {
+                                double kk;//第j次观测完成所花费时间 小时
+                                for (int j = 2; j <= K_Ober; j++)
+                                {
+                                    kk = (j - 1) * Tdut + (j - 1) * (Tdut * consumRate / chageRate) + dcen / 1000 / Vuav + tu_one;
+                                    if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - kk * 60 < 0)
+                                    {
+                                        double jt = TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - ((j - 1) * Tdut + (j - 1) * (Tdut * consumRate / chageRate)) * 60 - dcen / 1000 / Vuav * 60;    //第j次能够观测的时间（可能能够完成部分）
+                                        if (jt > 0)
+                                        {
+                                            Scstr = (j - 1) * Sone + jt / 60 * Vuav * UavWidth * 1000; ;//满足多次情况的完成面积
+                                        }
+                                        else
+                                        {
+                                            Scstr = (j - 1) * Sone;//满足多次情况的完成面积
+                                        }
+
+                                        //根据Scstr确定半径ober_urad  
+                                        /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
+                                        ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
                 else
-                { urad = 0; }
-                //-----------------------------------------------以上是可覆盖半径 实际观测半径如下（折损系数）----------------------------------------------------------------------------------------
-                urad = urad / 2 * conRadixi;//实际观测半径
-                //根据当前无人机和当前任务时间约束下的 无人机半径 构建缓冲区
-                GPBufferTool((ILayer)UavEveryLayer, UavToTaskpath, urad.ToString());
-                //OpenShape(UavToTaskpath);
-                //Program.myMap.Refresh();
-                UavEBFLayer = OpenFile_LayerFile(UavToTaskpath);
-                //根据缓冲区和对应任务区构建此无人机能够观测到的此任务区  （Intersect工具 无人机观测范围和任务的重叠部分）
-                //IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
-                //ILayer layer;
-                //ILayer la2;               
-                //DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
-                ////卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
-                //layer = mapLayers.get_Layer(8);
-                //la2 = mapLayers.get_Layer(12);
-                //IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
-                //IFeatureLayer FeatureLayer = (IFeatureLayer)la2;
-                UavBfToTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "To" + ptaskFeatureLayer.Name + ".shp";
-                //当前第i组无人机任务   每一个无人机相对于每一个任务区的交集----------------------------------------------------------------------------------------------
-                GPIntersectTool(UavEBFLayer.FeatureClass, TaskEveryLayer.FeatureClass, UavBfToTaskPath);
-                //OpenShape(UavBfToTaskPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
-                //Program.myMap.Refresh();
-                IFeatureLayer UavToTTrueObe = OpenFile_LayerFile(UavBfToTaskPath);
-                lstFC.Add(UavToTTrueObe);
+                { ober_urad = 0; }//开始观测时间大于任务结束时间 观测半径为0
+
+                if (ober_urad > 0)//观测半径>0 有实际意义
+                {
+                    UavToTaskpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + UavEveryLayer.Name + "BF.shp";
+                    //计算在当前无人机和当前任务时间约束下的 无人机半径
+                    //string Mileage=UAVlayer.FeatureClass.Fields.get_Field(int.Parse(RTinfoList[i].ResouceID);
+                    //通过Ifeature获取属性值 http://blog.163.com/song_zhuyue/blog/static/17343278720101074524281/  http://blog.sina.com.cn/s/blog_84f7fbbb0101975m.html                 
+                    //pFeatureCursor = UavEveryLayer.FeatureClass.Search(null, false);
+                    //pFeature= pFeatureCursor.NextFeature();
+                    //-----------------------------------------------以上是可覆盖半径 实际观测半径如下（折损系数）----------------------------------------------------------------------------------------
+                    //ober_urad = ober_urad / 2 * conRadixi;//实际观测半径
+                    //根据当前无人机和当前任务时间约束下的 无人机半径 构建缓冲区
+                    GPBufferTool((ILayer)UavEveryLayer, UavToTaskpath, ober_urad.ToString());
+                    //OpenShape(UavToTaskpath);
+                    //Program.myMap.Refresh();
+                    UavEBFLayer = OpenFile_LayerFile(UavToTaskpath);
+                    //根据缓冲区和对应任务区构建此无人机能够观测到的此任务区  （Intersect工具 无人机观测范围和任务的重叠部分）
+                    //IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
+                    //ILayer layer;
+                    //ILayer la2;               
+                    //DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
+                    ////卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
+                    //layer = mapLayers.get_Layer(8);
+                    //la2 = mapLayers.get_Layer(12);
+                    //IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
+                    //IFeatureLayer FeatureLayer = (IFeatureLayer)la2;
+                    UavBfToTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "To" + ptaskFeatureLayer.Name + ".shp";
+                    //当前第i组无人机任务   每一个无人机相对于每一个任务区的交集----------------------------------------------------------------------------------------------
+                    GPIntersectTool(UavEBFLayer.FeatureClass, TaskEveryLayer.FeatureClass, UavBfToTaskPath);
+                    //OpenShape(UavBfToTaskPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+                    //Program.myMap.Refresh();
+                    IFeatureLayer UavToTTrueObe = OpenFile_LayerFile(UavBfToTaskPath);
+                    lstFC.Add(UavToTTrueObe);
+                }
+                 
             }
             //将无人机观测到任务的实际区域交叉分割 形成最终的子任务   每一次叠加操作 都要更新每个任务的观测资源集
-            string UavToTasdfkUnionPath ;
+            string UavToTasdfkUnionPath;
             IFeatureLayer replaceLayer = lstFC[0];
             List<IFeatureLayer> lstTWOFC = new List<IFeatureLayer>();//Union工具只能输入两个图层 以后可修改
-            for (int i =1; i < lstFC.Count; i++)
+            for (int i = 1; i < lstFC.Count; i++)
             {
-                UavToTasdfkUnionPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\"+i.ToString() + "UToTaUni.shp";
+                UavToTasdfkUnionPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i.ToString() + "UToTaUni.shp";
                 lstTWOFC.Add(replaceLayer);
                 lstTWOFC.Add(lstFC[i]);
                 GPUnionTool(lstTWOFC, UavToTasdfkUnionPath);
                 replaceLayer = OpenFile_LayerFile(UavToTasdfkUnionPath);
                 lstTWOFC.Clear();
-                if (i == lstFC.Count - 1)
-                {
-                    Program.myMap.AddLayer(replaceLayer as ILayer, 0);
-                    //OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
-                }
             }
+            //以上不包括无人机无法到达观测的子任务  以上结果和TaskArea再进行一次Union可解决
+            lstTWOFC.Clear();
+            lstTWOFC.Add(replaceLayer);//能够观测到的区域分割结果
+            lstTWOFC.Add(ptaskFeatureLayer);//任务区
+            string UavToTaUnionPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "UToTaUni.shp";
+            GPUnionTool(lstTWOFC, UavToTaUnionPath);
+            subTaskLayer = OpenFile_LayerFile(UavToTaUnionPath);
+            Program.myMap.AddLayer(subTaskLayer as ILayer, 0);
 
-           
 
-           // OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
+
+            // OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
             Program.myMap.Refresh();
             //地图缩放到阿克苏地区
             ILayer akesulayer = PRV_GetLayersByName("AkesuCity");
@@ -400,6 +497,7 @@ namespace CoScheduling.Main
             Program.myMap.Extent = Akesu.Shape.Envelope;// Program.myMap.FullExtent;
             Program.myMap.Refresh();
             Program.myMap.Update();
+
 
             //IEnumFeature pEnumFeature = UAVbuFeatureLayer as IEnumFeature;
             //IEnumFeature pEnumFeature = Program.myMap.Map.FeatureSelection as IEnumFeature;
@@ -517,7 +615,7 @@ namespace CoScheduling.Main
 
                 // Initialize the MakeFeatureLayer tool
                 ESRI.ArcGIS.AnalysisTools.Buffer buffertool = new ESRI.ArcGIS.AnalysisTools.Buffer();
-
+                GP.OverwriteOutput = true;
                 buffertool.in_features = in_features; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //
                 buffertool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
                 buffertool.buffer_distance_or_field = distance;
@@ -610,6 +708,34 @@ namespace CoScheduling.Main
                 Console.WriteLine(err.Message);
             }
         }
+        private static void GPFeatureToPointTool(IFeatureLayer in_features, string out_features)
+        {
+
+
+            try
+            {
+                Geoprocessor GP = new Geoprocessor();
+
+                ESRI.ArcGIS.DataManagementTools.FeatureToPoint FeToPointTool = new ESRI.ArcGIS.DataManagementTools.FeatureToPoint();
+                IGeometry ige = in_features.FeatureClass.GetFeature(0).Shape;
+
+                IPolygon pointfe = ige as IPolygon;
+                FeToPointTool.in_features = in_features;// "E:\\Cooperative monitoring\\program\\CPclone\\bin\\Data\\cache\\0UMaxT.shp";
+                FeToPointTool.out_feature_class = out_features;
+                //FeToPointTool.point_location = "CENTROID ";// "FALSE";
+
+                GP.Execute(FeToPointTool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                //return OpenShape(out_features);
+                //Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
 
 
         private static void GPUnionTool(List<IFeatureLayer> lstFeatureClass, string out_features)
@@ -661,6 +787,53 @@ namespace CoScheduling.Main
             }
         }
         // Function for returning the tool messages.
+
+        private static void GPNearTool(IFeatureLayer InputFeature, IFeatureLayer NearFeature)
+        {
+
+            try
+            {
+
+                IGpValueTableObject valTbl = new GpValueTableObjectClass();
+                valTbl.SetColumns(1);
+                IFeatureClass ff;
+
+                object row = "";
+                object rank = 1;
+
+                row = NearFeature.FeatureClass;
+                //valTbl.SetRow(i, ref row);
+                valTbl.AddRow(row);
+                //valTbl.SetValue(i, 1, ref rank);
+                //parameters.Add(filePath + lstFeatureClass[i].Name+ ".shp" );
+
+
+
+                Geoprocessor GP = new Geoprocessor();
+
+                // Initialize the MakeFeatureLayer tool
+                ESRI.ArcGIS.AnalysisTools.Near Neartool = new ESRI.ArcGIS.AnalysisTools.Near();
+                GP.OverwriteOutput = true;
+
+                Neartool.in_features = InputFeature; // @"E:\Cooperative monitoring\program\CPclone\bin\Data\UAV_Buffer.shp;E:\Cooperative monitoring\program\CPclone\bin\Data\TaskArea.shp";//datapath + "\\"+in_features+".shp;" + datapath + "\\"+clipFeat+".shp"; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //                
+                Neartool.near_features = valTbl;
+
+                //Uniontool.join_attributes = "ONLY_FID";  // = "id=" + idvalue;
+
+                // buffertool.dissolve_option = "ALL";
+                // RunTool(GP, buffertool, null);
+                GP.Execute(Neartool, null);
+                //IFeatureLayer mFeatureClass = (IFeatureLayer)GP.Execute(buffertool, null);
+                //Program.myMap.Map.AddLayer(mFeatureClass);
+                //return OpenShape(out_features);
+                //Program.myMap.Refresh();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err.Message);
+            }
+        }
         private static void ReturnMessages(Geoprocessor gp)
         {
             if (gp.MessageCount > 0)
@@ -672,10 +845,67 @@ namespace CoScheduling.Main
             }
 
         }
+        public static double AreaToRadius(IFeatureLayer UavPointFL, IFeatureLayer TaskAreaFL, double TaskArea, double mileage)
+        {
+            try
+            {
+                double Radius;//最终的半径
+                double Maxd = mileage / 2;
+                double Mind;//无人机位置到任务的最近距离
+                double sth = TaskArea * 0.01;//面积阈值 定义？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
+                
+                //IFeatureLayer UavPointFL = OpenFile_LayerFile(UavPointPath);
+                IFeatureLayer RadBFfeature;//缓冲区要素图层
+                IFeatureLayer InterSelefeature;//交集要素图层
+                string BFpath;//缓冲区图层存储路径
+                string IntersPath;//交集图层存储路径
+                IPolygon InterSelefePolygon;//交集区域转为面
+                IArea Uarea;//交集区域转为Iarea
+
+                GPNearTool(UavPointFL, TaskAreaFL);//GP工具求点到面最近距离 生成表中一个字段  多次循环会删除么？？？？？？？？
+                //IFeature UavPfe = UavPointFL.FeatureClass.GetFeature(0);//转成一个要素
+                IFeature UavPfe = UavPointFL.FeatureClass.GetFeature(0);//转成一个要素
+               
+
+                Mind = double.Parse(UavPfe.get_Value(UavPfe.Fields.FieldCount - 1).ToString());
+                BFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "RadBF.shp";
+                IntersPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "RadBF.shp";
+                do
+                {
+
+                    Radius = (Maxd + Mind) / 2;
+
+                    GPBufferTool((ILayer)UavPointFL, BFpath, Radius.ToString());
+                    RadBFfeature = OpenFile_LayerFile(BFpath);
+
+                    GPIntersectTool(RadBFfeature.FeatureClass, TaskAreaFL.FeatureClass, IntersPath);
+                    InterSelefeature = OpenFile_LayerFile(IntersPath);
+                    InterSelefePolygon = InterSelefeature.FeatureClass.GetFeature(0).Shape as IPolygon;
+                    Uarea = InterSelefePolygon as IArea;
+                    if (Uarea.Area > TaskArea)
+                    {
+                        Maxd = Radius;
+                    }
+                    else
+                    {
+                        Mind = Radius;
+                    }
+                } while (Uarea.Area < TaskArea + sth && Uarea.Area > TaskArea + sth);
+
+                //Radius = TaskArea;
+                return Radius;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("错误：" + ex.Message);
+                return -1;
+            }
+        }
+
+
 
         #endregion
         #endregion
-
 
         #region 注释代码 可参考
 

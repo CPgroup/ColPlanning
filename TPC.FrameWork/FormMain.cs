@@ -12,6 +12,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
 using CoScheduling.Main;
+using ESRI.ArcGIS.esriSystem;
 
 namespace CP.FrameWork
 {
@@ -19,6 +20,10 @@ namespace CP.FrameWork
     {
         public FormMain()
         {
+            //IAoInitialize m_AoInitialize = new AoInitializeClass();
+            //esriLicenseStatus licenseStatus = esriLicenseStatus.esriLicenseUnavailable;
+
+            //licenseStatus = m_AoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeAdvanced);//里面的esriLicenseProductCode后面的产品可以自己选择
             InitializeComponent();            
         }
         

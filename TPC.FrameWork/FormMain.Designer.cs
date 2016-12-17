@@ -222,6 +222,7 @@ namespace CP.FrameWork
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.appMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemProgressBar1)).BeginInit();
@@ -396,11 +397,12 @@ namespace CP.FrameWork
             this.barButtonItem44,
             this.barButtonItem45,
             this.barButtonItem46,
-            this.taskDisButton});
+            this.taskDisButton,
+            this.conflictButton});
             this.ribbonControl.LargeImages = this.ribbonImageCollectionLarge;
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ribbonControl.MaxItemId = 295;
+            this.ribbonControl.MaxItemId = 296;
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.resourceManage,
@@ -1649,6 +1651,7 @@ namespace CP.FrameWork
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem42);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem43);
             this.rpgTaskPlanning.ItemLinks.Add(this.taskDisButton);
+            this.rpgTaskPlanning.ItemLinks.Add(this.conflictButton);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem34);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem35);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem36);
@@ -1917,6 +1920,15 @@ namespace CP.FrameWork
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "¶¯Ì¬¹æ»®";
             // 
+            // conflictButton
+            // 
+            this.conflictButton.Caption = "³åÍ»ÅÐ¶Ï";
+            this.conflictButton.Glyph = ((System.Drawing.Image)(resources.GetObject("conflictButton.Glyph")));
+            this.conflictButton.Id = 295;
+            this.conflictButton.Name = "conflictButton";
+            this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
+            // 
             // FormMain
             // 
             this.Appearance.Options.UseFont = true;
@@ -2143,6 +2155,7 @@ namespace CP.FrameWork
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private DevExpress.XtraBars.BarButtonItem taskDisButton;
         private DevExpress.XtraBars.Ribbon.RibbonPage PlanCoScheduling;
+        private DevExpress.XtraBars.BarButtonItem conflictButton;
 
     }
 }

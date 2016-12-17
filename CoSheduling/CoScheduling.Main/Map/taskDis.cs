@@ -31,6 +31,8 @@ namespace CoScheduling.Main.Map
             comboBox4.SelectedIndex = CarNO;//车
             bindCboxLayer(comboBox10);
             comboBox10.SelectedIndex = TaskNO;//车
+            bindCboxLayer(comboBox11);
+            comboBox11.SelectedIndex = satLine;//车
 
             bindCboxTable(comboBox8, comboBox1.SelectedIndex);
             bindCboxTable(comboBox7, comboBox2.SelectedIndex);
@@ -42,11 +44,12 @@ namespace CoScheduling.Main.Map
 
         }
         //四类资源图层序号
-        int satNO = 4;
+        int satNO = 10;
         int UAVNO = 0;
-        int ASNO = 3;
-        int CarNO = 1;
+        int ASNO = 4;
+        int CarNO = 2;
         int TaskNO = 12;
+        int satLine = 7;
         /// <summary>
         /// 任务分解开始执行
         /// </summary>
@@ -54,7 +57,7 @@ namespace CoScheduling.Main.Map
         /// <param name="e"></param>
         private void TaskDisOkbuttoon_Click(object sender, EventArgs e)
         {
-            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
+            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex,comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
             //CoScheduling.Main.MainInterface.delete(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
         }
         /// <summary>
@@ -69,6 +72,7 @@ namespace CoScheduling.Main.Map
             comboBox3.SelectedIndex = ASNO;//飞艇
             comboBox4.SelectedIndex = CarNO;//车
             comboBox10.SelectedIndex = TaskNO;//车
+            comboBox11.SelectedIndex = satLine;//车
         }
 
 
@@ -170,6 +174,11 @@ namespace CoScheduling.Main.Map
             bindCboxTable(comboBox5, comboBox4.SelectedIndex);
         } 
         #endregion
+
+        private void comboBox11_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //bindCboxTable(comboBox8, comboBox11.SelectedIndex);
+        }
 
     }
 

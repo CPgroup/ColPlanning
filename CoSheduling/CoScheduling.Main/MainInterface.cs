@@ -208,20 +208,39 @@ namespace CoScheduling.Main
         /// 任务分解 子任务生成
         /// 输入为卫星、无人机、飞艇、车的图层序号
         /// </summary>
-        public static void taskDis(int satLayNO, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
+        public static void taskDis(int satLayNO, int satAttribute, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
         {
             string tStart = "0700";//开始观测时间 格式4位数 前两位小时 后两位分钟
+            //int satNo=2;//卫星个数
+            int SThour;//开始观测时间 小时
+            int STmin;//开始观测时间 分钟
+            if (tStart.Length > 3)
+            {
+                SThour = int.Parse(tStart.Substring(0, 2));//开始观测时间 小时        
+            }
+            else
+            {
+                SThour = int.Parse(tStart.Substring(0, 1));//开始观测时间 小时
+            }
+            STmin = int.Parse(tStart.Substring(tStart.Length - 2, 2));//开始观测时间 分钟
             //double conRadixi = 0.7;//半径折损系数 与数据属性表中半径属性一致
             IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
             ILayer layer;
+            ILayer ASlayer;//飞艇图层
             IList<R_TInfo> RTinfoList = new List<R_TInfo>();//存储每一个无人机和任务id初步筛选匹配结果
             DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
             //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
             layer = mapLayers.get_Layer(UAVLayNO);
+            ASlayer = mapLayers.get_Layer(ASLayNO);
+            ILayer satLayer = mapLayers.get_Layer(satLayNO);//SatElementTask 图层
+            ILayer satAtributeLayer = mapLayers.get_Layer(satAttribute);//主要使用卫星的各种属性 后期可从sql数据库中获取 SateliteLine图层
+
+            #region 任务分解 确定每一资源观测区域
+
+            #region 无人机观测区域确定
+            //无人机及实际观测范围--------------------------------------(无人机开始)------------------------------------------
             IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
             string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
-
-
             string distan = UAVFeatureLayer.FeatureClass.Fields.get_Field(6).Name.ToString();//获取续航半径字段 第6个字段 最大半径为航程一半
             GPBufferTool(layer, BufferPath, distan);
             OpenShape(BufferPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
@@ -229,8 +248,6 @@ namespace CoScheduling.Main
             //Program.myMap.Extent = Program.myMap.FullExtent;
             //Program.myMap.Refresh();
             IFeatureLayer UAVbuFeatureLayer = (IFeatureLayer)mapLayers.get_Layer(0);//得到刚生成的无人机最大缓冲区
-
-
             //pFeatureLayer = layer as IFeatureLayer;//可用此获取属性表
 
             //获取每一个面状任务区  并且使无人机根据此面状任务task生成缓冲区，为了简化计算，先根据无人机的最大航程范围确定无人机可能会观测到的任务集，在根据每一个无人机和他的任务集进行缓冲区构建
@@ -253,7 +270,7 @@ namespace CoScheduling.Main
                 IFeature pFeature = taskfeatureCursor.NextFeature();//查询的当前无人机缓冲区内 相交的面状任务区
                 while (pFeature != null)
                 {
-                    R_TInfo Rinfo = new R_TInfo() { ResouceID = Feature.get_Value(2).ToString(), TaskID = pFeature.get_Value(2).ToString() };
+                    R_TInfo Rinfo = new R_TInfo() { ResouceFID = Feature.get_Value(0).ToString(), TaskFID = pFeature.get_Value(0).ToString() };
                     RTinfoList.Add(Rinfo);//存储无人机ID和面状任务区ID对应关系，表明无人机可能观测到此任务区（空间上）
                     //验证是否获取到当前无人机缓冲区内的面状任务区
                     //string hehe = pFeature.get_Value(2).ToString();
@@ -291,18 +308,20 @@ namespace CoScheduling.Main
             string TaskWinE;//任务时间窗口结束时间 格式4位数 前两位小时 后两位分钟
             int TWEhour;//任务时间窗口结束时间 小时
             int TWEmin;//任务时间窗口结束时间 分钟
-            int SThour;//开始观测时间 小时
-            int STmin;//开始观测时间 分钟
+
+
             double ober_urad = 0;//每一个UAV相对于每一个任务的观测半径    
             IFeatureLayer subTaskLayer;//最终的任务子集-------★★★★★------
-            List<IFeatureLayer> lstFC = new List<IFeatureLayer>();//存储每个无人机相对于每个任务的时间观测区域要素图层
+            List<RTFeatureInfo> lstFC = new List<RTFeatureInfo>();//存储每个无人机相对于每个任务的时间观测区域要素图层
+            //List<R_TFIDtime> RTtimeList = new List<R_TFIDtime>();//资源对应任务所花费时间   小时     
+            double UtoTtime = 0;//每一个任务相对每一个资源执行的总花费时间
             for (int i = 0; i < RTinfoList.Count; i++)
             {
                 //IFeature Uavf = UAVlayer.FeatureClass.GetFeature(int.Parse(RTinfoList[i].ResouceID) - 1);
                 seleceUavPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + UAVlayer.Name + "sl.shp";
-                GPselectTool(UAVlayer, seleceUavPath, int.Parse(RTinfoList[i].ResouceID));//选出单个无人机 以便根据具体任务区构建缓冲区
+                GPselectTool(UAVlayer, seleceUavPath, "FID=", int.Parse(RTinfoList[i].ResouceFID));//选出单个无人机 以便根据具体任务区构建缓冲区
                 selTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + ptaskFeatureLayer.Name + "sl.shp";
-                GPselectTool(ptaskFeatureLayer, selTaskPath, int.Parse(RTinfoList[i].TaskID));//选出单个无人机 以便根据具体任务区构建缓冲区
+                GPselectTool(ptaskFeatureLayer, selTaskPath, "FID=", int.Parse(RTinfoList[i].TaskFID));//选出单个任务 以便根据具体任务区构建缓冲区
                 UavEveryLayer = OpenFile_LayerFile(seleceUavPath);// mapLayers.get_Layer(0) as FeatureLayer;
                 TaskEveryLayer = OpenFile_LayerFile(selTaskPath);
                 UavEveryFeature = UavEveryLayer.FeatureClass.GetFeature(0);
@@ -316,7 +335,7 @@ namespace CoScheduling.Main
 
                 //首先用无人机最大半径切割当前任务区 获取能够覆盖的最大任务范围    
                 string UavMaxBF = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + "UMaxBF.shp";//选择当前无人机缓冲区
-                GPselectTool(UAVbuFeatureLayer, UavMaxBF, int.Parse(RTinfoList[i].ResouceID));//UAVbuFeatureLayer是已生成的所有无人机最大半径缓冲区
+                GPselectTool(UAVbuFeatureLayer, UavMaxBF, "FID=", int.Parse(RTinfoList[i].ResouceFID));//UAVbuFeatureLayer是已生成的所有无人机最大半径缓冲区
                 IFeatureLayer ifluav = OpenFile_LayerFile(UavMaxBF);//获取当前无人机最大缓冲区
                 string UavMaxTask = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i + "UMaxT.shp";//当前无人机最大缓冲区半径内能够观测的任务区域
                 GPIntersectTool(ifluav.FeatureClass, TaskEveryLayer.FeatureClass, UavMaxTask);
@@ -326,7 +345,7 @@ namespace CoScheduling.Main
                 IFeatureLayer PointFeatureLayer = OpenFile_LayerFile(featureToPointPath);
                 IPoint pointfe = PointFeatureLayer.FeatureClass.GetFeature(0).Shape as IPoint;//将当前无人机最大缓冲区半径内能够观测的任务区域转成的点目标
                 IPoint UavPoint = UavEveryLayer.FeatureClass.GetFeature(0).Shape as IPoint;//将当前无人机转成的点目标
-                double dcen = Math.Sqrt(Math.Pow(pointfe.X - UavPoint.X, 2) + Math.Pow(pointfe.Y - UavPoint.Y, 2));//无人机基地到无人机最大缓冲区半径内能够观测的任务区域的质心距离 米？
+                double dcen = Math.Sqrt(Math.Pow(pointfe.X - UavPoint.X, 2) + Math.Pow(pointfe.Y - UavPoint.Y, 2));//无人机基地到无人机最大缓冲区半径内能够观测的任务区域的质心距离 米
                 double TLongUToT = (Mileage - 2 * dcen) / 1000 / Vuav; //当前无人机相对于当前任务单次观测最长时间 距离考虑用质心距离统一代替 小时
                 if (TLongUToT < MaxConObeT)//小时
                 { tu_one = TLongUToT; } //小时
@@ -347,15 +366,7 @@ namespace CoScheduling.Main
                     TWEhour = int.Parse(TaskWinE.Substring(0, 1));//任务结束时间 小时
                 }
                 TWEmin = int.Parse(TaskWinE.Substring(TaskWinE.Length - 2, 2));//任务结束时间 分钟 
-                if (tStart.Length > 3)
-                {
-                    SThour = int.Parse(tStart.Substring(0, 2));//开始观测时间 小时        
-                }
-                else
-                {
-                    SThour = int.Parse(tStart.Substring(0, 1));//开始观测时间 小时
-                }
-                STmin = int.Parse(tStart.Substring(tStart.Length - 2, 2));//开始观测时间 分钟
+
                 //double SinMaxT = (Mileage) / (2 * (Vuav) * 0.2777778) / 60; //最远单程飞行时间 分钟
 
 
@@ -366,14 +377,23 @@ namespace CoScheduling.Main
                         if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60 - tu_one * 60 > 0)
                         {
                             ober_urad = Mileage / 2;//满足时间约束 半径等于续航里程/2
+                            UtoTtime = (dcen / 1000 / Vuav) * 2 + tu_one;
+
                         }
                         else  //不满足时间窗口约束 则确定在时间窗口约束下能够完成的面积
                         {
                             Scstr = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60) / 60 * Vuav * 1000 * UavWidth;
                             //根据Scstr确定半径ober_urad 
-                            ///////////////////////////////////////////算法A///////////////////////////////////////////////////////////////////
-                            ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
+                            if (Scstr > 0)
+                            {
+                                ///////////////////////////////////////////算法A///////////////////////////////////////////////////////////////////
+                                ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage / 2);
+
+                                UtoTtime = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) + dcen / 1000 / Vuav * 60) / 60;
+
+                            }
                         }
+
                     }
                     else if (K_Ober > 1)//飞行多次才可完成的任务
                     {
@@ -387,15 +407,23 @@ namespace CoScheduling.Main
                         if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - tk * 60 > 0)
                         {
                             ober_urad = Mileage / 2;//满足时间约束 半径等于续航里程/2
+                            UtoTtime = K_Ober * Tdut + 0.25 * K_Ober * Tdut;//充电时间 一定值 这里与上文一致 0.2/0.8
+
                         }
                         else //不满足时间窗口约束 则首先确定满足时间窗口的最大观测面积Scstr
                         {
-                            if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60 < 0)
+                            if (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60 - tu_one * 60 < 0)
                             {//一次都不满足情况 
                                 Scstr = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) - dcen / 1000 / Vuav * 60) / 60 * Vuav * 1000 * UavWidth;
                                 //根据Scstr确定半径ober_urad  
-                                /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
-                                ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
+                                if (Scstr > 0)
+                                {
+                                    /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
+                                    ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage / 2);
+                                    UtoTtime = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) + dcen / 1000 / Vuav * 60) / 60;
+
+                                }
+
                             }
                             else//能够满足至少一次观测情况
                             {
@@ -416,15 +444,24 @@ namespace CoScheduling.Main
                                         }
 
                                         //根据Scstr确定半径ober_urad  
-                                        /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
-                                        ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage);
-                                        break;
+                                        if (Scstr > 0)
+                                        {
+                                            /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
+                                            ober_urad = AreaToRadius(UavEveryLayer, TaskEveryLayer, Scstr, Mileage / 2);
+                                            UtoTtime = (TWEhour * 60 + TWEmin - (SThour * 60 + STmin) + dcen / 1000 / Vuav * 60) / 60;
+
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
 
+
                     }
+
+
+
                 }
                 else
                 { ober_urad = 0; }//开始观测时间大于任务结束时间 观测半径为0
@@ -460,19 +497,207 @@ namespace CoScheduling.Main
                     //OpenShape(UavBfToTaskPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
                     //Program.myMap.Refresh();
                     IFeatureLayer UavToTTrueObe = OpenFile_LayerFile(UavBfToTaskPath);
-                    lstFC.Add(UavToTTrueObe);
+
+                    IPolygon UAVsubTPolygon = UavToTTrueObe.FeatureClass.GetFeature(0).Shape as IPolygon;
+                    IArea uavTarea = UAVsubTPolygon as IArea;
+
+                    //lstFC.Add(UavToTTrueObe);
+                    RTFeatureInfo RTFinfo = new RTFeatureInfo() { UAVFID = RTinfoList[i].ResouceFID, ASFID = "-1", SATFID = "-1", TFID = RTinfoList[i].TaskFID, RtoTFL = UavToTTrueObe, areaT = uavTarea.Area, RtoTtime = UtoTtime };
+                    lstFC.Add(RTFinfo);//每个无人机相对于每个任务的最终观测区域 和无人机ID和面状任务区ID对应关系，表明无人机最终观测到此任务区
+
                 }
-                 
+
             }
-            //将无人机观测到任务的实际区域交叉分割 形成最终的子任务   每一次叠加操作 都要更新每个任务的观测资源集
+            //无人机及实际观测范围--------------------------------------(无人机结束)------------------------------------------
+
+            #endregion
+
+            #region 飞艇观测区域确定
+
+            //飞艇及实际观测范围--------------------------------------(飞艇开始)------------------------------------------
+            IFeatureLayer ASfeatureLayer = ASlayer as IFeatureLayer;
+
+            double ASv;//巡航速度
+            double ASconT;//持续观测时间
+            double ASwidth;//幅宽
+            List<R_TInfo> AStoTaskFIDlist = new List<R_TInfo>();//AS相对于任务的FID 以便为缓冲区命名
+            int ASFID = 0;//获取每一个AS的FID以便为缓冲区命名
+            double AStoTtime = 0;//每一个任务相对每一个资源执行的总花费时间 小时
+            IQueryFilter pASFilter = new QueryFilter();//实例化一个查询条件对象 
+            pASFilter.WhereClause = "FID >= 0";//将查询条件赋值     遍历每一个飞艇
+            IFeatureCursor ASfeatureCursor = ASfeatureLayer.Search(pASFilter, false);
+            IFeature ASFeature = ASfeatureCursor.NextFeature();//遍历查询结果  每一个飞艇要素
+            //获取每一个飞艇
+            while (ASFeature != null)
+            {
+                //ptaskFeatureLayer//任务featurelayer
+                int TaskFID = 0;//获取每一个任务的FID以便为缓冲区命名 
+                string selASPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "OneAS.shp";
+                GPselectTool(ASfeatureLayer, selASPath, "FID=", int.Parse(ASFeature.get_Value(0).ToString()));//选出单个飞艇 
+                IFeatureLayer ASOneLayer = OpenFile_LayerFile(selASPath);//选出单个飞艇作为要素图层
+                IFeatureLayer ASoneBFLayer;//单个飞艇相对于当前任务的缓冲区图层
+                string taskPointPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "TaskPoint.shp";//把所有任务面转成任务点图层
+                GPFeatureToPointTool(ptaskFeatureLayer, taskPointPath);
+                IFeatureLayer taskPointFeatureLayer = OpenFile_LayerFile(taskPointPath);
+                IQueryFilter taskFilter = new QueryFilter();//实例化一个查询条件对象 
+                taskFilter.WhereClause = "FID >= 0";//将查询条件赋值     遍历每一个任务点
+                IFeatureCursor TaskPointfeatureCursor = taskPointFeatureLayer.Search(taskFilter, false);
+                IFeature taskPointFeature = TaskPointfeatureCursor.NextFeature();//遍历查询结果  每一个任务点要素
+                while (taskPointFeature != null)
+                {
+                    string oneTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "Onetask.shp";
+                    GPselectTool(ptaskFeatureLayer, oneTaskPath, "FID=", int.Parse(taskPointFeature.get_Value(0).ToString()));//选出单个任务区 
+                    IFeatureLayer taskOneLayer = OpenFile_LayerFile(oneTaskPath);//选出单个任务区作为要素图层
+
+                    IPoint taskFeaturePoint = taskPointFeature.Shape as IPoint;//将当前任务区域转成的点目标
+                    IPoint ASFeaturePoint = ASFeature.Shape as IPoint;//将当前飞艇转成的点目标
+                    double ASdcen = Math.Sqrt(Math.Pow(taskFeaturePoint.X - ASFeaturePoint.X, 2) + Math.Pow(taskFeaturePoint.Y - ASFeaturePoint.Y, 2));//飞艇到任务区域的质心距离 米
+                    double Tas;//有效观测时间 小时
+                    double TmaxAS;//用来判断最大航行距离 小时
+                    double oberASd;//观测半径
+                    double ASScstr;//在时间约束下能够完成的面积
+                    string ASToTaskBFpath;//AS相对任务的观测缓冲区路径
+                    string ASBfToTaskPath;//as相对与具体任务的观测范围存储路径
+                    ASv = double.Parse(ASFeature.get_Value(5).ToString());//巡航速度
+                    ASconT = double.Parse(ASFeature.get_Value(6).ToString());//持续观测时间
+                    ASwidth = double.Parse(ASFeature.get_Value(7).ToString());//幅宽
+                    TsakWinS = taskPointFeature.get_Value(4).ToString();//任务开始时间
+                    TaskWinE = taskPointFeature.get_Value(5).ToString();//任务结束时间
+                    //确定时间
+                    if (TaskWinE.Length > 3)
+                    {
+                        TWEhour = int.Parse(TaskWinE.Substring(0, 2));//任务结束时间 小时                 
+                    }
+                    else
+                    {
+                        TWEhour = int.Parse(TaskWinE.Substring(0, 1));//任务结束时间 小时
+                    }
+                    TWEmin = int.Parse(TaskWinE.Substring(TaskWinE.Length - 2, 2));//任务结束时间 分钟 
+                    if (tStart.Length > 3)
+                    {
+                        SThour = int.Parse(tStart.Substring(0, 2));//开始观测时间 小时        
+                    }
+                    else
+                    {
+                        SThour = int.Parse(tStart.Substring(0, 1));//开始观测时间 小时
+                    }
+                    STmin = int.Parse(tStart.Substring(tStart.Length - 2, 2));//开始观测时间 分钟
+                    if ((TWEhour * 60 + TWEmin - SThour * 60 - STmin - (ASdcen / ASv / 1000) * 60) < ASconT * 60)
+                    {
+                        Tas = (TWEhour * 60 + TWEmin - SThour * 60 - STmin - (ASdcen / ASv / 1000) * 60) / 60;//有效观测时间 小时
+                        //TmaxAS = ASconT;
+                    }
+                    else
+                    {
+                        Tas = ASconT; //有效观测时间 小时
+                        //TmaxAS = (TWEhour * 60 + TWEmin - SThour * 60 - STmin - (ASdcen / ASv / 1000) * 60) / 60;
+                    }
+                    if (Tas > 0)//观测该任务的时间必须 >0 才有意义 ，说明可以观测到该任务
+                    {
+                        ASScstr = Tas * ASv * ASwidth * 1000;//能够观测的面积  平方米
+                        TmaxAS = (TWEhour * 60 + TWEmin - SThour * 60 - STmin) / 60;
+                        //根据Scstr确定半径ober_urad  
+                        /////////////////////////（算法A）循环逼近半径/////////////////////////////////////////
+                        oberASd = AreaToRadius(ASOneLayer, taskOneLayer, ASScstr, TmaxAS * ASv * 1000); //(TmaxAS的确定？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                        if (oberASd > 0)//观测半径>0 有实际意义
+                        {
+                            R_TInfo AStoTinfo = new R_TInfo() { ResouceFID = ASFID.ToString(), TaskFID = TaskFID.ToString() };
+                            AStoTaskFIDlist.Add(AStoTinfo);//AS相对于任务的FID 以便为缓冲区命名 后面调用
+                            ASToTaskBFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + AStoTaskFIDlist.Count + "ASBF.shp";// ASFID + "_" + TaskFID + "#ASBF.shp";
+                            //根据当前飞艇和当前任务时间约束下的 观测半径 构建缓冲区
+                            GPBufferTool((ILayer)ASOneLayer, ASToTaskBFpath, oberASd.ToString());
+                            ASoneBFLayer = OpenFile_LayerFile(ASToTaskBFpath);
+                            //根据缓冲区和对应任务区构建此飞艇能够观测到的此任务区  （Intersect工具 观测范围和任务的重叠部分）                            
+                            ASBfToTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + AStoTaskFIDlist.Count + "AstoT.shp";
+                            GPIntersectTool(ASoneBFLayer.FeatureClass, taskOneLayer.FeatureClass, ASBfToTaskPath);
+                            IFeatureLayer ASToTTrueObe = OpenFile_LayerFile(ASBfToTaskPath);
+                            IArea ASTarea;
+                            double areaAS;
+                            if (ASToTTrueObe.FeatureClass.FeatureCount(null) > 0)
+                            {
+                                IPolygon ASsubTPolygon = ASToTTrueObe.FeatureClass.GetFeature(0).Shape as IPolygon;//交集可能为空
+                                ASTarea = ASsubTPolygon as IArea;
+                                areaAS = ASTarea.Area;
+                            }
+                            else
+                            {
+                                areaAS = 0;
+                            }
+
+
+                            RTFeatureInfo RTFinfo = new RTFeatureInfo() { ASFID = ASFeature.get_Value(0).ToString(), UAVFID = "-1", SATFID = "-1", TFID = taskPointFeature.get_Value(0).ToString(), RtoTFL = ASToTTrueObe, RtoTtime = Tas, areaT = areaAS };
+                            lstFC.Add(RTFinfo);//每个飞艇相对于每个任务的最终观测区域 和飞艇ID和面状任务区ID对应关系，表明飞艇最终观测到此任务区
+
+
+                        }
+                    }
+
+                    TaskFID = TaskFID + 1;
+                    taskPointFeature = TaskPointfeatureCursor.NextFeature();
+                }
+
+
+                ASFID = ASFID + 1;
+                ASFeature = ASfeatureCursor.NextFeature();
+            }
+            //飞艇及实际观测范围--------------------------------------(飞艇结束)------------------------------------------
+
+            #endregion
+
+            #region 卫星观测区域确定
+
+            //卫星及实际观测范围--------------------------------------(卫星开始)------------------------------------------
+            List<R_TInfo> SattoTaskFIDlist = new List<R_TInfo>();//sat相对于任务的FID 以便为条带命名
+            IFeatureLayer SatFeLayer = satLayer as IFeatureLayer;
+            IQueryFilter pSatFilter = new QueryFilter();//实例化一个查询条件对象 
+            pSatFilter.WhereClause = "FID >= 0";//将查询条件赋值     遍历每一个
+            IFeatureCursor SatfeatureCursor = SatFeLayer.Search(pSatFilter, false);
+            IFeature SatFeature = SatfeatureCursor.NextFeature();//遍历查询结果  每一个卫星条带
+            //获取每一个卫星条带
+            while (SatFeature != null)
+            {
+                R_TInfo satinfo = new R_TInfo() { ResouceFID = SatFeature.get_Value(16).ToString(), TaskFID = SatFeature.get_Value(15).ToString(), SatEleTFID = int.Parse(SatFeature.get_Value(0).ToString()) };
+                SattoTaskFIDlist.Add(satinfo);//AS相对于任务的FID 以便为缓冲区命名 后面调用
+
+                //string oneSatTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "OneStask.shp";
+                //GPselectTool(ptaskFeatureLayer, oneSatTaskPath, "FID=", int.Parse(SatFeature.get_Value(5).ToString()));//选出单个任务区 
+                //IFeatureLayer SattaskOneLayer = OpenFile_LayerFile(oneSatTaskPath);//选出单个任务区作为要素图层
+
+                string oneSatPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + SattoTaskFIDlist.Count + "OneSat.shp";
+                GPselectTool(SatFeLayer, oneSatPath, "FID=", int.Parse(SatFeature.get_Value(0).ToString()));// 相当于缓冲区 这里是卫星覆盖的子区域 
+                IFeatureLayer ASToTTrueObe = OpenFile_LayerFile(oneSatPath);
+
+                //根据卫星条带和对应任务区构建此卫星能够观测到的此任务区  （Intersect工具 观测范围和任务的重叠部分）                            
+                //string SatBfToTaskPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + SattoTaskFIDlist.Count + "SattoT.shp";
+                ////GPIntersectTool(SatTirpLayer.FeatureClass, SattaskOneLayer.FeatureClass, SatBfToTaskPath);
+                //IFeatureLayer ASToTTrueObe = OpenFile_LayerFile(SatBfToTaskPath);
+
+                RTFeatureInfo sRTFinfo = new RTFeatureInfo() { SATFID = SatFeature.get_Value(16).ToString(), UAVFID = "-1", ASFID = "-1", TFID = SatFeature.get_Value(15).ToString(), RtoTFL = ASToTTrueObe };
+                lstFC.Add(sRTFinfo);//每个飞艇相对于每个任务的最终观测区域 和飞艇ID和面状任务区ID对应关系，表明飞艇最终观测到此任务区
+
+
+                SatFeature = SatfeatureCursor.NextFeature();
+            }
+
+
+            //卫星及实际观测范围--------------------------------------(卫星结束)------------------------------------------
+
+            #endregion
+
+            #endregion
+
+            #region 任务分解 交集求元任务
+
+            //通过交集求最终的元任务集并显示--------------------------------------(交集求元任务开始)------------------------------------------
+            //将资源观测到任务的实际区域交叉分割 形成最终的子任务   每一次叠加操作 都要更新每个任务的观测资源集
             string UavToTasdfkUnionPath;
-            IFeatureLayer replaceLayer = lstFC[0];
+            IFeatureLayer replaceLayer = lstFC[0].RtoTFL;
             List<IFeatureLayer> lstTWOFC = new List<IFeatureLayer>();//Union工具只能输入两个图层 以后可修改
             for (int i = 1; i < lstFC.Count; i++)
             {
                 UavToTasdfkUnionPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + i.ToString() + "UToTaUni.shp";
                 lstTWOFC.Add(replaceLayer);
-                lstTWOFC.Add(lstFC[i]);
+                lstTWOFC.Add(lstFC[i].RtoTFL);
                 GPUnionTool(lstTWOFC, UavToTasdfkUnionPath);
                 replaceLayer = OpenFile_LayerFile(UavToTasdfkUnionPath);
                 lstTWOFC.Clear();
@@ -485,8 +710,142 @@ namespace CoScheduling.Main
             GPUnionTool(lstTWOFC, UavToTaUnionPath);
             subTaskLayer = OpenFile_LayerFile(UavToTaUnionPath);
             Program.myMap.AddLayer(subTaskLayer as ILayer, 0);
+            //通过交集求最终的元任务集并显示--------------------------------------(交集求元任务结束)------------------------------------------
+
+            #endregion
 
 
+            #region 元任务构建 对应关系确定
+            //求元任务集中每一个 元任务的原任务、资源、覆盖级别对应关系--------------------------------------(对应关系开始)------------------------------------------
+            //每一个子任务的所属任务FID  所属观测资源FID  子任务FID 覆盖级别
+            List<RTsubTInfo> lstTaskFC = new List<RTsubTInfo>();//★★★★★★★★★★★★★★★★存储对应关系 
+            IQueryFilter pFilter = new QueryFilter();//实例化一个查询条件对象 
+            pFilter.WhereClause = "FID >= 0";//将查询条件赋值     选择所有的子任务
+            IFeatureCursor subTaskfeatureCursor = subTaskLayer.Search(pFilter, false);
+            IFeature subTaskFeature = subTaskfeatureCursor.NextFeature();//遍历查询结果  子任务
+            string OriTFID = "-1";//原任务FID
+            while (subTaskFeature != null)
+            {
+                ISpatialFilter pContainFilter = new SpatialFilterClass();
+                pContainFilter.Geometry = subTaskFeature.Shape;
+                pContainFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;//空间关系选择条件 用相交选择该子任务的原始任务
+                IFeatureCursor OriTaskfeatureCursor = ptaskFeatureLayer.FeatureClass.Search(pContainFilter, false);
+                IFeature pTFeature = OriTaskfeatureCursor.NextFeature();//查询与子任务相交的原任务区
+                while (pTFeature != null)//有且仅有一个与子任务相交的原任务区
+                {
+
+                    OriTFID = pTFeature.get_Value(0).ToString();//当前子任务所属原任务的FID  
+                    double subTweight = double.Parse(pTFeature.get_Value(9).ToString());//当前子任务所属原任务的权重
+                    string subTWinS = pTFeature.get_Value(4).ToString();//当前子任务所属原任务的开始时间
+                    string subTWinE = pTFeature.get_Value(5).ToString();//当前子任务所属原任务的结束时间
+                    int coverNO = 0;
+                    List<int> ReUAVID = new List<int>();//每一个子任务的无人机资源FID 列表                    
+                    //确定所属资源FID   无人机//////////////////////////////////////明日任务///////////////////////////////////////////////////////
+                    //////////////////////////////
+                    for (int j = 0; j < RTinfoList.Count; j++)
+                    {
+                        if (int.Parse(OriTFID) == int.Parse(RTinfoList[j].TaskFID))//查找与原任务id匹配的序列 以确定缓冲区
+                        {
+                            string UtoTBFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + j + layer.Name + "slBF.shp";
+                            if (File.Exists(UtoTBFpath))//判断文件是否存在
+                            {
+                                IFeatureLayer UtoTBFfl = OpenFile_LayerFile(UtoTBFpath);
+                                //不能用相交？ 接触的情况也能查出来
+                                ISpatialFilter pRBFFilter = new SpatialFilterClass();
+                                pRBFFilter.Geometry = subTaskFeature.Shape;
+                                pRBFFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelWithin;//空间关系选择条件 选择能够观测到该子任务的缓冲区 （subT在UtoTBF内部，子任务是query ，缓冲区是target）——
+                                IFeatureCursor TasktoRBFCursor = UtoTBFfl.FeatureClass.Search(pRBFFilter, false);
+                                IFeature BFFeature = TasktoRBFCursor.NextFeature();//查询包含子任务的缓冲区
+                                if (BFFeature != null)
+                                {
+                                    //RTsubTInfo RTFNOinfo = new RTsubTInfo() { RID = (int.Parse(RTinfoList[j].ResouceID) - 1).ToString(), TID = (int.Parse(RTinfoList[j].TaskID) - 1).ToString(), subTID = subTaskFeature.get_Value(0).ToString() };
+                                    //lstTaskFC.Add(RTFNOinfo);
+                                    ReUAVID.Add(int.Parse(RTinfoList[j].ResouceFID));
+                                    BFFeature = TasktoRBFCursor.NextFeature();
+                                }
+                            }
+                            else
+                            { }
+
+                        }
+                    }
+                    List<int> ReASID = new List<int>();//每一个子任务的飞艇资源FID 列表
+                    //确定所属资源FID  飞艇/////////////////////////////////////////////////////////////////////////////////////////
+                    for (int asi = 0; asi < AStoTaskFIDlist.Count; asi++)
+                    {
+                        if (OriTFID == AStoTaskFIDlist[asi].TaskFID)//查找与原任务id匹配的序列 以确定缓冲区
+                        {
+                            string AStoTBFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + (asi + 1).ToString() + "ASBF.shp";
+                            IFeatureLayer AStoTBFfl = OpenFile_LayerFile(AStoTBFpath);
+                            ISpatialFilter pASBFFilter = new SpatialFilterClass();
+                            pASBFFilter.Geometry = subTaskFeature.Shape;
+                            pASBFFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelWithin;//空间关系选择条件 选择能够观测到该子任务的缓冲区 （subT在UtoTBF内部，子任务是query ，缓冲区是target）——
+                            IFeatureCursor TasktoASBFCursor = AStoTBFfl.FeatureClass.Search(pASBFFilter, false);
+                            IFeature ASBFFeature = TasktoASBFCursor.NextFeature();//查询包含子任务的缓冲区
+                            if (ASBFFeature != null)
+                            {
+                                //RTsubTInfo RTFNOinfo = new RTsubTInfo() { RID = (int.Parse(RTinfoList[j].ResouceID) - 1).ToString(), TID = (int.Parse(RTinfoList[j].TaskID) - 1).ToString(), subTID = subTaskFeature.get_Value(0).ToString() };
+                                //lstTaskFC.Add(RTFNOinfo);
+                                ReASID.Add(int.Parse(AStoTaskFIDlist[asi].ResouceFID));
+                                ASBFFeature = TasktoASBFCursor.NextFeature();
+                            }
+
+                        }
+                    }
+                    //确定所属资源FID  卫星/////////////////////////////////////////////////////////////////////////////////////////
+                    List<int> ReSatID = new List<int>();//每一个子任务的飞艇资源FID 列表                   
+                    for (int sati = 0; sati < SattoTaskFIDlist.Count; sati++)
+                    {
+                        if (OriTFID == SattoTaskFIDlist[sati].TaskFID)//查找与原任务id匹配的序列 以确定条带
+                        {
+
+                            string SATtoTBFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + (sati + 1).ToString() + "OneSat.shp";
+                            IFeatureLayer SATtoTBFfl = OpenFile_LayerFile(SATtoTBFpath);
+
+
+
+                            ISpatialFilter psatBFFilter = new SpatialFilterClass();
+                            psatBFFilter.Geometry = subTaskFeature.Shape;
+                            psatBFFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelWithin;//空间关系选择条件 选择能够观测到该子任务的缓冲区 （subT在UtoTBF内部，子任务是query ，缓冲区是target）——
+                            IFeatureCursor TasktosatBFCursor = SATtoTBFfl.FeatureClass.Search(psatBFFilter, false);
+                            IFeature satBFFeature = TasktosatBFCursor.NextFeature();//查询包含子任务的缓冲区
+
+                            ISpatialFilter psatBFFilter2 = new SpatialFilterClass();//在卫星观测区域之内或完全覆盖
+                            psatBFFilter2.Geometry = subTaskFeature.Shape;
+                            psatBFFilter2.SpatialRel = esriSpatialRelEnum.esriSpatialRelOverlaps;//空间关系选择条件 选择能够观测到该子任务的缓冲区 （subT在UtoTBF内部，子任务是query ，缓冲区是target）
+                            IFeatureCursor TasktosatBFCursor2 = SATtoTBFfl.FeatureClass.Search(psatBFFilter2, false);
+                            IFeature satBFFeature2 = TasktosatBFCursor2.NextFeature();//查询包含子任务的缓冲区
+
+                            if (satBFFeature != null)
+                            {
+                                //RTsubTInfo RTFNOinfo = new RTsubTInfo() { RID = (int.Parse(RTinfoList[j].ResouceID) - 1).ToString(), TID = (int.Parse(RTinfoList[j].TaskID) - 1).ToString(), subTID = subTaskFeature.get_Value(0).ToString() };
+                                //lstTaskFC.Add(RTFNOinfo);
+                                ReSatID.Add(int.Parse(SattoTaskFIDlist[sati].ResouceFID));
+                                satBFFeature = TasktosatBFCursor.NextFeature();
+                            }
+                            else if (satBFFeature2 != null)
+                            {
+                                ReSatID.Add(int.Parse(SattoTaskFIDlist[sati].ResouceFID));
+                                satBFFeature2 = TasktosatBFCursor2.NextFeature();
+                            }
+
+                        }
+                    }
+
+                    IPolygon subTPolygon = subTaskFeature.Shape as IPolygon;
+                    IArea subTarea = subTPolygon as IArea;
+
+                    RTsubTInfo RTFNOinfo = new RTsubTInfo() { TFID = (int.Parse(OriTFID)).ToString(), subTFID = subTaskFeature.get_Value(0).ToString(), UAVFID = ReUAVID, ASFID = ReASID, SatFID = ReSatID, CoverL = ReUAVID.Count + ReASID.Count + ReSatID.Count, subTArea = subTarea.Area, subTWeight = subTweight, subTWinS = subTWinS, subTWinE = subTWinE };
+                    lstTaskFC.Add(RTFNOinfo);
+
+                    pTFeature = OriTaskfeatureCursor.NextFeature();
+                }
+
+                subTaskFeature = subTaskfeatureCursor.NextFeature();
+            }
+            //求元任务集中每一个 元任务的原任务、资源、覆盖级别对应关系--------------------------------------(对应关系结束)------------------------------------------
+
+            #endregion
 
             // OpenShape(UavToTasdfkUnionPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
             Program.myMap.Refresh();
@@ -499,110 +858,1086 @@ namespace CoScheduling.Main
             Program.myMap.Update();
 
 
-            //IEnumFeature pEnumFeature = UAVbuFeatureLayer as IEnumFeature;
-            //IEnumFeature pEnumFeature = Program.myMap.Map.FeatureSelection as IEnumFeature;
-            //IEnumFeatureSetup pEnumFeatureSetup = pEnumFeature as IEnumFeatureSetup;
-            //pEnumFeatureSetup.AllFields = true;
-            //IFeature Feature = pEnumFeature.Next();
+            #region 冲突判断
+
+            //冲突判断部分开始--------------------------------------(冲突判断开始)------------------------------------------
+            //IQueryFilter UAVQueryFilter = new QueryFilter();//IQueryFilter还可以用来选择要素 select search 方法
+            //UAVQueryFilter.WhereClause = "FID >= 0";//和null效果是一样的 全选 
+            //int UAVcount = UAVFeatureLayer.FeatureClass.FeatureCount(UAVQueryFilter);
+            //查询UAV的个数
+
+            #region 确定每个元任务的观测时长
+            //根据subt与资源观测任务的面积比值确定时间  小时
+            for (int i = 0; i < lstTaskFC.Count; i++)
+            {
+                List<int> uavFid = lstTaskFC[i].UAVFID;//观测此元任务的无人机列表
+                List<double> UavTime = new List<double>(new double[uavFid.Count]);//无人机观测时长                
+                for (int k = 0; k < uavFid.Count; k++)
+                {
+                    for (int j = 0; j < lstFC.Count; j++)
+                    {
+                        if (uavFid[k].ToString() == lstFC[j].UAVFID && lstTaskFC[i].TFID.ToString() == lstFC[j].TFID)
+                        {
+                            UavTime[k] = lstFC[j].RtoTtime * (lstTaskFC[i].subTArea / lstFC[j].areaT); //获取元任务的观测时间
+                        }
+
+                    }
+                }
+                List<int> asFid = lstTaskFC[i].ASFID;//观测此元任务的AS列表
+                List<double> ASTime = new List<double>(new double[asFid.Count]);//AS观测时长                
+                for (int k = 0; k < asFid.Count; k++)
+                {
+                    for (int j = 0; j < lstFC.Count; j++)
+                    {
+                        if (asFid[k].ToString() == lstFC[j].ASFID && lstTaskFC[i].TFID.ToString() == lstFC[j].TFID)
+                        {
+                            ASTime[k] = lstFC[j].RtoTtime * (lstTaskFC[i].subTArea / lstFC[j].areaT); //获取元任务的观测时间
+                        }
+
+                    }
+                }
+                lstTaskFC[i].UAVTime = UavTime;
+                lstTaskFC[i].ASTime = ASTime;
+            }
+            #endregion
+
+            #region UAV冲突判断
+            //UAV冲突判断开始--------------------------------------(uav冲突判断开始)------------------------------------------
+            List<RT_FID> UavRTFIDlist = new List<RT_FID>();//无人机FID 及此无人机能够观测的元任务集FIDlist ,以及元任务发生冲突的list★★★★★★★★★★★★★★★★ 资源FID：int，元任务FID：list<int>,元任务个数：int
+            int UAVcount = UAVFeatureLayer.FeatureClass.FeatureCount(null);//无人机个数 null就是全选
+            for (int i = 0; i < UAVcount; i++)//资源FID
+            {
+                List<int> subFIdlist = new List<int>();//存储每个资源能够观测的元任务fid列表
+                for (int j = 0; j < lstTaskFC.Count; j++)//元任务FID
+                {
+                    List<int> uavFIDList = lstTaskFC[j].UAVFID;
+                    for (int k = 0; k < uavFIDList.Count; k++)//遍历每个元任务下的观测资源（能够观测到此元任务的资源）
+                    {
+                        if (i == uavFIDList[k])
+                        {
+                            subFIdlist.Add(j);
+                            break;
+                        }
+                    }
+                }
+
+                List<ConflictTFID> conFIdlist = new List<ConflictTFID>();//存储每个资源能够观测的元任务中发生冲突的元任务ID列表list<(int,int)>
+                if (subFIdlist.Count > 1)//当前观测资源能够观测到的元任务不为空且大于1，满足两两冲突的基本条件
+                {
+                    //无人机冲突判断 UAV假设全部观测完一个任务后再观测其他任务  因此冲突判断条件为：任务i开始时间+任务i执行时间+任务u执行时间大于任务u结束时间
+                    for (int j = 0; j < subFIdlist.Count; j++)
+                    {
+                        for (int k = j + 1; k < subFIdlist.Count; k++)
+                        {
+                            //IFeature firstSubFeature = subTaskLayer.FeatureClass.GetFeature(subFIdlist[j]);//获取第一个冲突元任务要素
+                            //IFeature secondSubFeature = subTaskLayer.FeatureClass.GetFeature(subFIdlist[k]);//获取第一个冲突元任务要素
+                            //根据元任务fid获取其时间窗口  （获取源任务再得到时间）
+                            int fisttTFID = 0;//源任务FID
+                            int secondTFID = 0;
+                            double firstsubTarea = 0;//元任务面积
+                            double secondsubTarea = 0;
+                            int firstThour;
+                            int firstTmin;
+                            int secondThour;
+                            int secondTmin;
+                            double firstsubTtime = 0;//第一个冲突元任务的观测持续时间
+                            double secondsubTtime = 0;//第一个冲突元任务的观测持续时间
+                            for (int ti = 0; ti < lstTaskFC.Count; ti++)
+                            {
+                                if (lstTaskFC[ti].subTFID == subFIdlist[j].ToString())
+                                {
+                                    fisttTFID = int.Parse(lstTaskFC[ti].TFID);
+                                    firstsubTarea = lstTaskFC[ti].subTArea;
+                                }
+                                if (lstTaskFC[ti].subTFID == subFIdlist[k].ToString())
+                                {
+                                    secondTFID = int.Parse(lstTaskFC[ti].TFID);
+                                    secondsubTarea = lstTaskFC[ti].subTArea;
+                                }
+                                if (firstsubTarea != 0 && secondsubTarea != 0)
+                                {
+                                    break;
+                                }
+                            }
+                            IFeature firstTFeature = ptaskFeatureLayer.FeatureClass.GetFeature(fisttTFID);//获取第一个冲突元任务所属源任务要素 为了获取时间窗口
+                            IFeature secondTFeature = ptaskFeatureLayer.FeatureClass.GetFeature(secondTFID);//获取第二个冲突元任务所属源任务要素
+                            string firstTe = firstTFeature.get_Value(5).ToString();//结束时间
+                            string seconTe = secondTFeature.get_Value(5).ToString();
+                            //时间确定 
+                            if (firstTe.Length > 3)
+                            {
+                                firstThour = int.Parse(firstTe.Substring(0, 2));//任务结束时间 小时                 
+                            }
+                            else
+                            {
+                                firstThour = int.Parse(firstTe.Substring(0, 1));//任务结束时间 小时
+                            }
+                            firstTmin = int.Parse(firstTe.Substring(firstTe.Length - 2, 2));//任务结束时间 分钟 
+
+                            if (seconTe.Length > 3)
+                            {
+                                secondThour = int.Parse(seconTe.Substring(0, 2));//任务结束时间 小时                 
+                            }
+                            else
+                            {
+                                secondThour = int.Parse(seconTe.Substring(0, 1));//任务结束时间 小时
+                            }
+                            secondTmin = int.Parse(seconTe.Substring(seconTe.Length - 2, 2));//任务结束时间 分钟 
+
+                            //根据subt与资源观测任务的面积比值确定时间
+                            for (int Uavi = 0; Uavi < lstFC.Count; Uavi++)
+                            {
+                                if (lstFC[Uavi].UAVFID == i.ToString() && lstFC[Uavi].TFID == fisttTFID.ToString()) //如果资源和源任务都匹配 那么元任务属于此子任务
+                                {
+                                    firstsubTtime = firstsubTarea / lstFC[Uavi].areaT * lstFC[Uavi].RtoTtime;  //任务持续时间 小时 
+                                }
+
+                                if (lstFC[Uavi].UAVFID == i.ToString() && lstFC[Uavi].TFID == secondTFID.ToString()) //如果资源和源任务都匹配 那么元任务属于此子任务
+                                {
+                                    secondsubTtime = secondsubTarea / lstFC[Uavi].areaT * lstFC[Uavi].RtoTtime;  //任务持续时间 小时
+                                }
+                                if (firstsubTtime != 0 && secondsubTtime != 0)
+                                {
+                                    break;
+                                }
+                            }
+
+                            //判断任务先后顺序  冲突判断
+                            if ((firstThour * 60 + firstTmin) < (secondThour * 60 + secondTmin))//第二个任务后执行  SThour;//开始观测时间 小时 STmin;//开始观测时间 分钟
+                            {
+                                if ((SThour + (double)STmin / 60 + firstsubTtime + secondsubTtime) > (secondThour + (double)secondTmin / 60)) //无人机判断冲突  任务开始时间是：（开始观测时间）和（任务窗口开始时间）的最大值-----------？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？---------从lsttaskfc可获得----
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = subFIdlist[j], secondTFID = subFIdlist[k] };
+                                    conFIdlist.Add(conflictFidInfo);
+                                }
+
+                            }
+                            else
+                            {
+                                if ((SThour + (double)STmin / 60 + firstsubTtime + secondsubTtime) > (firstThour + (double)firstTmin / 60)) //无人机判断冲突  
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = subFIdlist[j], secondTFID = subFIdlist[k] };
+                                    conFIdlist.Add(conflictFidInfo);
+                                }
+                            }
+
+                        }//第二个任务 k
+                    }//第一个任务 j
+
+                }//(subFIdlist.Count > 1) 当前资源观测的元任务个数大于1
+
+                RT_FID rtFidInfo = new RT_FID() { RFID = i, subTaskFID = subFIdlist, ConflictTaskFID = conFIdlist, taskCount = subFIdlist.Count };
+                UavRTFIDlist.Add(rtFidInfo);
+            }//无人机资源结束 
+            //UAV冲突判断结束--------------------------------------(uav冲突判断结束)------------------------------------------ 
+            #endregion
+
+            #region 卫星冲突判断
+            //卫星冲突判断开始--------------------------------------(sat冲突判断开始)------------------------------------------ 
+            IFeatureLayer satAtributeFL = satAtributeLayer as IFeatureLayer; //SateliteLine 
+            int satNo = satAtributeFL.FeatureClass.FeatureCount(null);
+            List<RT_FID> satRTFIDlist = new List<RT_FID>();//卫星FID 及此卫星能够观测的元任务集FIDlist ,以及元任务发生冲突的list★★★★★★★★★★★★★★★★ 资源FID：int，元任务FID：list<int>,元任务个数：int  
+            for (int i = 0; i < satNo; i++) //卫星FID                      SattoTaskFIDlist
+            {//对于卫星 不需判断每个元任务的冲突 因为假定卫星要么观测一个任务的完整条带 要么完全不观测
+                List<int> satSubFIdlist = new List<int>();//存储每个资源能够观测的satElemT任务fid列表
+                for (int j = 0; j < SattoTaskFIDlist.Count; j++)
+                {
+
+                    if (i.ToString() == SattoTaskFIDlist[j].ResouceFID)
+                    {
+                        satSubFIdlist.Add(SattoTaskFIDlist[j].SatEleTFID);//卫星观测任务FID 即SatElementTask中FID 2 3 5 6
+                    }
+                }
+
+                List<ConflictTFID> satConFIdlist = new List<ConflictTFID>();//存储每个卫星能够观测的SatElemT中发生冲突的任务FID列表list<(int,int)>
+                if (satSubFIdlist.Count > 1)//当前观测资源能够观测到的元任务不为空且大于1，满足两两冲突的基本条件
+                {
+                    //卫星冲突判断  转角时间约束 和容量约束
+                    for (int j = 0; j < satSubFIdlist.Count; j++)
+                    {
+                        for (int k = j + 1; k < satSubFIdlist.Count; k++)
+                        {
+                            IFeature SATatributeFeature = satAtributeFL.FeatureClass.GetFeature(i);//当前卫星（获取属性）
+                            double Vengel = double.Parse(SATatributeFeature.get_Value(10).ToString()); //侧摆角转向速度 度每秒
+                            double storeV = double.Parse(SATatributeFeature.get_Value(9).ToString()); //星上存储容量 GB
+                            double intervalT = double.Parse(SATatributeFeature.get_Value(11).ToString()); //开机间隔时间 秒
+                            double staT = double.Parse(SATatributeFeature.get_Value(12).ToString()); //侧摆之后稳定时间 秒
+
+                            IFeature firstSATTask = SatFeLayer.FeatureClass.GetFeature(satSubFIdlist[j]);//获取第一个冲突任务要素
+                            IFeature secondSATTask = SatFeLayer.FeatureClass.GetFeature(satSubFIdlist[k]);//获取第二个冲突任务要素
+                            string firstTaskStime = firstSATTask.get_Value(10).ToString();//获取第一个冲突任务的开始观测时间
+                            string firstTaskEtime = firstSATTask.get_Value(11).ToString();//获取第一个冲突任务的结束观测时间
+                            string secondTaskStime = secondSATTask.get_Value(10).ToString();//获取第二个冲突任务的开始观测时间
+                            string secondTaskEtime = secondSATTask.get_Value(11).ToString();//获取第二个冲突任务的结束观测时间
+                            double firstAngel = double.Parse(firstSATTask.get_Value(12).ToString());//获取第一个冲突任务的侧摆角 度
+                            double secondAngel = double.Parse(secondSATTask.get_Value(12).ToString());//获取第二个冲突任务的侧摆角 
+                            double firstStore = double.Parse(firstSATTask.get_Value(14).ToString());//
+                            double secondStore = double.Parse(secondSATTask.get_Value(14).ToString());//获取第二个冲突任务的需要容量 G
+
+                            //确定时间
+                            int firstTShour = 0;//第一个冲突任务的开始观测时间 小时
+                            double firstTSmin = 0;//第一个冲突任务的开始观测时间 分钟
+                            int firstTEhour = 0;//第一个冲突任务的结束观测时间 小时
+                            double firstTEmin = 0;//第一个冲突任务的结束观测时间 分钟
+                            int secondTShour = 0;//第二个冲突任务的开始观测时间 小时
+                            double secondTSmin = 0;//第二个冲突任务的开始观测时间 分钟
+                            int secondTEhour = 0;//第二个冲突任务的结束观测时间 小时
+                            double secondTEmin = 0;//第二个冲突任务的结束观测时间 分钟
+                            #region 确定时间
+                            if (firstTaskStime.Contains("."))
+                            {
+                                if (firstTaskStime.Contains("."))
+                                {
+                                    string HourAndMin = firstTaskStime.Substring(0, firstTaskStime.IndexOf("."));
+                                    if (HourAndMin.Length > 3)
+                                    {
+                                        firstTShour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                                    }
+                                    else
+                                    {
+                                        firstTShour = int.Parse(HourAndMin.Substring(0, 1));//
+                                    }
+                                    firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + firstTaskStime.Substring(firstTaskStime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                                }
+                                else
+                                {
+                                    if (firstTaskStime.Length > 3)
+                                    {
+                                        firstTShour = int.Parse(firstTaskStime.Substring(0, 2));// 
+                                    }
+                                    else
+                                    {
+                                        firstTShour = int.Parse(firstTaskStime.Substring(0, 1));//
+                                    }
+                                    firstTSmin = int.Parse(firstTaskStime.Substring(firstTaskStime.Length - 2, 2));//
+                                }
+                            }
+                            /////////////////
+                            if (firstTaskEtime.Contains("."))
+                            {
+                                if (firstTaskEtime.Contains("."))
+                                {
+                                    string HourAndMin = firstTaskEtime.Substring(0, firstTaskEtime.IndexOf("."));
+                                    if (HourAndMin.Length > 3)
+                                    {
+                                        firstTEhour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                                    }
+                                    else
+                                    {
+                                        firstTEhour = int.Parse(HourAndMin.Substring(0, 1));//
+                                    }
+                                    firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + firstTaskEtime.Substring(firstTaskEtime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                                }
+                                else
+                                {
+                                    if (firstTaskEtime.Length > 3)
+                                    {
+                                        firstTEhour = int.Parse(firstTaskEtime.Substring(0, 2));// 
+                                    }
+                                    else
+                                    {
+                                        firstTEhour = int.Parse(firstTaskEtime.Substring(0, 1));//
+                                    }
+                                    firstTEmin = int.Parse(firstTaskEtime.Substring(firstTaskEtime.Length - 2, 2));//
+                                }
+                            }
+                            /////////////////
+                            if (secondTaskStime.Contains("."))
+                            {
+                                if (secondTaskStime.Contains("."))
+                                {
+                                    string HourAndMin = secondTaskStime.Substring(0, secondTaskStime.IndexOf("."));
+                                    if (HourAndMin.Length > 3)
+                                    {
+                                        secondTShour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                                    }
+                                    else
+                                    {
+                                        secondTShour = int.Parse(HourAndMin.Substring(0, 1));//
+                                    }
+                                    firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + secondTaskStime.Substring(secondTaskStime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                                }
+                                else
+                                {
+                                    if (secondTaskStime.Length > 3)
+                                    {
+                                        secondTShour = int.Parse(secondTaskStime.Substring(0, 2));// 
+                                    }
+                                    else
+                                    {
+                                        secondTShour = int.Parse(secondTaskStime.Substring(0, 1));//
+                                    }
+                                    secondTSmin = int.Parse(secondTaskStime.Substring(secondTaskStime.Length - 2, 2));//
+                                }
+                            }
+                            /////////////////
+                            if (secondTaskEtime.Contains("."))
+                            {
+                                if (secondTaskEtime.Contains("."))
+                                {
+                                    string HourAndMin = secondTaskEtime.Substring(0, secondTaskEtime.IndexOf("."));
+                                    if (HourAndMin.Length > 3)
+                                    {
+                                        secondTEhour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                                    }
+                                    else
+                                    {
+                                        secondTEhour = int.Parse(HourAndMin.Substring(0, 1));//
+                                    }
+                                    firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + secondTaskEtime.Substring(secondTaskEtime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                                }
+                                else
+                                {
+                                    if (secondTaskEtime.Length > 3)
+                                    {
+                                        secondTEhour = int.Parse(secondTaskEtime.Substring(0, 2));// 
+                                    }
+                                    else
+                                    {
+                                        secondTEhour = int.Parse(secondTaskEtime.Substring(0, 1));//
+                                    }
+                                    secondTEmin = int.Parse(secondTaskEtime.Substring(secondTaskEtime.Length - 2, 2));//
+                                }
+                            }
+                            #endregion
+
+
+                            if ((firstTShour * 60 + firstTSmin) < (secondTShour * 60 + secondTSmin))
+                            {
+                                if (firstTEhour * 3600 + firstTEmin * 60 + Math.Abs(firstAngel - secondAngel) / Vengel + intervalT + staT > secondTShour * 3600 + secondTSmin * 60)//化成秒比较
+                                {
+                                    //冲突
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = satSubFIdlist[j], secondTFID = satSubFIdlist[k] };//存储的是SatElementTask的FID
+                                    satConFIdlist.Add(conflictFidInfo);
+                                }
+                                else if (firstStore + secondStore > storeV)
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = satSubFIdlist[j], secondTFID = satSubFIdlist[k] };//存储的是SatElementTask的FID
+                                    satConFIdlist.Add(conflictFidInfo);
+                                }
+                            }
+                            else
+                            {
+                                if (secondTEhour * 3600 + secondTEmin * 60 + Math.Abs(firstAngel - secondAngel) / Vengel + intervalT + staT > firstTShour * 3600 + firstTSmin * 60)//化成秒比较
+                                {
+                                    //冲突
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = satSubFIdlist[j], secondTFID = satSubFIdlist[k] };//存储的是SatElementTask的FID
+                                    satConFIdlist.Add(conflictFidInfo);
+                                }
+                                else if (firstStore + secondStore > storeV)
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = satSubFIdlist[j], secondTFID = satSubFIdlist[k] };//存储的是SatElementTask的FID
+                                    satConFIdlist.Add(conflictFidInfo);
+                                }
+                            }
+
+
+
+                        }//第二个任务 k
+                    }//第一个任务 j
+
+                }//(subFIdlist.Count > 1) 当前资源观测的元任务个数大于1
+
+                RT_FID rtFidInfo = new RT_FID() { RFID = i, subTaskFID = satSubFIdlist, ConflictTaskFID = satConFIdlist, taskCount = satSubFIdlist.Count };
+                satRTFIDlist.Add(rtFidInfo);
+            }
+            //卫星冲突判断结束--------------------------------------(sat冲突判断结束)------------------------------------------ 
+            #endregion
+
+            #region 飞艇冲突判断
+            //飞艇冲突判断开始--------------------------------------(AS冲突判断开始)------------------------------------------
+            List<RT_FID> ASRTFIDlist = new List<RT_FID>();//飞艇FID 及此飞艇能够观测的元任务集FIDlist ,以及元任务发生冲突的list★★★★★★★★★★★★★★★★ 资源FID：int，元任务FID：list<int>,元任务个数：int
+            int AScount = ASfeatureLayer.FeatureClass.FeatureCount(null);//飞艇个数 null就是全选
+            #region 将sub任务转为点目标
+            string ConflictTPOint = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "subTDis.shp";
+            GPFeatureToPointTool(subTaskLayer, ConflictTPOint); //将元任务转为点目标 以便求距离
+            IFeatureLayer ASConflictTPointFL = OpenFile_LayerFile(ConflictTPOint);
+            #endregion
+            for (int i = 0; i < AScount; i++)//资源FID
+            {
+                List<int> subFIdlist = new List<int>();//存储每个资源能够观测的元任务fid列表
+                for (int j = 0; j < lstTaskFC.Count; j++)//元任务FID
+                {
+                    List<int> ASFIDList = lstTaskFC[j].ASFID;
+                    for (int k = 0; k < ASFIDList.Count; k++)//遍历每个元任务下的观测资源（能够观测到此元任务的资源）
+                    {
+                        if (i == ASFIDList[k])
+                        {
+                            subFIdlist.Add(j);
+                            break;
+                        }
+                    }
+                }
+                IFeature ASFea = ASfeatureLayer.FeatureClass.GetFeature(i);//当前飞艇（获取属性）
+                double Vas = double.Parse(ASFea.get_Value(5).ToString()); //飞艇速度 km/h
+                List<ConflictTFID> ASconFIdlist = new List<ConflictTFID>();//存储每个资源能够观测的元任务中发生冲突的元任务ID列表list<(int,int)>
+                if (subFIdlist.Count > 1)//当前观测资源能够观测到的元任务不为空且大于1，满足两两冲突的基本条件
+                {
+                    //飞艇冲突判断 AS假设全部观测完一个任务后再观测其他任务  因此冲突判断条件为：开始时间+执行任务两个任务的时间+航行到两个地点飞行时间 大于 第二个任务结束时间 则冲突
+                    for (int j = 0; j < subFIdlist.Count; j++)
+                    {
+                        for (int k = j + 1; k < subFIdlist.Count; k++)
+                        {
+                            //IFeatureLayer firstSubFL = subTaskLayer.FeatureClass.  //.GetFeature(subFIdlist[j]);//获取第一个冲突元任务要素 获取两者间距离 米
+                            //IFeature secondSubFeature = subTaskLayer.FeatureClass.GetFeature(subFIdlist[k]);//获取第一个冲突元任务要素
+                            double TaskDis;//冲突任务之间距离 米
+                            #region 两个冲突任务间距离 米
+
+                            IPoint firstPoint = ASConflictTPointFL.FeatureClass.GetFeature(subFIdlist[j]).Shape as IPoint;//获取第一个冲突元任务要素（点目标）
+                            IPoint secondPoint = ASConflictTPointFL.FeatureClass.GetFeature(subFIdlist[k]).Shape as IPoint;//将当前subT转成的点目标
+                            TaskDis = Math.Sqrt(Math.Pow(firstPoint.X - secondPoint.X, 2) + Math.Pow(firstPoint.Y - secondPoint.Y, 2));//两冲突任务的质心距离 米 
+                            #endregion
+
+                            //根据元任务fid获取其时间窗口  （获取源任务再得到时间）
+                            int fisttTFID = 0;//源任务FID
+                            int secondTFID = 0;
+                            double firstsubTarea = 0;//元任务面积
+                            double secondsubTarea = 0;
+                            int firstThour;//结束时间
+                            int firstTmin;
+                            int secondThour;
+                            int secondTmin;
+                            double firstsubTtime = 0;//第一个冲突元任务的观测持续时间
+                            double secondsubTtime = 0;//第一个冲突元任务的观测持续时间
+                            double AStoTDis;//AS到第一个任务的距离
+                            for (int ti = 0; ti < lstTaskFC.Count; ti++)
+                            {
+                                if (lstTaskFC[ti].subTFID == subFIdlist[j].ToString())//元任务FID匹配
+                                {
+                                    fisttTFID = int.Parse(lstTaskFC[ti].TFID);
+                                    firstsubTarea = lstTaskFC[ti].subTArea;
+                                }
+                                if (lstTaskFC[ti].subTFID == subFIdlist[k].ToString())
+                                {
+                                    secondTFID = int.Parse(lstTaskFC[ti].TFID);
+                                    secondsubTarea = lstTaskFC[ti].subTArea;
+                                }
+                                if (firstsubTarea != 0 && secondsubTarea != 0)
+                                {
+                                    break;
+                                }
+                            }
+                            IFeature firstTFeature = ptaskFeatureLayer.FeatureClass.GetFeature(fisttTFID);//获取第一个冲突元任务所属源任务要素 为了获取时间窗口
+                            IFeature secondTFeature = ptaskFeatureLayer.FeatureClass.GetFeature(secondTFID);//获取第二个冲突元任务所属源任务要素
+                            string firstTe = firstTFeature.get_Value(5).ToString();//结束时间
+                            string seconTe = secondTFeature.get_Value(5).ToString();
+
+                            #region 时间确定
+                            //时间确定 
+                            if (firstTe.Length > 3)
+                            {
+                                firstThour = int.Parse(firstTe.Substring(0, 2));//任务结束时间 小时                 
+                            }
+                            else
+                            {
+                                firstThour = int.Parse(firstTe.Substring(0, 1));//任务结束时间 小时
+                            }
+                            firstTmin = int.Parse(firstTe.Substring(firstTe.Length - 2, 2));//任务结束时间 分钟 
+
+                            if (seconTe.Length > 3)
+                            {
+                                secondThour = int.Parse(seconTe.Substring(0, 2));//任务结束时间 小时                 
+                            }
+                            else
+                            {
+                                secondThour = int.Parse(seconTe.Substring(0, 1));//任务结束时间 小时
+                            }
+                            secondTmin = int.Parse(seconTe.Substring(seconTe.Length - 2, 2));//任务结束时间 分钟 
+
+                            //根据subt与资源观测任务的面积比值确定时间
+                            for (int ASi = 0; ASi < lstFC.Count; ASi++)
+                            {
+                                if (lstFC[ASi].ASFID == i.ToString() && lstFC[ASi].TFID == fisttTFID.ToString()) //如果资源和源任务都匹配 那么元任务属于此子任务
+                                {
+                                    firstsubTtime = firstsubTarea / lstFC[ASi].areaT * lstFC[ASi].RtoTtime;  //任务持续时间 小时 
+                                }
+
+                                if (lstFC[ASi].ASFID == i.ToString() && lstFC[ASi].TFID == secondTFID.ToString()) //如果资源和源任务都匹配 那么元任务属于此子任务
+                                {
+                                    secondsubTtime = secondsubTarea / lstFC[ASi].areaT * lstFC[ASi].RtoTtime;  //任务持续时间 小时
+                                }
+                                if (firstsubTtime != 0 && secondsubTtime != 0)
+                                {
+                                    break;
+                                }
+                            }
+
+                            #endregion
+
+                            //判断任务先后顺序  冲突判断
+                            IPoint ASPoint = ASFea.Shape as IPoint;//将AS当作point求当前飞艇到任务的距离
+
+                            if ((firstThour * 60 + firstTmin) < (secondThour * 60 + secondTmin))//第二个任务后执行  SThour;//开始观测时间 小时 STmin;//开始观测时间 分钟
+                            {
+                                AStoTDis = Math.Sqrt(Math.Pow(firstPoint.X - ASPoint.X, 2) + Math.Pow(firstPoint.Y - ASPoint.Y, 2));
+                                if ((SThour + (double)STmin / 60 + firstsubTtime + secondsubTtime + (AStoTDis + TaskDis) / 1000 / Vas) > (secondThour + (double)secondTmin / 60)) //AS判断冲突  小时
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = subFIdlist[j], secondTFID = subFIdlist[k] };
+                                    ASconFIdlist.Add(conflictFidInfo);
+                                }
+
+                            }
+                            else
+                            {
+                                AStoTDis = Math.Sqrt(Math.Pow(secondPoint.X - ASPoint.X, 2) + Math.Pow(secondPoint.Y - ASPoint.Y, 2));
+                                if ((SThour + (double)STmin / 60 + firstsubTtime + secondsubTtime + (AStoTDis + TaskDis) / 1000 / Vas) > (firstThour + (double)firstTmin / 60)) //AS判断冲突  
+                                {
+                                    ConflictTFID conflictFidInfo = new ConflictTFID() { firstTFID = subFIdlist[j], secondTFID = subFIdlist[k] };
+                                    ASconFIdlist.Add(conflictFidInfo);
+                                }
+                            }
+
+                        }//第二个任务 k
+                    }//第一个任务 j
+
+                }//(subFIdlist.Count > 1) 当前资源观测的元任务个数大于1
+
+                RT_FID rtFidInfo = new RT_FID() { RFID = i, subTaskFID = subFIdlist, ConflictTaskFID = ASconFIdlist, taskCount = subFIdlist.Count };
+                ASRTFIDlist.Add(rtFidInfo);
+            }//飞艇资源结束 
+            //AS冲突判断结束--------------------------------------(AS冲突判断结束)------------------------------------------ 
+            #endregion
+
+            //冲突判断部分结束--------------------------------------(冲突判断结束)------------------------------------------
+
+            #endregion
+
+            #region 启发式准则模型构建
+
+            //先以每个资源为视角计算资源观测到任务的收益 最后在统一到各个子规划中心上 
+            #region 无人机子规划中心启发式准则模型
+            //无人机子规划中心模型.
+            double UAVPlanCenGain = 0;//无人机子规划中心总体收益 元任务不一定分配给此规划中心 要在算法上计算 
+            for (int i = 0; i < UavRTFIDlist.Count; i++)
+            {
+                int UAVFID = UavRTFIDlist[i].RFID;//资源FID‘
+                List<int> subFIDList = UavRTFIDlist[i].subTaskFID;//当前资源能够观测到的元任务list集合
+                List<ConflictTFID> ConTFID = UavRTFIDlist[i].ConflictTaskFID;//当前资源能够观测的元任务的冲突集合
+                List<double> ConRatelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率 每一个资源相对于每一个元任务 list长度为观测元任务个数
+                List<double> ConDgreelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率
+                List<double> ConLeftElist = new List<double>(new double[subFIDList.Count]);//元任务冲突剩余能力 存储冲突之后能够观测的当前任务的面积s之和 （所有冲突之后的面积之和S1+S2+...+Sjm） （不是概率p）
+                for (int j = 0; j < subFIDList.Count; j++)
+                {
+                    int subTFID = subFIDList[j];//获取当前资源观测的一个元任务FID 当前元任务
+                    List<int> ConflictsubTfid = new List<int>();//与当前元任务冲突的元任务FID集合
+                    double subTtime = 0;//当前元任务的观测时长
+                    double ConflisubTtime = 0;//与当前任务冲突的元任务的观测时长
+                    string subTwinE = "0";//当前元任务的结束观测时间
+                    string confisubTWinE = "0";//与当前任务冲突的元任务的观测结束时间
+
+                    #region ConflictsubTfid赋值
+                    for (int k = 0; k < ConTFID.Count; k++)
+                    {
+                        if (ConTFID[k].firstTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].secondTFID);
+                        }
+                        else if (ConTFID[k].secondTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].firstTFID);
+                        }
+                    }
+                    #endregion
+
+                    ConRatelist[j] = (double)ConflictsubTfid.Count / subFIDList.Count;//冲突率 jm/jn ----------------------------------------------------------------------------
+                    double conTWeight;//与当前元任务冲突的任务的权重
+                    double conTArea;//与当前元任务冲突的任务的面积
+                    double conTLevel;//与当前元任务冲突的任务的覆盖级别
+                    double conIndSum = 0;//三个指标计算之和   冲突度模型括号里面和
+                    for (int k = 0; k < ConflictsubTfid.Count; k++)
+                    {
+                        conTWeight = lstTaskFC[ConflictsubTfid[k]].subTWeight;//获取与当前元任务冲突的任务的权重 lstTaskFC的第几个即对应元任务的FID
+                        conTArea = lstTaskFC[ConflictsubTfid[k]].subTArea;//获取与当前元任务冲突的任务的面积
+                        conTLevel = lstTaskFC[ConflictsubTfid[k]].CoverL;//获取与当前元任务冲突的任务的覆盖级别
+                        conIndSum = conIndSum + conTWeight / (conTWeight + lstTaskFC[subTFID].subTWeight) + conTArea / (conTArea + lstTaskFC[subTFID].subTArea) + (1 - conTLevel / (conTLevel + (double)lstTaskFC[subTFID].CoverL));
+                    }
+                    ConDgreelist[j] = conIndSum / ((double)3 * ConflictsubTfid.Count);//冲突度 -------------------------------------------------------------------------------------
+                    double subTleftArea = 0;//当前元任务所有冲突剩余面积之和
+                    //根据剩余观测时间估计完成面积 参考冲突判断部分
+                    for (int l = 0; l < ConflictsubTfid.Count; l++)
+                    {
+                        int ConsubTFID = ConflictsubTfid[l];//与当前元任务冲突的元任务FID                   
+
+                        int subThour;//当前元任务结束时间 小时
+                        int subTmin;//当前元任务结束时间 分钟
+                        int consubThour;//冲突元任务结束时间 小时
+                        int consubTmin;//冲突元任务结束时间 分钟
+                        //时间确定 
+                        #region 时间确定
+
+                        for (int k = 0; k < lstTaskFC.Count; k++)
+                        {
+                            if (lstTaskFC[k].subTFID == subTFID.ToString())
+                            {
+                                List<int> UavFIDlist = lstTaskFC[k].UAVFID;
+                                for (int ui = 0; ui < UavFIDlist.Count; ui++)
+                                {
+                                    if (UavFIDlist[ui] == UAVFID)
+                                    { subTtime = lstTaskFC[k].UAVTime[ui]; }//当前元任务的观测时长
+                                }
+                                subTwinE = lstTaskFC[k].subTWinE;//当前元任务的结束观测时间
+                            }
+                            if (lstTaskFC[k].subTFID == ConsubTFID.ToString())
+                            {
+                                List<int> conUavFIDlist = lstTaskFC[k].UAVFID;//冲突元任务的FID list
+                                for (int ui = 0; ui < conUavFIDlist.Count; ui++)
+                                {
+                                    if (conUavFIDlist[ui] == UAVFID)
+                                    { ConflisubTtime = lstTaskFC[k].UAVTime[ui]; }//冲突元任务的观测时长
+                                }
+                                confisubTWinE = lstTaskFC[k].subTWinE;//与当前任务冲突的元任务的观测结束时间
+                            }
+
+                        }
+
+                        if (subTwinE.Length > 3)
+                        {
+                            subThour = int.Parse(subTwinE.Substring(0, 2));//任务结束时间 小时                 
+                        }
+                        else
+                        {
+                            subThour = int.Parse(subTwinE.Substring(0, 1));//任务结束时间 小时
+                        }
+                        subTmin = int.Parse(subTwinE.Substring(subTwinE.Length - 2, 2));//任务结束时间 分钟 
+
+                        if (confisubTWinE.Length > 3)
+                        {
+                            consubThour = int.Parse(confisubTWinE.Substring(0, 2));//任务结束时间 小时                 
+                        }
+                        else
+                        {
+                            consubThour = int.Parse(confisubTWinE.Substring(0, 1));//任务结束时间 小时
+                        }
+                        consubTmin = int.Parse(confisubTWinE.Substring(confisubTWinE.Length - 2, 2));//任务结束时间 分钟  
+                        #endregion
+
+                        if ((subThour * 60 + subTmin) < (consubThour * 60 + consubTmin))//当前任务先执行 冲突任务后执行  SThour;//开始观测时间 小时 STmin;//开始观测时间 分钟
+                        {
+                            double AreaRate = (consubThour + (double)consubTmin / 60 - (SThour + (double)STmin / 60) - ConflisubTtime) / subTtime;//任务开始时间是：（开始观测时间）和（任务窗口开始时间）的最大值-----------？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？---------从lsttaskfc可获得----
+                            if (AreaRate > 0)
+                            {
+                                subTleftArea = subTleftArea + AreaRate * lstTaskFC[subTFID].subTArea;
+                            }
+                            else
+                            { }
+                        }
+                        else//冲突任务先执行 当前任务后执行
+                        {
+                            double AreaRate = (subThour + (double)subTmin / 60 - (SThour + (double)STmin / 60) - ConflisubTtime) / subTtime;//任务开始时间是：（开始观测时间）和（任务窗口开始时间）的最大值-----------？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？---------从lsttaskfc可获得----
+                            if (AreaRate > 0)
+                            {
+                                subTleftArea = subTleftArea + AreaRate * lstTaskFC[subTFID].subTArea;
+                            }
+                            else
+                            { }
+                        }
+
+
+                    }
+                    ConLeftElist[j] = subTleftArea;
+
+                }
+                UavRTFIDlist[i].conRate = ConRatelist;
+                UavRTFIDlist[i].conDegree = ConDgreelist;
+                UavRTFIDlist[i].leftEn = ConLeftElist;
+            }
+
+            #endregion
+
+            #region 飞艇子规划中心启发式准则模型
+            //飞艇子规划中心模型.
+            double ASPlanCenGain = 0;//飞艇子规划中心总体收益 元任务不一定分配给此规划中心 要在算法上计算 
+            for (int i = 0; i < ASRTFIDlist.Count; i++)
+            {
+                int ASRFID = ASRTFIDlist[i].RFID;//资源FID‘
+                IFeature ASFea = ASfeatureLayer.FeatureClass.GetFeature(ASRFID);//当前飞艇（获取属性）
+                double Vas = double.Parse(ASFea.get_Value(5).ToString()); //飞艇速度 km/h
+                List<int> subFIDList = ASRTFIDlist[i].subTaskFID;//当前资源能够观测到的元任务list集合
+                List<ConflictTFID> ConTFID = ASRTFIDlist[i].ConflictTaskFID;//当前资源能够观测的元任务的冲突集合
+                List<double> ConRatelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率 每一个资源相对于每一个元任务 list长度为观测元任务个数
+                List<double> ConDgreelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率
+                List<double> ConLeftElist = new List<double>(new double[subFIDList.Count]);//元任务冲突剩余能力 存储冲突之后能够观测的当前任务的面积s之和 （所有冲突之后的面积之和S1+S2+...+Sjm） （不是概率p）
+                for (int j = 0; j < subFIDList.Count; j++)//遍历当前资源能够观测到的元任务
+                {
+                    int subTFID = subFIDList[j];//获取当前资源观测的一个元任务FID 当前元任务
+                    List<int> ConflictsubTfid = new List<int>();//与当前元任务冲突的元任务FID集合
+                    double subTtime = 0;//当前元任务的观测时长
+                    double ConflisubTtime = 0;//与当前任务冲突的元任务的观测时长
+                    string subTwinE = "0";//当前元任务的结束观测时间
+                    string confisubTWinE = "0";//与当前任务冲突的元任务的观测结束时间
+
+                    #region ConflictsubTfid赋值
+                    for (int k = 0; k < ConTFID.Count; k++)
+                    {
+                        if (ConTFID[k].firstTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].secondTFID);
+                        }
+                        else if (ConTFID[k].secondTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].firstTFID);
+                        }
+                    }
+                    #endregion
+
+                    ConRatelist[j] = (double)ConflictsubTfid.Count / subFIDList.Count;//冲突率 jm/jn ----------------------------------------------------------------------------
+                    double conTWeight;//与当前元任务冲突的任务的权重
+                    double conTArea;//与当前元任务冲突的任务的面积
+                    double conTLevel;//与当前元任务冲突的任务的覆盖级别
+                    double conIndSum = 0;//三个指标计算之和   冲突度模型括号里面和
+                    for (int k = 0; k < ConflictsubTfid.Count; k++)
+                    {
+                        conTWeight = lstTaskFC[ConflictsubTfid[k]].subTWeight;//获取与当前元任务冲突的任务的权重 lstTaskFC的第几个即对应元任务的FID
+                        conTArea = lstTaskFC[ConflictsubTfid[k]].subTArea;//获取与当前元任务冲突的任务的面积
+                        conTLevel = lstTaskFC[ConflictsubTfid[k]].CoverL;//获取与当前元任务冲突的任务的覆盖级别
+                        conIndSum = conIndSum + conTWeight / (conTWeight + lstTaskFC[subTFID].subTWeight) + conTArea / (conTArea + lstTaskFC[subTFID].subTArea) + (1 - conTLevel / (conTLevel + (double)lstTaskFC[subTFID].CoverL));
+                    }
+                    ConDgreelist[j] = conIndSum / ((double)3 * ConflictsubTfid.Count);//冲突度 -------------------------------------------------------------------------------------
+                    double subTleftArea = 0;//当前元任务所有冲突剩余面积之和
+                    //根据剩余观测时间估计完成面积 参考冲突判断部分
+                    for (int l = 0; l < ConflictsubTfid.Count; l++)
+                    {
+                        int ConsubTFID = ConflictsubTfid[l];//与当前元任务冲突的元任务FID
+                        int subThour;//当前元任务结束时间 小时
+                        int subTmin;//当前元任务结束时间 分钟
+                        int consubThour;//冲突元任务结束时间 小时
+                        int consubTmin;//冲突元任务结束时间 分钟
+                        //时间确定 
+                        #region 结束时间确定
+                        for (int k = 0; k < lstTaskFC.Count; k++)
+                        {
+                            if (lstTaskFC[k].subTFID == subTFID.ToString())
+                            {
+                                List<int> ASFIDlist = lstTaskFC[k].ASFID;
+                                for (int ui = 0; ui < ASFIDlist.Count; ui++)
+                                {
+                                    if (ASFIDlist[ui] == ASRFID)
+                                    { subTtime = lstTaskFC[k].ASTime[ui]; }//当前元任务的观测时长
+                                }
+                                subTwinE = lstTaskFC[k].subTWinE;//当前元任务的结束观测时间
+                            }
+                            if (lstTaskFC[k].subTFID == ConsubTFID.ToString())
+                            {
+                                List<int> conASFIDlist = lstTaskFC[k].ASFID;//冲突元任务的资源FID list
+                                for (int ui = 0; ui < conASFIDlist.Count; ui++)
+                                {
+                                    if (conASFIDlist[ui] == ASRFID)
+                                    { ConflisubTtime = lstTaskFC[k].ASTime[ui]; }//冲突元任务的观测时长
+                                }
+                                confisubTWinE = lstTaskFC[k].subTWinE;//与当前任务冲突的元任务的观测结束时间
+                            }
+
+                        }
+
+                        if (subTwinE.Length > 3)
+                        {
+                            subThour = int.Parse(subTwinE.Substring(0, 2));//任务结束时间 小时                 
+                        }
+                        else
+                        {
+                            subThour = int.Parse(subTwinE.Substring(0, 1));//任务结束时间 小时
+                        }
+                        subTmin = int.Parse(subTwinE.Substring(subTwinE.Length - 2, 2));//任务结束时间 分钟 
+
+                        if (confisubTWinE.Length > 3)
+                        {
+                            consubThour = int.Parse(confisubTWinE.Substring(0, 2));//任务结束时间 小时                 
+                        }
+                        else
+                        {
+                            consubThour = int.Parse(confisubTWinE.Substring(0, 1));//任务结束时间 小时
+                        }
+                        consubTmin = int.Parse(confisubTWinE.Substring(confisubTWinE.Length - 2, 2));//任务结束时间 分钟  
+                        #endregion
+
+                        double TaskDis;//元任务之间距离 米
+                        #region 两个冲突任务间距离 米
+                        IPoint subTPoint = ASConflictTPointFL.FeatureClass.GetFeature(subTFID).Shape as IPoint;//获取当前元任务要素（点目标）
+                        IPoint conTPoint = ASConflictTPointFL.FeatureClass.GetFeature(ConsubTFID).Shape as IPoint;//将冲突转成的点目标
+                        TaskDis = Math.Sqrt(Math.Pow(subTPoint.X - conTPoint.X, 2) + Math.Pow(subTPoint.Y - conTPoint.Y, 2));//两冲突任务的质心距离 米 
+                        #endregion
+                        IPoint ASPoint = ASFea.Shape as IPoint;//将AS当作point求当前飞艇到任务的距离
+                        double AStosubTDis;//飞艇到元任务距离
+                        if ((subThour * 60 + subTmin) < (consubThour * 60 + consubTmin))//当前任务先执行 冲突任务后执行  SThour;//开始观测时间 小时 STmin;//开始观测时间 分钟
+                        {
+                            AStosubTDis = Math.Sqrt(Math.Pow(subTPoint.X - ASPoint.X, 2) + Math.Pow(subTPoint.Y - ASPoint.Y, 2));
+                            double AreaRate = (consubThour + (double)consubTmin / 60 - (SThour + (double)STmin / 60) - ConflisubTtime - (AStosubTDis + TaskDis) / Vas / 1000) / subTtime;//任务开始时间是：（开始观测时间）和（任务窗口开始时间）的最大值-----------？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？---------从lsttaskfc可获得----
+                            if (AreaRate > 0)
+                            {
+                                subTleftArea = subTleftArea + AreaRate * lstTaskFC[subTFID].subTArea;
+                            }
+                            else
+                            { }
+                        }
+                        else//冲突任务先执行 当前任务后执行
+                        {
+                            AStosubTDis = Math.Sqrt(Math.Pow(conTPoint.X - ASPoint.X, 2) + Math.Pow(conTPoint.Y - ASPoint.Y, 2));
+                            double AreaRate = (subThour + (double)subTmin / 60 - (SThour + (double)STmin / 60) - ConflisubTtime - (AStosubTDis + TaskDis) / Vas / 1000) / subTtime;//任务开始时间是：（开始观测时间）和（任务窗口开始时间）的最大值-----------？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？---------从lsttaskfc可获得----
+                            if (AreaRate > 0)
+                            {
+                                subTleftArea = subTleftArea + AreaRate * lstTaskFC[subTFID].subTArea;
+                            }
+                            else
+                            { }
+                        }
+
+
+                    }
+                    ConLeftElist[j] = subTleftArea;
+
+                }
+                ASRTFIDlist[i].conRate = ConRatelist;
+                ASRTFIDlist[i].conDegree = ConDgreelist;
+                ASRTFIDlist[i].leftEn = ConLeftElist;
+            }
+
+            #endregion
+
+            #region 卫星子规划中心启发式准则模型
+            //卫星子规划中心模型.
+            //卫星不观测元任务 只考虑卫星观测的子任务不进行划分
+            double SatPlanCenGain = 0;//卫星子规划中心总体收益 元任务不一定分配给此规划中心 要在算法上计算 
+            for (int i = 0; i < satRTFIDlist.Count; i++)
+            {
+                int SatRFID = satRTFIDlist[i].RFID;//资源FID‘
+                IFeature SatFea = satAtributeFL.FeatureClass.GetFeature(SatRFID);//当前卫星（获取属性）SatelinteLine图层
+
+                double Vengel = double.Parse(SatFea.get_Value(10).ToString()); //侧摆角转向速度 度每秒
+                double storeV = double.Parse(SatFea.get_Value(9).ToString()); //星上存储容量 GB
+                double intervalT = double.Parse(SatFea.get_Value(11).ToString()); //开机间隔时间 秒
+                double staT = double.Parse(SatFea.get_Value(12).ToString()); //侧摆之后稳定时间 秒
+
+
+                List<int> subFIDList = satRTFIDlist[i].subTaskFID;//当前资源能够观测到的元任务list集合
+                List<ConflictTFID> ConTFID = satRTFIDlist[i].ConflictTaskFID;//当前资源能够观测的元任务的冲突集合
+                List<double> ConRatelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率 每一个资源相对于每一个元任务 list长度为观测元任务个数
+                List<double> ConDgreelist = new List<double>(new double[subFIDList.Count]);//元任务冲突率
+                List<double> ConLeftElist = new List<double>(new double[subFIDList.Count]);//元任务冲突剩余能力 存储冲突之后能够观测的当前任务的面积s之和 （所有冲突之后的面积之和S1+S2+...+Sjm） （不是概率p）
+                for (int j = 0; j < subFIDList.Count; j++)//遍历当前资源能够观测到的元任务
+                {
+                    int subTFID = subFIDList[j];//获取当前资源观测的一个元任务FID 当前元任务
+                    List<int> ConflictsubTfid = new List<int>();//与当前元任务冲突的元任务FID集合
+                   
+
+                    #region ConflictsubTfid赋值
+                    for (int k = 0; k < ConTFID.Count; k++)
+                    {
+                        if (ConTFID[k].firstTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].secondTFID);
+                        }
+                        else if (ConTFID[k].secondTFID == subTFID)
+                        {
+                            ConflictsubTfid.Add(ConTFID[k].firstTFID);
+                        }
+                    }
+                    #endregion
+
+                    ConRatelist[j] = (double)ConflictsubTfid.Count / subFIDList.Count;//冲突率 jm/jn ----------------------------------------------------------------------------
+                    double conTWeight;//与当前元任务冲突的任务的权重
+                    double conTArea;//与当前元任务冲突的任务的面积
+                    double conTLevel;//与当前元任务冲突的任务的覆盖级别
+                    double conIndSum = 0;//三个指标计算之和   冲突度模型括号里面和
+                    for (int k = 0; k < ConflictsubTfid.Count; k++)
+                    {
+                        conTWeight = lstTaskFC[ConflictsubTfid[k]].subTWeight;//获取与当前元任务冲突的任务的权重 lstTaskFC的第几个即对应元任务的FID
+                        conTArea = lstTaskFC[ConflictsubTfid[k]].subTArea;//获取与当前元任务冲突的任务的面积
+                        conTLevel = lstTaskFC[ConflictsubTfid[k]].CoverL;//获取与当前元任务冲突的任务的覆盖级别
+                        conIndSum = conIndSum + conTWeight / (conTWeight + lstTaskFC[subTFID].subTWeight) + conTArea / (conTArea + lstTaskFC[subTFID].subTArea) + (1 - conTLevel / (conTLevel + (double)lstTaskFC[subTFID].CoverL));
+                    }
+                    ConDgreelist[j] = conIndSum / ((double)3 * ConflictsubTfid.Count);//冲突度 -------------------------------------------------------------------------------------
+                    double subTleftArea = 0;//当前元任务所有冲突剩余面积之和
+                    //卫星一旦冲突即不观测冲突任务，所以剩余能力为0
+                    #region 卫星一旦冲突即不观测 冲突任务 
+                    //for (int l = 0; l < ConflictsubTfid.Count; l++)
+                    //{
+                    //    int ConsubTFID = ConflictsubTfid[l];//与当前元任务冲突的元任务FID
+
+                    //    IFeature subTSATTask = SatFeLayer.FeatureClass.GetFeature(subTFID);//获取当前元任务要素
+                    //    IFeature conTSATTask = SatFeLayer.FeatureClass.GetFeature(ConsubTFID);//获取冲突任务要素
+                    //    string subTTaskStime = subTSATTask.get_Value(10).ToString();//获取当前元任务的开始观测时间
+                    //    string subTTaskEtime = subTSATTask.get_Value(11).ToString();//获取当前元任务的结束观测时间
+                    //    string conTaskStime = conTSATTask.get_Value(10).ToString();//获取冲突任务的开始观测时间
+                    //    string conTaskEtime = conTSATTask.get_Value(11).ToString();//获取冲突任务的结束观测时间
+                    //    double subAngel = double.Parse(subTSATTask.get_Value(12).ToString());//获取当前元任务的侧摆角 度
+                    //    double conAngel = double.Parse(conTSATTask.get_Value(12).ToString());//获取冲突任务的侧摆角 
+                    //    double subStore = double.Parse(subTSATTask.get_Value(14).ToString());//
+                    //    double conStore = double.Parse(conTSATTask.get_Value(14).ToString());//获取冲突任务的需要容量 G
+
+                    //    //确定时间
+                    //    int firstTShour = 0;//当前元任务的开始观测时间 小时
+                    //    double firstTSmin = 0;//当前元任务的开始观测时间 分钟
+                    //    int firstTEhour = 0;//当前元任务的结束观测时间 小时
+                    //    double firstTEmin = 0;//当前元任务的结束观测时间 分钟
+                    //    int secondTShour = 0;//冲突任务的开始观测时间 小时
+                    //    double secondTSmin = 0;//冲突任务的开始观测时间 分钟
+                    //    int secondTEhour = 0;//冲突任务的结束观测时间 小时
+                    //    double secondTEmin = 0;//冲突任务的结束观测时间 分钟
+                    //    //时间确定 
+                    //    #region 确定时间
+                    //    if (subTTaskStime.Contains("."))
+                    //    {
+                    //        if (subTTaskStime.Contains("."))
+                    //        {
+                    //            string HourAndMin = subTTaskStime.Substring(0, subTTaskStime.IndexOf("."));
+                    //            if (HourAndMin.Length > 3)
+                    //            {
+                    //                firstTShour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                    //            }
+                    //            else
+                    //            {
+                    //                firstTShour = int.Parse(HourAndMin.Substring(0, 1));//
+                    //            }
+                    //            firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + subTTaskStime.Substring(subTTaskStime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                    //        }
+                    //        else
+                    //        {
+                    //            if (subTTaskStime.Length > 3)
+                    //            {
+                    //                firstTShour = int.Parse(subTTaskStime.Substring(0, 2));// 
+                    //            }
+                    //            else
+                    //            {
+                    //                firstTShour = int.Parse(subTTaskStime.Substring(0, 1));//
+                    //            }
+                    //            firstTSmin = int.Parse(subTTaskStime.Substring(subTTaskStime.Length - 2, 2));//
+                    //        }
+                    //    }
+                    //    /////////////////
+                    //    if (subTTaskEtime.Contains("."))
+                    //    {
+                    //        if (subTTaskEtime.Contains("."))
+                    //        {
+                    //            string HourAndMin = subTTaskEtime.Substring(0, subTTaskEtime.IndexOf("."));
+                    //            if (HourAndMin.Length > 3)
+                    //            {
+                    //                firstTEhour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                    //            }
+                    //            else
+                    //            {
+                    //                firstTEhour = int.Parse(HourAndMin.Substring(0, 1));//
+                    //            }
+                    //            firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + subTTaskEtime.Substring(subTTaskEtime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                    //        }
+                    //        else
+                    //        {
+                    //            if (subTTaskEtime.Length > 3)
+                    //            {
+                    //                firstTEhour = int.Parse(subTTaskEtime.Substring(0, 2));// 
+                    //            }
+                    //            else
+                    //            {
+                    //                firstTEhour = int.Parse(subTTaskEtime.Substring(0, 1));//
+                    //            }
+                    //            firstTEmin = int.Parse(subTTaskEtime.Substring(subTTaskEtime.Length - 2, 2));//
+                    //        }
+                    //    }
+                    //    /////////////////
+                    //    if (conTaskStime.Contains("."))
+                    //    {
+                    //        if (conTaskStime.Contains("."))
+                    //        {
+                    //            string HourAndMin = conTaskStime.Substring(0, conTaskStime.IndexOf("."));
+                    //            if (HourAndMin.Length > 3)
+                    //            {
+                    //                secondTShour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                    //            }
+                    //            else
+                    //            {
+                    //                secondTShour = int.Parse(HourAndMin.Substring(0, 1));//
+                    //            }
+                    //            firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + conTaskStime.Substring(conTaskStime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                    //        }
+                    //        else
+                    //        {
+                    //            if (conTaskStime.Length > 3)
+                    //            {
+                    //                secondTShour = int.Parse(conTaskStime.Substring(0, 2));// 
+                    //            }
+                    //            else
+                    //            {
+                    //                secondTShour = int.Parse(conTaskStime.Substring(0, 1));//
+                    //            }
+                    //            secondTSmin = int.Parse(conTaskStime.Substring(conTaskStime.Length - 2, 2));//
+                    //        }
+                    //    }
+                    //    /////////////////
+                    //    if (conTaskEtime.Contains("."))
+                    //    {
+                    //        if (conTaskEtime.Contains("."))
+                    //        {
+                    //            string HourAndMin = conTaskEtime.Substring(0, conTaskEtime.IndexOf("."));
+                    //            if (HourAndMin.Length > 3)
+                    //            {
+                    //                secondTEhour = int.Parse(HourAndMin.Substring(0, 2));//第一个任务开始观测时间  小时                 
+                    //            }
+                    //            else
+                    //            {
+                    //                secondTEhour = int.Parse(HourAndMin.Substring(0, 1));//
+                    //            }
+                    //            firstTSmin = double.Parse(HourAndMin.Substring(HourAndMin.Length - 2, 2) + conTaskEtime.Substring(conTaskEtime.IndexOf(".")));//第一个任务开始观测时间  分钟  
+                    //        }
+                    //        else
+                    //        {
+                    //            if (conTaskEtime.Length > 3)
+                    //            {
+                    //                secondTEhour = int.Parse(conTaskEtime.Substring(0, 2));// 
+                    //            }
+                    //            else
+                    //            {
+                    //                secondTEhour = int.Parse(conTaskEtime.Substring(0, 1));//
+                    //            }
+                    //            secondTEmin = int.Parse(conTaskEtime.Substring(conTaskEtime.Length - 2, 2));//
+                    //        }
+                    //    }
+                    //    #endregion
+
+
+                    //    if ((firstTShour * 60 + firstTSmin) < (secondTShour * 60 + secondTSmin))//当前任务先执行 冲突任务后执行  SThour;//开始观测时间 小时 STmin;//开始观测时间 分钟
+                    //    {
+                    //        double subTendTime = secondTShour * 3600 + secondTSmin * 60 - (Math.Abs(subAngel - conAngel) / Vengel + intervalT + staT); //冲突发生后当前任务的结束观测时间  秒 不是时间点
+                    //        //用STK判断在冲突之后的时间窗口内能观察的 当前元任务的面积 ，这里假设根据剩余时间推算
+                    //        double subTleftTime = subTendTime - (firstTEhour * 3600 + firstTEmin * 60);//当前任务剩余观测时间
 
 
 
 
+                    //        if (AreaRate > 0)
+                    //        {
+                    //            subTleftArea = subTleftArea + AreaRate * lstTaskFC[subTFID].subTArea;
+                    //        }
+                    //        else
+                    //        { }
+                    //    }
+                    //    else//冲突任务先执行 当前任务后执行
+                    //    {
+
+                    //    }
 
 
+                    //} 
+                    #endregion
 
-            //int ss = pFeatureLayer.FeatureClass.Indexes;
-            //for (int Ti = 1; Ti < pFeatureLayer.FeatureClass.FeatureCount; Ti++)
-            //    pFeatureLayerDefinition.DefinitionExpression = "Id=" + i;//"FID<10";
-            //pActiveView.Refresh();
-            //IQueryFilter pQueryFilter = new QueryFilterClass();
-            //pQueryFilter.WhereClause = "AREA<10";
-            //IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
-            //pFeatureSelection.SelectFeatures(pQueryFilter, esriSelectionResultEnum.esriSelectionResultNew, false);
-            //pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphicSelection, null, null);
-            //IFeatureLayer pNew = pFeatureLayerDefinition.CreateSelectionLayer("new", true, null, null);
-            //pFeatureSelection.Clear();
-            //pMap.AddLayer(pNew);
-            //MessageBox.Show(Convert.ToString(pMap.LayerCount));
+                    ConLeftElist[j] = subTleftArea;
 
+                }
+                satRTFIDlist[i].conRate = ConRatelist;
+                satRTFIDlist[i].conDegree = ConDgreelist;
+                satRTFIDlist[i].leftEn = ConLeftElist;
+            }
 
-
-
-
-
-
-
-            // layer = mapLayers.get_Layer(satLayNO);
-            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-            //layer = mapLayers.get_Layer(UAVLayNO + 1);
-            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
-            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-            //layer = mapLayers.get_Layer(ASLayNO + 2);
-            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
-            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-            //layer = mapLayers.get_Layer(CarLayNO +3);
-            //BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + mapLayers.get_Layer(CarLayNO+3).Name + "BF.shp";
-            //GPBufferTool(PRV_GetLayersByName(layer.Name), BufferPath, 5000);
-
+            #endregion
+            #endregion
 
         }
 
-        /// <summary>
-        /// 测试 可删
-        /// </summary>
-        /// <param name="satLayNO"></param>
-        /// <param name="UAVLayNO"></param>
-        /// <param name="ASLayNO"></param>
-        /// <param name="CarLayNO"></param>
-        /// <param name="PolygonTaskNO"></param>
-        public static void delete(int satLayNO, int UAVLayNO, int ASLayNO, int CarLayNO, int PolygonTaskNO)
-        {
-            IMapLayers mapLayers = Program.myMap.Map as IMapLayers;//IFeatureLayer pFeatureLayer;
-            ILayer layer;
-            ILayer la2;
-            //IWorkspaceFactory pWorkspaceFactory;
-            //IFeatureWorkspace pFeatureWorkspace;
-            //pWorkspaceFactory = (IWorkspaceFactory)(new ShapefileWorkspaceFactory());
-            ////注意此处的路径是不能带文件名的
-            //string datapath = System.AppDomain.CurrentDomain.BaseDirectory + "Data";
-            //string sWorkPath;
-            //pFeatureWorkspace = pWorkspaceFactory.OpenFromFile(datapath, 0) as IFeatureWorkspace;
 
 
-            //IWorkspace sWordkPath = pFeatureWorkspace as IWorkspace;
-            //sWorkPath = sWordkPath.PathName;
 
 
-            DeleteFolder(System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache");//删除cache下所有文件  
-            //卫星 无人机 飞艇 测量车覆盖面路径（缓冲区路径）
-            layer = mapLayers.get_Layer(8);
-            la2 = mapLayers.get_Layer(12);
-            IFeatureLayer UAVFeatureLayer = (IFeatureLayer)layer;
-            IFeatureLayer FeatureLayer = (IFeatureLayer)la2;
-            string BufferPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + layer.Name + "BF.shp";
 
-            GPIntersectTool(UAVFeatureLayer.FeatureClass, FeatureLayer.FeatureClass, BufferPath);
-            OpenShape(BufferPath);//如果在图层上显示 PolygonTaskNO等图层NO要+1 //////////////////////////////////////////////////////////////////////////////////////////
-            Program.myMap.Refresh();
-        }
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //    IMap pMap = axMapControl1.ActiveView.FocusMap;
-        //    IActiveView pActiveView = axMapControl1.ActiveView;
-        //    IFeatureLayer pFeatureLayer = (IFeatureLayer)pMap.get_Layer(0);
-        //    IFeatureLayerDefinition pFeatureLayerDefinition = (IFeatureLayerDefinition)pFeatureLayer;
-        //    pFeatureLayerDefinition.DefinitionExpression = "FID<10";
-        //    pActiveView.Refresh();
-        //    IQueryFilter pQueryFilter = new QueryFilterClass();
-        //    pQueryFilter.WhereClause = "AREA<10";
-        //    IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
-        //    pFeatureSelection.SelectFeatures(pQueryFilter, esriSelectionResultEnum.esriSelectionResultNew, false);
-        //    pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphicSelection, null, null);
-        //    IFeatureLayer pNew = pFeatureLayerDefinition.CreateSelectionLayer("new", true, null, null);
-        //    pFeatureSelection.Clear();
-        //    pMap.AddLayer(pNew);
-        //    MessageBox.Show(Convert.ToString(pMap.LayerCount));
-        //}
+
+        #region GP工具
 
         private static void GPBufferTool(ILayer in_features, string out_features, string distance)
         {
@@ -634,7 +1969,7 @@ namespace CoScheduling.Main
             }
         }
 
-        private static void GPselectTool(IFeatureLayer in_features, string out_features, int idvalue)
+        private static void GPselectTool(IFeatureLayer in_features, string out_features, string clause, int idvalue)
         {
 
 
@@ -645,10 +1980,10 @@ namespace CoScheduling.Main
 
                 // Initialize the MakeFeatureLayer tool
                 ESRI.ArcGIS.AnalysisTools.Select selecetool = new ESRI.ArcGIS.AnalysisTools.Select();
-
+                GP.OverwriteOutput = true;
                 selecetool.in_features = in_features; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //
                 selecetool.out_feature_class = out_features; //@"E\test.gdb\road_bf30"; //
-                selecetool.where_clause = "id=" + idvalue;
+                selecetool.where_clause = clause + idvalue;
                 // buffertool.dissolve_option = "ALL";
                 // RunTool(GP, buffertool, null);
                 GP.Execute(selecetool, null);
@@ -718,7 +2053,7 @@ namespace CoScheduling.Main
 
                 ESRI.ArcGIS.DataManagementTools.FeatureToPoint FeToPointTool = new ESRI.ArcGIS.DataManagementTools.FeatureToPoint();
                 IGeometry ige = in_features.FeatureClass.GetFeature(0).Shape;
-
+                GP.OverwriteOutput = true;
                 IPolygon pointfe = ige as IPolygon;
                 FeToPointTool.in_features = in_features;// "E:\\Cooperative monitoring\\program\\CPclone\\bin\\Data\\cache\\0UMaxT.shp";
                 FeToPointTool.out_feature_class = out_features;
@@ -789,14 +2124,14 @@ namespace CoScheduling.Main
         // Function for returning the tool messages.
 
         private static void GPNearTool(IFeatureLayer InputFeature, IFeatureLayer NearFeature)
-        {
+        {//使用下面mindis函数
 
             try
             {
 
                 IGpValueTableObject valTbl = new GpValueTableObjectClass();
                 valTbl.SetColumns(1);
-                IFeatureClass ff;
+                //IFeatureClass ff;
 
                 object row = "";
                 object rank = 1;
@@ -814,6 +2149,7 @@ namespace CoScheduling.Main
                 // Initialize the MakeFeatureLayer tool
                 ESRI.ArcGIS.AnalysisTools.Near Neartool = new ESRI.ArcGIS.AnalysisTools.Near();
                 GP.OverwriteOutput = true;
+
 
                 Neartool.in_features = InputFeature; // @"E:\Cooperative monitoring\program\CPclone\bin\Data\UAV_Buffer.shp;E:\Cooperative monitoring\program\CPclone\bin\Data\TaskArea.shp";//datapath + "\\"+in_features+".shp;" + datapath + "\\"+clipFeat+".shp"; //根据图层名称获取图层 System.AppDomain.CurrentDomain.BaseDirectory + "Data\\Car.shp"; //                
                 Neartool.near_features = valTbl;
@@ -834,26 +2170,38 @@ namespace CoScheduling.Main
                 Console.WriteLine(err.Message);
             }
         }
-        private static void ReturnMessages(Geoprocessor gp)
-        {
-            if (gp.MessageCount > 0)
-            {
-                for (int Count = 0; Count <= gp.MessageCount - 1; Count++)
-                {
-                    Console.WriteLine(gp.GetMessage(Count));
-                }
-            }
+        #endregion
 
-        }
-        public static double AreaToRadius(IFeatureLayer UavPointFL, IFeatureLayer TaskAreaFL, double TaskArea, double mileage)
+
+        //private static void ReturnMessages(Geoprocessor gp)
+        //{
+        //    if (gp.MessageCount > 0)
+        //    {
+        //        for (int Count = 0; Count <= gp.MessageCount - 1; Count++)
+        //        {
+        //            Console.WriteLine(gp.GetMessage(Count));
+        //        }
+        //    }
+
+        //}
+        #region 公共函数
+        /// <summary>
+        /// 根据面积多次逼近观测半径 
+        /// </summary>
+        /// <param name="UavPointFL">单个资源点</param>
+        /// <param name="TaskAreaFL">单个任务区域</param>
+        /// <param name="TaskArea">面积</param>
+        /// <param name="mileage">最大半径*2</param>
+        /// <returns></returns>
+        public static double AreaToRadius(IFeatureLayer UavPointFL, IFeatureLayer TaskAreaFL, double TaskArea, double maxRad)
         {
             try
             {
                 double Radius;//最终的半径
-                double Maxd = mileage / 2;
+                double Maxd = maxRad;
                 double Mind;//无人机位置到任务的最近距离
                 double sth = TaskArea * 0.01;//面积阈值 定义？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
-                
+
                 //IFeatureLayer UavPointFL = OpenFile_LayerFile(UavPointPath);
                 IFeatureLayer RadBFfeature;//缓冲区要素图层
                 IFeatureLayer InterSelefeature;//交集要素图层
@@ -861,15 +2209,24 @@ namespace CoScheduling.Main
                 string IntersPath;//交集图层存储路径
                 IPolygon InterSelefePolygon;//交集区域转为面
                 IArea Uarea;//交集区域转为Iarea
-
-                GPNearTool(UavPointFL, TaskAreaFL);//GP工具求点到面最近距离 生成表中一个字段  多次循环会删除么？？？？？？？？
+                int k = 1;//迭代次数
+                //GPNearTool(UavPointFL, TaskAreaFL);//GP工具求点到面最近距离 生成表中一个字段  多次循环会删除么？？？？？？？？
+                ////IFeature UavPfe = UavPointFL.FeatureClass.GetFeature(0);//转成一个要素
                 //IFeature UavPfe = UavPointFL.FeatureClass.GetFeature(0);//转成一个要素
-                IFeature UavPfe = UavPointFL.FeatureClass.GetFeature(0);//转成一个要素
-               
+                //Mind = double.Parse(UavPfe.get_Value(UavPfe.Fields.FieldCount - 1).ToString());
 
-                Mind = double.Parse(UavPfe.get_Value(UavPfe.Fields.FieldCount - 1).ToString());
+                Mind = MinDis(UavPointFL, TaskAreaFL);
+                if (Mind < 0)
+                {
+                }
+                if (Mind > Maxd)
+                {
+                    Radius = 0;
+                    return Radius;
+                }
+
                 BFpath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "RadBF.shp";
-                IntersPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "RadBF.shp";
+                IntersPath = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\cache\\" + "interP.shp";
                 do
                 {
 
@@ -880,6 +2237,7 @@ namespace CoScheduling.Main
 
                     GPIntersectTool(RadBFfeature.FeatureClass, TaskAreaFL.FeatureClass, IntersPath);
                     InterSelefeature = OpenFile_LayerFile(IntersPath);
+
                     InterSelefePolygon = InterSelefeature.FeatureClass.GetFeature(0).Shape as IPolygon;
                     Uarea = InterSelefePolygon as IArea;
                     if (Uarea.Area > TaskArea)
@@ -890,7 +2248,8 @@ namespace CoScheduling.Main
                     {
                         Mind = Radius;
                     }
-                } while (Uarea.Area < TaskArea + sth && Uarea.Area > TaskArea + sth);
+                    k++;
+                } while ((Uarea.Area > TaskArea + sth || Uarea.Area < TaskArea - sth) && k < 10);
 
                 //Radius = TaskArea;
                 return Radius;
@@ -902,9 +2261,19 @@ namespace CoScheduling.Main
             }
         }
 
-
+        private static double MinDis(IFeatureLayer InputFeature, IFeatureLayer NearFeature)
+        {
+            IGeometry InputGeo = InputFeature.FeatureClass.GetFeature(0).Shape;
+            IGeometry NearGeo = NearFeature.FeatureClass.GetFeature(0).Shape;
+            IProximityOperator pProOperator = InputGeo as IProximityOperator;
+            double mindis = pProOperator.ReturnDistance(NearGeo);
+            return mindis;
+        }
 
         #endregion
+
+        #endregion
+
         #endregion
 
         #region 注释代码 可参考
@@ -1912,9 +3281,77 @@ namespace CoScheduling.Main
     /// </summary>
     public class R_TInfo
     {
-        public string ResouceID { get; set; }
-        public string TaskID { get; set; }
+        public string ResouceFID { get; set; }
+        public string TaskFID { get; set; }
+        public int SatEleTFID { get; set; }
 
+    }
+    /// <summary>
+    /// 存储观测资源相对于任务的实际观测区域 记录资源FID 任务FID 观测区域feature
+    /// </summary>
+    public class RTFeatureInfo
+    {
+        public string SATFID { get; set; }
+        public string UAVFID { get; set; }
+        public string ASFID { get; set; }
+        public string TFID { get; set; }
+        public IFeatureLayer RtoTFL { get; set; }
+        public double areaT { get; set; }
+        public double RtoTtime { get; set; }
+
+    }
+    /// <summary>
+    /// 存储观测资源相对于任务的实际观测区域 记录资源ID 元任务ID 子任务FID 子任务面积 子任务权重
+    /// </summary>
+    public class RTsubTInfo
+    {
+        //public string RID { get; set; }
+        public string TFID { get; set; }
+        public string subTFID { get; set; }
+        public List<int> UAVFID { get; set; }
+        public List<int> ASFID { get; set; }
+        public List<int> SatFID { get; set; }
+        public int CoverL { get; set; }
+        public double subTArea { get; set; }
+        public double subTWeight { get; set; }
+        public string subTWinS { get; set; }//当前元任务开始观测时间
+        public string subTWinE { get; set; }
+        public List<double> UAVTime { get; set; }//无人机观测元任务时间
+        public List<double> ASTime { get; set; }
+        //public List<double> SatTime { get; set; }
+    }
+    /// <summary>
+    /// 一个资源能够观测的subTask集合 FID对应列表
+    /// </summary>
+    public class RT_FID
+    {
+        //public string RID { get; set; }
+        public int RFID { get; set; }
+        public List<int> subTaskFID { get; set; }
+        public List<ConflictTFID> ConflictTaskFID { get; set; }//两两冲突的元任务序列 
+        public int taskCount { get; set; }//当前资源能够观测的元任务个数
+        public List<double> conRate { get; set; }//每一个资源观测每一个元任务的冲突率
+        public List<double> conDegree { get; set; }//每一个资源观测每一个元任务的冲突度
+        public List<double> leftEn { get; set; }//每一个资源观测每一个元任务的剩余观测能力
+    }
+    /// <summary>
+    /// 相冲突的两个任务的FID
+    /// </summary>
+    public class ConflictTFID
+    {
+        //public string RID { get; set; }
+        public int firstTFID { get; set; }
+        public int secondTFID { get; set; }
+    }
+
+    /// <summary>
+    /// 一个资源观测一个任务所花费时间 
+    /// </summary>
+    public class R_TFIDtime
+    {
+        public int RFID { get; set; }
+        public int TFID { get; set; }
+        public double time { get; set; }
     }
     #endregion
 }

@@ -184,8 +184,17 @@ namespace CP.FrameWork
 
         }
 
+        private void conflictButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+        //    int x=8;
+        //    int y=25;
+        //    double jj = 8 + (double)25 / 60;
+        //    double xxx = x / jj;
+        //    double uu = x + jj;
+        }
        
         #endregion
+
      
     
 

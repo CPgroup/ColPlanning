@@ -59,6 +59,9 @@
             CP.WinFormsUI.Docking.TabGradient tabGradient13 = new CP.WinFormsUI.Docking.TabGradient();
             CP.WinFormsUI.Docking.TabGradient tabGradient14 = new CP.WinFormsUI.Docking.TabGradient();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.GirdDisButton = new System.Windows.Forms.Button();
+            this.PlanAllocationButton = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.comboBox10 = new System.Windows.Forms.ComboBox();
             this.comboBox9 = new System.Windows.Forms.ComboBox();
@@ -80,12 +83,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBox11 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.satLabel = new System.Windows.Forms.Label();
             this.dockPanel1 = new CP.WinFormsUI.Docking.DockPanel();
             this.resetbutton = new System.Windows.Forms.Button();
             this.TaskDisOkbuttoon = new System.Windows.Forms.Button();
-            this.comboBox11 = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,6 +97,9 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.LightGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.progressBar1);
+            this.panel1.Controls.Add(this.GirdDisButton);
+            this.panel1.Controls.Add(this.PlanAllocationButton);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.comboBox10);
             this.panel1.Controls.Add(this.comboBox9);
@@ -124,8 +130,35 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(242, 507);
+            this.panel1.Size = new System.Drawing.Size(243, 601);
             this.panel1.TabIndex = 0;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(22, 529);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(202, 23);
+            this.progressBar1.TabIndex = 43;
+            // 
+            // GirdDisButton
+            // 
+            this.GirdDisButton.Location = new System.Drawing.Point(22, 500);
+            this.GirdDisButton.Name = "GirdDisButton";
+            this.GirdDisButton.Size = new System.Drawing.Size(75, 23);
+            this.GirdDisButton.TabIndex = 40;
+            this.GirdDisButton.Text = "网格分解";
+            this.GirdDisButton.UseVisualStyleBackColor = true;
+            this.GirdDisButton.Click += new System.EventHandler(this.GirdDisButton_Click);
+            // 
+            // PlanAllocationButton
+            // 
+            this.PlanAllocationButton.Location = new System.Drawing.Point(149, 500);
+            this.PlanAllocationButton.Name = "PlanAllocationButton";
+            this.PlanAllocationButton.Size = new System.Drawing.Size(75, 23);
+            this.PlanAllocationButton.TabIndex = 37;
+            this.PlanAllocationButton.Text = "分配结果";
+            this.PlanAllocationButton.UseVisualStyleBackColor = true;
+            this.PlanAllocationButton.Click += new System.EventHandler(this.PlanAllocationButton_Click);
             // 
             // label11
             // 
@@ -252,7 +285,7 @@
             this.dockPanel2.BackColor = System.Drawing.Color.White;
             this.dockPanel2.Location = new System.Drawing.Point(3, 243);
             this.dockPanel2.Name = "dockPanel2";
-            this.dockPanel2.Size = new System.Drawing.Size(232, 222);
+            this.dockPanel2.Size = new System.Drawing.Size(233, 222);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -368,6 +401,16 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "无人机";
             // 
+            // comboBox11
+            // 
+            this.comboBox11.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox11.FormattingEnabled = true;
+            this.comboBox11.Location = new System.Drawing.Point(175, 38);
+            this.comboBox11.Name = "comboBox11";
+            this.comboBox11.Size = new System.Drawing.Size(49, 20);
+            this.comboBox11.TabIndex = 1;
+            this.comboBox11.SelectedIndexChanged += new System.EventHandler(this.comboBox11_SelectedIndexChanged);
+            // 
             // comboBox1
             // 
             this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -396,7 +439,7 @@
             this.dockPanel1.BackColor = System.Drawing.Color.White;
             this.dockPanel1.Location = new System.Drawing.Point(3, 3);
             this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(232, 234);
+            this.dockPanel1.Size = new System.Drawing.Size(233, 234);
             dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient4.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
@@ -447,7 +490,7 @@
             // 
             // resetbutton
             // 
-            this.resetbutton.Location = new System.Drawing.Point(128, 471);
+            this.resetbutton.Location = new System.Drawing.Point(149, 471);
             this.resetbutton.Name = "resetbutton";
             this.resetbutton.Size = new System.Drawing.Size(75, 23);
             this.resetbutton.TabIndex = 3;
@@ -465,23 +508,13 @@
             this.TaskDisOkbuttoon.UseVisualStyleBackColor = true;
             this.TaskDisOkbuttoon.Click += new System.EventHandler(this.TaskDisOkbuttoon_Click);
             // 
-            // comboBox11
-            // 
-            this.comboBox11.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox11.FormattingEnabled = true;
-            this.comboBox11.Location = new System.Drawing.Point(175, 38);
-            this.comboBox11.Name = "comboBox11";
-            this.comboBox11.Size = new System.Drawing.Size(49, 20);
-            this.comboBox11.TabIndex = 1;
-            this.comboBox11.SelectedIndexChanged += new System.EventHandler(this.comboBox11_SelectedIndexChanged);
-            // 
             // taskDis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(242, 507);
+            this.ClientSize = new System.Drawing.Size(243, 601);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "taskDis";
@@ -521,5 +554,8 @@
         private System.Windows.Forms.ComboBox comboBox10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox comboBox11;
+        private System.Windows.Forms.Button PlanAllocationButton;
+        private System.Windows.Forms.Button GirdDisButton;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

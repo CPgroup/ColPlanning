@@ -55,7 +55,15 @@ namespace CoScheduling.Main
             gStatusLabel.Text = tip;
             gStatusStrip.Refresh();
         }
-
+        /// <summary>
+        /// 设置进度条值
+        /// </summary>
+        /// <param name="val"></param>
+        internal static void SetProgressVal(int val)
+        {
+            gProgressBar.Value = val;
+            gStatusStrip.Refresh();
+        }
         /// <summary>
         /// 设置最大值
         /// </summary>

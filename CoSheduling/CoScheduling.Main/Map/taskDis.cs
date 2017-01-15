@@ -57,7 +57,7 @@ namespace CoScheduling.Main.Map
         /// <param name="e"></param>
         private void TaskDisOkbuttoon_Click(object sender, EventArgs e)
         {
-            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex,comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
+            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
             //CoScheduling.Main.MainInterface.delete(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
         }
         /// <summary>
@@ -74,7 +74,16 @@ namespace CoScheduling.Main.Map
             comboBox10.SelectedIndex = TaskNO;//车
             comboBox11.SelectedIndex = satLine;//车
         }
-
+        /// <summary>
+        /// 按照网格分解
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GirdDisButton_Click(object sender, EventArgs e)
+        {
+            CoScheduling.Main.MainInterface.GridTaskDis(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex,progressBar1);
+            
+        }
 
         #region 公共函数
         /// <summary>
@@ -172,13 +181,20 @@ namespace CoScheduling.Main.Map
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             bindCboxTable(comboBox5, comboBox4.SelectedIndex);
-        } 
+        }
         #endregion
 
         private void comboBox11_SelectedIndexChanged(object sender, EventArgs e)
         {
             //bindCboxTable(comboBox8, comboBox11.SelectedIndex);
         }
+
+        private void PlanAllocationButton_Click(object sender, EventArgs e)
+        {
+            CoScheduling.Main.MainInterface.PlanAllocation("Data\\CacheGrid\\" + "GirdTask.shp");//"Data\\CacheGrid\\" + "GirdTask.shp");//"Data\\cache\\" + "UToTaUni.shp");
+        }
+
+
 
     }
 

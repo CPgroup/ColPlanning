@@ -13,6 +13,7 @@ using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
 using CoScheduling.Main;
 using ESRI.ArcGIS.esriSystem;
+using System.Reflection;
 
 namespace CP.FrameWork
 {
@@ -186,11 +187,11 @@ namespace CP.FrameWork
 
         private void conflictButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-        //    int x=8;
-        //    int y=25;
-        //    double jj = 8 + (double)25 / 60;
-        //    double xxx = x / jj;
-        //    double uu = x + jj;
+            double j=1048576;
+            double  b=2;
+
+            double col = Math.Floor((double)(2 * j + 1) / 1048576);
+
         }
        
         #endregion

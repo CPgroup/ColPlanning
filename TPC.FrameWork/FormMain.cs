@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using DevExpress.Skins;
 using DevExpress.LookAndFeel;
@@ -187,11 +188,8 @@ namespace CP.FrameWork
 
         private void conflictButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            double j=1048576;
-            double  b=2;
-
-            double col = Math.Floor((double)(2 * j + 1) / 1048576);
-
+            List<int> SureSub = new List<int>() { 3, 4, 0, 2 };
+            SureSub.Sort();
         }
        
         #endregion

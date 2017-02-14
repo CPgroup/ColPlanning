@@ -59,6 +59,8 @@
             CP.WinFormsUI.Docking.TabGradient tabGradient13 = new CP.WinFormsUI.Docking.TabGradient();
             CP.WinFormsUI.Docking.TabGradient tabGradient14 = new CP.WinFormsUI.Docking.TabGradient();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBox12 = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.GirdDisButton = new System.Windows.Forms.Button();
             this.PlanAllocationButton = new System.Windows.Forms.Button();
@@ -97,6 +99,8 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.LightGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.comboBox12);
+            this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.progressBar1);
             this.panel1.Controls.Add(this.GirdDisButton);
             this.panel1.Controls.Add(this.PlanAllocationButton);
@@ -132,6 +136,24 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(243, 601);
             this.panel1.TabIndex = 0;
+            // 
+            // comboBox12
+            // 
+            this.comboBox12.FormattingEnabled = true;
+            this.comboBox12.Location = new System.Drawing.Point(32, 567);
+            this.comboBox12.Name = "comboBox12";
+            this.comboBox12.Size = new System.Drawing.Size(63, 20);
+            this.comboBox12.TabIndex = 49;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(101, 565);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 46;
+            this.button1.Text = "确定求解";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // progressBar1
             // 
@@ -557,5 +579,7 @@
         private System.Windows.Forms.Button PlanAllocationButton;
         private System.Windows.Forms.Button GirdDisButton;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comboBox12;
     }
 }

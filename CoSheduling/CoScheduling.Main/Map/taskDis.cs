@@ -40,6 +40,11 @@ namespace CoScheduling.Main.Map
             bindCboxTable(comboBox6, comboBox3.SelectedIndex);
             bindCboxTable(comboBox5, comboBox4.SelectedIndex);
             comboBox8.SelectedIndex = 1;//卫星
+
+            comboBox12.Items.Add("面积优先");
+            comboBox12.Items.Add("权重优先");
+            comboBox12.Items.Add("面积权重");
+            comboBox12.SelectedIndex = 0;
             #endregion
 
         }
@@ -192,6 +197,15 @@ namespace CoScheduling.Main.Map
         private void PlanAllocationButton_Click(object sender, EventArgs e)
         {
             CoScheduling.Main.MainInterface.PlanAllocation("Data\\CacheGrid\\" + "GirdTask.shp");//"Data\\CacheGrid\\" + "GirdTask.shp");//"Data\\cache\\" + "UToTaUni.shp");
+        }
+        /// <summary>
+        /// q其他方法对比 通过comboBox12选定面积优先 权重优先等
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)//优先
+        {
+            CoScheduling.Main.MainInterface.AreaFirst(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex,comboBox12.SelectedIndex);
         }
 
 

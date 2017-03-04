@@ -71,6 +71,16 @@
     <Reference Include="ESRI.ArcGIS.GlobeCore, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="ESRI.ArcGIS.NetworkAnalysis, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>D:\software\Arcgis\ArcEngine\DeveloperKit10.1\DotNet\ESRI.ArcGIS.NetworkAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.NetworkAnalyst, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>D:\software\Arcgis\ArcEngine\DeveloperKit10.1\DotNet\ESRI.ArcGIS.NetworkAnalyst.dll</HintPath>
+    </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -80,7 +90,7 @@
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.Version, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86" />
+    <Reference Include="ESRI.ArcGIS.Version, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -165,6 +175,7 @@
     <Compile Include="Generic\myXML.cs" />
     <Compile Include="Generic\SysEnviriment.cs" />
     <Compile Include="Map\MapHelper.cs" />
+    <Compile Include="Map\NetWorkAnalysClass.cs" />
     <Compile Include="Model\AssemblyPoint.cs" />
     <Compile Include="Model\Barries.cs" />
     <Compile Include="Model\Color.cs" />

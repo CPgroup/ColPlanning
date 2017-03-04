@@ -188,14 +188,12 @@ namespace CP.FrameWork
 
         private void conflictButton_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            List<int> SureSub = new List<int>() { 3, 4, 0, 2 };
-            SureSub.Sort();
+           
         }
        
         #endregion
 
-     
-    
+      
 
      
 

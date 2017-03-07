@@ -7617,6 +7617,7 @@ namespace CoScheduling.Main
         /// <param name="SortIndex">排序指标 根据SatElementTask的属性表 3：面积  6：权重</param>
         /// <param name="SatSubTsort"></param>
         /// ContrastPlan：0：面积  1：权重  2：权重*面积
+        /// 
         public static void SubTsort(List<int> SortTfid, IFeatureLayer SatFeLayer, int SortAreaIndex, int SortWeightIndex, int ContrastPlan, out List<int> SatSubTsort)
         {
 

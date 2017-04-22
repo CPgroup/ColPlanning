@@ -2,11 +2,11 @@
 <CoScheduling>
   <DataBase>
     <Server>(local)</Server>
-    <DataBase>CoScheduling</DataBase>
+    <DataBase>CoMonitoring</DataBase>
     <GeoDataBase>CoScheduling_GDB</GeoDataBase>
     <User>sa</User>
     <!--DR6fPbundQU=    PlUOxpz5/q4KJakeVvOXKA==-->
-    <Password>123</Password>
+    <Password>lhf2017</Password>
     <Domain>0</Domain>
   </DataBase>
   <DataBaseOra>

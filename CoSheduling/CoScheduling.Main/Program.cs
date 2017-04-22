@@ -166,9 +166,54 @@ namespace CoScheduling.Main
             formTOC.AxTOCControl.SetBuddyControl(formMap.MapControl);
             //formMap.MapControl.DocumentFilename = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\data.mxd";
         }
+
+        internal static Coverage.CoverageMain formCOV;
+        internal static Coverage.ObjectList formList;
+        internal static Coverage.PlanningResults formResult;
+        internal static Coverage.SatelliteCompute SateCom;
+
+        #region STK页面加载
+        internal static void ShowCoverage()
+        {
+            if (formList == null) formList = new Coverage.ObjectList();
+            else if (formList.IsDisposed) formList = new Coverage.ObjectList();
+            formList.Show(gDockPane, DockState.DockLeft);
+
+            if (formCOV == null) formCOV = new Coverage.CoverageMain();
+            else if (formCOV.IsDisposed) formCOV = new Coverage.CoverageMain();
+            formCOV.Show(gDockPane, DockState.Document);
+
+            if (formResult == null) formResult = new Coverage.PlanningResults();
+            else if (formResult.IsDisposed) formResult = new Coverage.PlanningResults();
+            formResult.Show(gDockPane, DockState.Document);
+            //if (SateCom == null) SateCom = new Coverage.SatelliteCompute();
+            //else if (SateCom.IsDisposed) SateCom = new Coverage.SatelliteCompute();
+            //SateCom.Show(gDockPane, DockState.Document);
+
+        }
+        #endregion
+        #region 卫星任务规划
+        internal static TreeView tvSatelliteResault;
+        internal static ContextMenuStrip cmsTvSat;
+        internal static Coverage.SatelliteResaultList satelliteResaultList;
+        //internal static ESRI.ArcGIS.Controls.AxMapControl myMap;
+        /// <summary>
+        /// 卫星观测结果列表窗口
+        /// </summary>
+        internal static void ShowFormSatelliteResault()
+        {
+            if (satelliteResaultList == null) satelliteResaultList = new Coverage.SatelliteResaultList();
+            else if (satelliteResaultList.IsDisposed) satelliteResaultList = new Coverage.SatelliteResaultList();
+            satelliteResaultList.Show(gDockPane, DockState.DockLeft);
+            //加载卫星观测结果列表，董毅博，20140323
+            Coverage.SatelliteResaultHelper.LoadSatelliteSchemeList(tvSatelliteResault);
+        }
        
         #endregion
-        
-      
+
+
+        #endregion
+
+
     }
 }

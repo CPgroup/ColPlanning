@@ -77,6 +77,11 @@ namespace CP.FrameWork
                 CP.Interface.Subsys4.MainInterface.AddFrameworkControl4();//根据管理内容修改控件
                 op = 4;
             }
+            else if (this.ribbonControl.SelectedPage.Name == "ribbonPage1")
+            {
+                CP.Interface.Subsys5.MainInterface.AddFrameworkControl5();//根据管理内容修改控件
+                op = 5;
+            }
             
         }
 
@@ -181,6 +186,115 @@ namespace CP.FrameWork
 
        
         #endregion
+
+        private void barButtonItem62_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys5.MainInterface.ShowScen11();
+        }
+
+        private void buttonPosition_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys5.MainInterface.GainScen();
+        }
+
+        private void barButtonItem70_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Form f = new CoScheduling.Main.Coverage.SatelliteCompute();
+            f.Show();
+            this.Visible = false;
+        }
+
+        private void barButtonManageTask_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys3.MainInterface.TaskManage();
+        }
+
+        private void barButtonQueryTask_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys3.MainInterface.TaskQuery();
+        }
+
+        private void barButtonGenerateTask_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys3.MainInterface.TaskGenerate();
+        }
+
+        private void barButtonTaskResMatch_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys3.MainInterface.TaskResMatch();
+        }
+
+        private void barButtonUAVManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.UAVManage();
+        }
+
+        private void barButtonUAVQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.UAVQuery();
+        }
+
+        private void barButtonSensor1Query_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.Sensor1Query();
+        }
+
+        private void barButtonBandQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.BandQuery();
+        }
+
+        private void barButtonSatManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.SatelliteManage();
+        }
+
+        private void barButtonSatQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.SatQuery();
+        }
+
+        private void barButtonAEROSHIPManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.AEROSHIPManage();
+        }
+
+        private void barButtonAEROSHIPQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.AEROSHIPQuery();
+        }
+
+        private void barButtonILLCARManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.ILLUSTRATEDCARManage();
+        }
+
+        private void barButtonILLCARQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.ILLUSTRATEDCARQuery();
+        }
+
+        private void barButtonSPYCAMManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.SPYCAMManage();
+        }
+
+        private void barButtonSPYCAMQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.SPYCAMQuery();
+        }
+
+        private void barButtonHUMDETManage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.HUMDETManage();
+        }
+
+        private void barButtonHUMDETQuery_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.HUMDETQuery();
+        }
+
+        
      
     
 

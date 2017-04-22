@@ -94,7 +94,8 @@ namespace CoScheduling.Main
 
             Program.gStatusLabel.Text = "正在加载地图控件，请稍候...";
             Program.gStatusStrip.Refresh();
-            Program.ShowMapControl();                            //加载地图控件            
+            Program.ShowMapControl();                            //加载地图控件   
+            //Program.ShowCoverage();
             //Program.ShowFormUAVList();                           //加载无人机列表
             //Program.ShowFormDisaList();                          //加载灾区列表
             if (Program.gSplashForm != null)
@@ -200,6 +201,133 @@ namespace CoScheduling.Main
         #endregion
         #endregion
 
+        public static void TaskManage()
+        {
+            TaskRequirement.TaskRequirementManage newform = new TaskRequirement.TaskRequirementManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        public static void TaskQuery()
+        {
+            TaskRequirement.TaskQuery newform = new TaskRequirement.TaskQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        public static void TaskGenerate()
+        {
+            TaskRequirement.TaskGenerate newform = new TaskRequirement.TaskGenerate();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void TaskResMatch()
+        {
+            TaskRequirement.TaskResMatch newform = new TaskRequirement.TaskResMatch();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void UAVManage()
+        {
+            TaskRequirement.UAVManage newform = new TaskRequirement.UAVManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void UAVQuery()
+        {
+            UAV.UAVQuery newform = new UAV.UAVQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void Sensor1Query()
+        {
+            UAV.Sensor1Query newform = new UAV.Sensor1Query();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void BandQuery()
+        {
+            UAV.BandQuery newform = new UAV.BandQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+
+        public static void SatelliteManage()
+        {
+            Satellite.SatelliteManage newform = new Satellite.SatelliteManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        public static void SatQuery()
+        {
+            Satellite.SatelliteQuery newform = new Satellite.SatelliteQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        
+        public static void AEROSHIPManage()
+        {
+            AEROSHIP.AEROSHIPManage newform = new AEROSHIP.AEROSHIPManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+       
+        public static void AEROSHIPQuery()
+        {
+            AEROSHIP.AEROSHIPQuery newform = new AEROSHIP.AEROSHIPQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+       
+        public static void ILLUSTRATEDCARManage()
+        {
+            ILLUSTRATEDCAR.ILLUSTRATEDCARManage newform = new ILLUSTRATEDCAR.ILLUSTRATEDCARManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+     
+        public static void ILLUSTRATEDCARQuery()
+        {
+            ILLUSTRATEDCAR.ILLUSTRATEDCARQuery newform = new ILLUSTRATEDCAR.ILLUSTRATEDCARQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        public static void SPYCAMManage()
+        {
+            SPYCAM_RANGE.SPYCAMManage newform = new SPYCAM_RANGE.SPYCAMManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+       
+        //public static void SPYCAMQuery()
+        //{
+        //    SPYCAM_RANGE.SPYCAMQuery newform = new SPYCAM_RANGE.SPYCAMQuery();
+        //    newform.StartPosition = FormStartPosition.CenterScreen;
+        //    newform.Show();
+        //}
+        public static void SPYCAMQuery()
+        {
+            SPYCAM_RANGE.SPYCAMQuery newform = new SPYCAM_RANGE.SPYCAMQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+        public static void HUMDETManage()
+        {
+            HUMANDETECTION.HUMANDETECTIONManage newform = new HUMANDETECTION.HUMANDETECTIONManage();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
+
+        public static void HUMDETQuery()
+        {
+            HUMANDETECTION.HUMDETQuery newform = new HUMANDETECTION.HUMDETQuery();
+            newform.StartPosition = FormStartPosition.CenterScreen;
+            newform.Show();
+        }
         #region 任务规划调度
 
         #region 任务规划

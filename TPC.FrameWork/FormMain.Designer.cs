@@ -181,6 +181,7 @@ namespace CP.FrameWork
             this.barButtonItem45 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem46 = new DevExpress.XtraBars.BarButtonItem();
             this.taskDisButton = new DevExpress.XtraBars.BarButtonItem();
+            this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection(this.components);
             this.resourceManage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rpgUAV = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -193,6 +194,7 @@ namespace CP.FrameWork
             this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.PlanCoScheduling = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.rpgInfoManage = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpgTaskPlanning = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -222,7 +224,6 @@ namespace CP.FrameWork
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.appMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemProgressBar1)).BeginInit();
@@ -402,7 +403,7 @@ namespace CP.FrameWork
             this.ribbonControl.LargeImages = this.ribbonImageCollectionLarge;
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ribbonControl.MaxItemId = 296;
+            this.ribbonControl.MaxItemId = 298;
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.resourceManage,
@@ -1532,6 +1533,15 @@ namespace CP.FrameWork
             this.taskDisButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             this.taskDisButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.taskDisButton_ItemClick);
             // 
+            // conflictButton
+            // 
+            this.conflictButton.Caption = "冲突判断";
+            this.conflictButton.Glyph = ((System.Drawing.Image)(resources.GetObject("conflictButton.Glyph")));
+            this.conflictButton.Id = 295;
+            this.conflictButton.Name = "conflictButton";
+            this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
+            // 
             // ribbonImageCollectionLarge
             // 
             this.ribbonImageCollectionLarge.ImageSize = new System.Drawing.Size(32, 32);
@@ -1638,23 +1648,28 @@ namespace CP.FrameWork
             // PlanCoScheduling
             // 
             this.PlanCoScheduling.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.rpgInfoManage,
             this.rpgTaskPlanning,
             this.ribbonPageGroup7,
             this.ribbonPageGroup2});
             this.PlanCoScheduling.Name = "PlanCoScheduling";
             this.PlanCoScheduling.Text = "任务规划与调度";
             // 
+            // rpgInfoManage
+            // 
+            this.rpgInfoManage.ItemLinks.Add(this.barEditItem2);
+            this.rpgInfoManage.ItemLinks.Add(this.barEditItem3);
+            this.rpgInfoManage.ItemLinks.Add(this.barButtonItem42);
+            this.rpgInfoManage.ItemLinks.Add(this.barButtonItem43);
+            this.rpgInfoManage.Name = "rpgInfoManage";
+            this.rpgInfoManage.Text = "信息管理";
+            // 
             // rpgTaskPlanning
             // 
-            this.rpgTaskPlanning.ItemLinks.Add(this.barEditItem2);
-            this.rpgTaskPlanning.ItemLinks.Add(this.barEditItem3);
-            this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem42);
-            this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem43);
             this.rpgTaskPlanning.ItemLinks.Add(this.taskDisButton);
             this.rpgTaskPlanning.ItemLinks.Add(this.conflictButton);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem34);
             this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem35);
-            this.rpgTaskPlanning.ItemLinks.Add(this.barButtonItem36);
             this.rpgTaskPlanning.Name = "rpgTaskPlanning";
             this.rpgTaskPlanning.Text = "任务规划";
             // 
@@ -1672,6 +1687,7 @@ namespace CP.FrameWork
             // 
             // ribbonPageGroup2
             // 
+            this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem36);
             this.ribbonPageGroup2.ItemLinks.Add(this.bbiTaskState);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem46);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
@@ -1920,15 +1936,6 @@ namespace CP.FrameWork
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "动态规划";
             // 
-            // conflictButton
-            // 
-            this.conflictButton.Caption = "冲突判断";
-            this.conflictButton.Glyph = ((System.Drawing.Image)(resources.GetObject("conflictButton.Glyph")));
-            this.conflictButton.Id = 295;
-            this.conflictButton.Name = "conflictButton";
-            this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
-            this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
-            // 
             // FormMain
             // 
             this.Appearance.Options.UseFont = true;
@@ -2156,6 +2163,7 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem taskDisButton;
         private DevExpress.XtraBars.Ribbon.RibbonPage PlanCoScheduling;
         private DevExpress.XtraBars.BarButtonItem conflictButton;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup rpgInfoManage;
 
     }
 }

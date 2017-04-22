@@ -32,8 +32,12 @@ namespace CoScheduling.Main.Map
 
         public DummyMap()
         {
-            InitializeComponent();
+            IAoInitialize m_AoInitialize = new AoInitializeClass();
+            esriLicenseStatus licenseStatus = esriLicenseStatus.esriLicenseUnavailable;
 
+            licenseStatus = m_AoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeAdvanced);//里面的esriLicenseProductCode后面的产品可以自己选择
+            InitializeComponent();
+           
         }
 
         private void FormMap_Load(object sender, EventArgs e)
@@ -293,7 +297,6 @@ namespace CoScheduling.Main.Map
                 IElementProperties pElmentProperties = null;
                 switch (pGeometry.GeometryType)
                 {
-
                     case esriGeometryType.esriGeometryEnvelope:
                         {
                             pElement = new RectangleElement();

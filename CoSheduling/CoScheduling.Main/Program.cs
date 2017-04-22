@@ -55,7 +55,15 @@ namespace CoScheduling.Main
             gStatusLabel.Text = tip;
             gStatusStrip.Refresh();
         }
-
+        /// <summary>
+        /// 设置进度条值
+        /// </summary>
+        /// <param name="val"></param>
+        internal static void SetProgressVal(int val)
+        {
+            gProgressBar.Value = val;
+            gStatusStrip.Refresh();
+        }
         /// <summary>
         /// 设置最大值
         /// </summary>
@@ -116,14 +124,14 @@ namespace CoScheduling.Main
                 }
             }
             //获取engine网络分析权限
-            Map.LicenseInitializer aoLicenseInitializer = new Map.LicenseInitializer();
-            if (!aoLicenseInitializer.InitializeApplication(new esriLicenseProductCode[] { esriLicenseProductCode.esriLicenseProductCodeEngine, esriLicenseProductCode.esriLicenseProductCodeBasic, esriLicenseProductCode.esriLicenseProductCodeStandard, esriLicenseProductCode.esriLicenseProductCodeAdvanced },
-            new esriLicenseExtensionCode[] { esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork, esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst }))
-            {
-                System.Windows.Forms.MessageBox.Show("This application could not initialize with the correct ArcGIS license and will shutdown. LicenseMessage: " + aoLicenseInitializer.LicenseMessage());
-                aoLicenseInitializer.ShutdownApplication();
-                return;
-            }
+            //Map.LicenseInitializer aoLicenseInitializer = new Map.LicenseInitializer();
+            //if (!aoLicenseInitializer.InitializeApplication(new esriLicenseProductCode[] { esriLicenseProductCode.esriLicenseProductCodeEngine, esriLicenseProductCode.esriLicenseProductCodeBasic, esriLicenseProductCode.esriLicenseProductCodeStandard, esriLicenseProductCode.esriLicenseProductCodeAdvanced },
+            //new esriLicenseExtensionCode[] { esriLicenseExtensionCode.esriLicenseExtensionCodeNetwork,esriLicenseExtensionCode.esriLicenseExtensionCodeDataInteroperability, esriLicenseExtensionCode.esriLicenseExtensionCodeSpatialAnalyst }))
+            //{
+            //    System.Windows.Forms.MessageBox.Show("This application could not initialize with the correct ArcGIS license and will shutdown. LicenseMessage: " + aoLicenseInitializer.LicenseMessage());
+            //    aoLicenseInitializer.ShutdownApplication();
+            //    return;
+            //}
             IsInitedMap = true;
         }
 

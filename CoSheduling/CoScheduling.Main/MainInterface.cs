@@ -6339,9 +6339,7 @@ namespace CoScheduling.Main
         /// <param name="out_features"></param>
         private static void GPCreatFishnetTool(IFeature in_features, string out_features, double length)
         {
-
-
-
+            
             Geoprocessor GP = new Geoprocessor();
 
             ESRI.ArcGIS.DataManagementTools.CreateFishnet CreatFishnetTool = new ESRI.ArcGIS.DataManagementTools.CreateFishnet();

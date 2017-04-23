@@ -171,7 +171,7 @@
             // 
             // txtBandID
             // 
-            this.txtBandID.Location = new System.Drawing.Point(354, 11);
+            this.txtBandID.Location = new System.Drawing.Point(359, 11);
             this.txtBandID.Name = "txtBandID";
             this.txtBandID.Size = new System.Drawing.Size(150, 21);
             this.txtBandID.TabIndex = 102;

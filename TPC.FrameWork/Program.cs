@@ -16,7 +16,7 @@ namespace CP.FrameWork
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DevExpress.Skins.SkinManager.EnableFormSkins();
-            DevExpress.UserSkins.OfficeSkins.Register();
+            //DevExpress.UserSkins.OfficeSkins.Register();
             DevExpress.UserSkins.BonusSkins.Register();
             UserLookAndFeel.Default.SetSkinStyle("DevExpress Style");
             //gFormSplash = new FormSplash(); //正在加载中图标显示

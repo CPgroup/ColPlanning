@@ -10,6 +10,9 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.DataSourcesRaster;
 using System.Drawing;
+using ESRI.ArcGIS.NetworkAnalyst;
+using ESRI.ArcGIS.NetworkAnalysis;
+using ESRI.ArcGIS.DataSourcesGDB;
 
 namespace CoScheduling.Core.Map
 {
@@ -193,6 +196,235 @@ namespace CoScheduling.Core.Map
                 xml = null;
             }
         }
+
+
+        /// <summary>
+        /// 最短路径分析
+        /// </summary>
+        /// <param name="StrGDB"> 数据库的存储路径</param>
+        /// <param name="DatasetName">数据集名称</param>
+        /// <param name="NetSetIndex"></param>
+        public void miniDis(string StrGDB, string DatasetName, int pCount, IMap pMap, IPoint pEdgePoint)
+        {
+            //第一步：打开几何网络数据集。IWorkspaceFactory
+
+            //IWorkspaceFactory pWF = new FileGDBWorkspaceFactoryClass(); // = new filegd// FileGDBWorkspaceFactoryClass();
+            //IWorkspace pW = pWF.OpenFromFile(StrGDB, 0);
+            //IFeatureDataset pFeaDataset = (pW as IFeatureWorkspace).OpenFeatureDataset(DatasetName);//RoadDataset数据集名称
+            //INetworkCollection pNetColl = pFeaDataset as INetworkCollection; //获取数据库中的网络数据集
+            //IGeometricNetwork pGeometricNet = pNetColl.get_GeometricNetwork(0);//由于数据集中只有一个网络数据集，因此获取第一个
+            ////第二步：建立节点的旗帜            
+            //int intJunctionUserClassID;
+            //int intJunctionUserID;
+            //int intJunctionUserSubID;
+            //int intJunctionID;
+            //IPoint pFoundJunctionPoint;
+            ////ITraceFlowSolverGEN这个接口是几何网络分析中的重要接口，大部分的功能都是由此接口完成，现在需要获取逻辑网络，对逻辑网络进行设置。
+            //ITraceFlowSolverGEN pTraceFlowSolverG = new TraceFlowSolverClass() as ITraceFlowSolverGEN;
+            //INetSolver pNetSolver = pTraceFlowSolverG as INetSolver;
+            //INetwork pNetWork = pGeometricNet.Network;
+            //pNetSolver.SourceNetwork = pNetWork;
+            //INetElements pNetElements = pNetWork as INetElements;
+            ////int pCount = pCollection.PointCount;//获取输入点的个数，来建立旗帜的数组
+            //IJunctionFlag[] pJunctionFlag = new JunctionFlagClass[pCount];
+            //IPointToEID pPointToEID = new PointToEIDClass();
+            //pPointToEID.SourceMap = pMap;
+            //pPointToEID.GeometricNetwork = pGeometricNet;
+            //pPointToEID.SnapTolerance = 0.01;//容差
+            ////第三  获取节点的旗帜
+
+            //for (int i = 0; i < pCount; i++)
+            //{
+
+            //    INetFlag pNetFlag = new JunctionFlagClass() as INetFlag;
+
+            //    //IPoint pEdgePoint = _pPoints.get_Point(i); //查找输入点的最近的节点
+            //    IPoint pFoundEdgePoint;//距离输入点最近的连接点的位置
+            //    int intEdgeID;//距离输入点最近的连接点的id
+            //    pPointToEID.GetNearestJunction(pEdgePoint, out intEdgeID, out pFoundEdgePoint);
+            //    int intEdgeUserClassID, intEdgeUserID, intEdgeUserSubID;
+            //    pNetElements.QueryIDs(intEdgeID, esriElementType.esriETJunction, out intEdgeUserClassID, out intEdgeUserID, out intEdgeUserSubID);
+
+            //    pNetFlag.UserClassID = intEdgeUserClassID;
+            //    pNetFlag.UserID = intEdgeUserID;
+            //    pNetFlag.UserSubID = intEdgeUserSubID;
+
+            //    IJunctionFlag pJuncF = (IJunctionFlag)(pNetFlag as IJunctionFlag);
+            //    pJunctionFlag[i] = pJuncF;
+            //}
+
+            //pTraceFlowSolverG.PutJunctionOrigins(ref pJunctionFlag);//设置开始节点
+
+            ////第四 设置边线权重，也可以设置点的权重
+            //INetSchema pNetSchema = pNetWork as INetSchema;
+            //INetWeight pNetWeight = pNetSchema.get_WeightByName("Shape_Length");
+            //INetSolverWeightsGEN pNetSolverWeightsG = pTraceFlowSolverG as INetSolverWeightsGEN;
+            //pNetSolverWeightsG.FromToEdgeWeight = pNetWeight;//开始边线的权重   
+            //pNetSolverWeightsG.ToFromEdgeWeight = pNetWeight;//终止边线的权重
+
+            ////第五 获取边线和交汇点的集合
+            //IEnumNetEID pEnumNetEID_Junctions;
+            //IEnumNetEID pEnumNetEID_Edges;
+            ////int EdgeCount;//边的条数 =pCount-1
+            //object[] segmentCosts = new object[pCount - 1];
+            //pTraceFlowSolverG.FindPath(esriFlowMethod.esriFMConnected, esriShortestPathObjFn.esriSPObjFnMinSum, out pEnumNetEID_Junctions, out pEnumNetEID_Edges, pCount - 1, ref segmentCosts);//pRes用来获取每条记录的权重数组
+            ////第六 获取最短线路
+            //Polyline pPolyline;
+            //IGeometryCollection pGeometryCollection = pPolyline as IGeometryCollection;
+            //ISpatialReference pSpatialReference = pMap.SpatialReference;
+            //IEIDHelper pEIDHelper = new EIDHelperClass();
+
+            //IGeometricNetwork _pGeometricNetwork;
+            //pNetWork = _pGeometricNetwork.Network;
+
+            //pEIDHelper.GeometricNetwork = _pGeometricNetwork;
+            //pEIDHelper.OutputSpatialReference = pSpatialReference;
+            //pEIDHelper.ReturnGeometries = true;
+            //IEnumEIDInfo pEnumEIDInfo = pEIDHelper.CreateEnumEIDInfo(pEnumNetEID_Edges);
+            //int Count = pEnumEIDInfo.Count;
+            //pEnumEIDInfo.Reset();
+            //for (int i = 0; i < Count; i++)
+            //{
+            //    IEIDInfo pEIDInfo = pEnumEIDInfo.Next();
+            //    IGeometry pGeometry = pEIDInfo.Geometry;
+            //    pGeometryCollection.AddGeometryCollection(pGeometry as IGeometryCollection);
+            //}
+        }
+
+        ////几何网络
+        //private IGeometricNetwork mGeometricNetwork;
+        ////给定点的集合
+        //private IPointCollection mPointCollection;
+        ////获取给定点最近的Network元素
+        //private IPointToEID mPointToEID;
+
+        ////返回结果变量
+        //private IEnumNetEID mEnumNetEID_Junctions;
+        //private IEnumNetEID mEnumNetEID_Edges;
+        //private double mdblPathCost;
+
+
+
+        /// <summary>
+        /// 实现路径分析 
+        /// </summary>
+        /// <param name="weightName">路径权重字段</param>
+        public void SolvePath(string weightName, IGeometricNetwork mGeometricNetwork, IPointCollection mPointCollection, IPointToEID mPointToEID, out IEnumNetEID mEnumNetEID_Junctions, out IEnumNetEID mEnumNetEID_Edges, out double mdblPathCost)
+        {
+            //创建ITraceFlowSolverGEN
+            ITraceFlowSolverGEN pTraceFlowSolverGEN = new TraceFlowSolverClass();
+            INetSolver pNetSolver = pTraceFlowSolverGEN as INetSolver;
+            //初始化用于路径计算的Network
+            INetwork pNetWork = mGeometricNetwork.Network;
+            pNetSolver.SourceNetwork = pNetWork;
+
+            //获取分析经过的点的个数
+            int intCount = mPointCollection.PointCount;
+            if (intCount < 1)
+            { MessageBox.Show("未获取到车辆点或目标点！"); }
+
+
+            INetFlag pNetFlag;
+            //用于存储路径计算得到的边
+            IEdgeFlag[] pEdgeFlags = new IEdgeFlag[intCount];
+
+
+            IPoint pEdgePoint = new PointClass();
+            int intEdgeEID;
+            IPoint pFoundEdgePoint;
+            double dblEdgePercent;
+
+            //用于获取几何网络元素的UserID, UserClassID,UserSubID
+            INetElements pNetElements = pNetWork as INetElements;
+            int intEdgeUserClassID;
+            int intEdgeUserID;
+            int intEdgeUserSubID;
+            for (int i = 0; i < intCount; i++)
+            {
+                pNetFlag = new EdgeFlagClass();
+                //获取用户点击点
+                pEdgePoint = mPointCollection.get_Point(i);
+                //获取距离用户点击点最近的边
+                mPointToEID.GetNearestEdge(pEdgePoint, out intEdgeEID, out pFoundEdgePoint, out dblEdgePercent);
+                if (intEdgeEID <= 0)
+                    continue;
+                //根据得到的边查询对应的几何网络中的元素UserID, UserClassID,UserSubID
+                pNetElements.QueryIDs(intEdgeEID, esriElementType.esriETEdge,
+                    out intEdgeUserClassID, out intEdgeUserID, out intEdgeUserSubID);
+                if (intEdgeUserClassID <= 0 || intEdgeUserID <= 0)
+                    continue;
+
+                pNetFlag.UserClassID = intEdgeUserClassID;
+                pNetFlag.UserID = intEdgeUserID;
+                pNetFlag.UserSubID = intEdgeUserSubID;
+                pEdgeFlags[i] = pNetFlag as IEdgeFlag;
+            }
+            //设置路径求解的边
+            pTraceFlowSolverGEN.PutEdgeOrigins(ref pEdgeFlags);
+
+            //路径计算权重
+            INetSchema pNetSchema = pNetWork as INetSchema;
+            INetWeight pNetWeight = pNetSchema.get_WeightByName(weightName);
+            if (pNetWeight == null)
+            { MessageBox.Show("权重设置有误！"); }
+
+            //设置权重，这里双向的权重设为一致
+            INetSolverWeights pNetSolverWeights = pTraceFlowSolverGEN as INetSolverWeights;
+            pNetSolverWeights.ToFromEdgeWeight = pNetWeight;
+            pNetSolverWeights.FromToEdgeWeight = pNetWeight;
+
+            object[] arrResults = new object[intCount - 1];
+            //执行路径计算
+            pTraceFlowSolverGEN.FindPath(esriFlowMethod.esriFMConnected, esriShortestPathObjFn.esriSPObjFnMinSum,
+                out mEnumNetEID_Junctions, out mEnumNetEID_Edges, intCount - 1, ref arrResults);
+
+            //获取路径计算总代价（cost）
+            mdblPathCost = 0;
+            for (int i = 0; i < intCount - 1; i++)
+                mdblPathCost += (double)arrResults[i];
+        }
+
+
+
+        /// <summary>
+        /// 路径分析结果到几何要素的转换
+        /// </summary>
+        /// <param name="pMap">当前地图 获取空间参考</param>
+        /// <returns></returns>
+        public IPolyline PathToPolyLine(IMap pMap, IGeometricNetwork mGeometricNetwork, IEnumNetEID mEnumNetEID_Edges)
+        {
+            IPolyline pPolyLine = new PolylineClass();
+            IGeometryCollection pNewGeometryCollection = pPolyLine as IGeometryCollection;
+            if (mEnumNetEID_Edges == null)
+                return null;
+
+            IEIDHelper pEIDHelper = new EIDHelperClass();
+            //获取几何网络
+            pEIDHelper.GeometricNetwork = mGeometricNetwork;
+            //获取地图空间参考
+            ISpatialReference pSpatialReference = pMap.SpatialReference;
+            pEIDHelper.OutputSpatialReference = pSpatialReference;
+            pEIDHelper.ReturnGeometries = true;
+            //根据边的ID获取边的信息
+            IEnumEIDInfo pEnumEIDInfo = pEIDHelper.CreateEnumEIDInfo(mEnumNetEID_Edges);
+            int intCount = pEnumEIDInfo.Count;
+            pEnumEIDInfo.Reset();
+
+            IEIDInfo pEIDInfo;
+            IGeometry pGeometry;
+            for (int i = 0; i < intCount; i++)
+            {
+                pEIDInfo = pEnumEIDInfo.Next();
+                //获取边的几何要素
+                pGeometry = pEIDInfo.Geometry;
+                pNewGeometryCollection.AddGeometryCollection((IGeometryCollection)pGeometry);
+            }
+            return pPolyLine;
+        }
+
+        
+        
+        
 
         /// <summary>
         /// 打开mxd地图文档

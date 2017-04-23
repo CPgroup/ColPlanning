@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ESRI.ArcGIS.esriSystem;
 
 namespace CoScheduling.Main.Map
 {
@@ -23,6 +24,15 @@ namespace CoScheduling.Main.Map
         public DummyTOC()
         {
             InitializeComponent();
+            //ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.Desktop);
+            //IAoInitialize pAoInitialize = new AoInitializeClass();
+            //esriLicenseStatus licenseStatus = esriLicenseStatus.esriLicenseUnavailable;
+            //licenseStatus = pAoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeAdvanced);
+            ////licenseStatus = pAoInitialize.CheckOutExtension(esriLicenseExtensionCode.esriLicenseExtensionCodeRuntimeAdvanced);
+            //if (licenseStatus == esriLicenseStatus.esriLicenseNotInitialized)
+            //{
+            //    MessageBox.Show("没有info许可");
+            //}
         }
     }
 }

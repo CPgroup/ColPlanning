@@ -32,6 +32,16 @@ namespace CoScheduling.Main.Map
 
         public DummyMap()
         {
+            //ESRI.ArcGIS.RuntimeManager.Bind(ESRI.ArcGIS.ProductCode.Desktop);
+            //IAoInitialize m_AoInitialize = new AoInitializeClass();
+            //esriLicenseStatus licenseStatus = esriLicenseStatus.esriLicenseUnavailable;
+
+            //licenseStatus = m_AoInitialize.Initialize(esriLicenseProductCode.esriLicenseProductCodeAdvanced);//里面的esriLicenseProductCode后面的产品可以自己选择
+            ////licenseStatus = m_AoInitialize.CheckOutExtension(esriLicenseExtensionCode.esriLicenseExtensionCodeRuntimeAdvanced);
+            //if (licenseStatus == esriLicenseStatus.esriLicenseNotInitialized)
+            //{
+            //    MessageBox.Show("没有info许可");
+            //}
             InitializeComponent();
 
         }

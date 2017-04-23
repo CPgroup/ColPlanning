@@ -162,8 +162,9 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 得到一个对象实体
         /// </summary>
-        public Model.SatelliteOrbit GetModel(decimal SAT_ID)
+        public Model.SatelliteOrbit GetModel(decimal SAT_ID, DateTime time)
         {
+            /*
             StringBuilder strSql = new StringBuilder();
             strSql.Append("SELECT * FROM LHF.T_PUB_SATELLITEORBIT ");
             strSql.Append(" WHERE SAT_ID="+SAT_ID);
@@ -175,7 +176,23 @@ namespace CoScheduling.Core.DAL
                     model = GetModel(dr);
                 }
                 return model;
+            }*/
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT TOP 1 * FROM LHF.T_PUB_SATELLITEORBIT ");
+            strSql.Append(" WHERE SAT_ID=" + SAT_ID);
+            strSql.Append(" AND SAT_ORBITDATE<='" + time.ToString("yyyy-MM-dd HH:mm:ss") + "'");
+            strSql.Append(" ORDER BY SAT_ORBITDATE DESC");
+            Model.SatelliteOrbit model = new Model.SatelliteOrbit();
+            using (DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
+            {
+                while (dr.Read())
+                {
+                    model = GetModel(dr);
+                }
+                return model;
             }
+            
         }
 
         /// <summary>

@@ -41,8 +41,73 @@ namespace CP.Interface.Subsys1
             CoScheduling.Main.MainInterface.UAVlist();
         }
         
+        public static void UAVManage()
+        {
+            CoScheduling.Main.MainInterface.UAVManage();
+        }
+        public static void UAVQuery()
+        {
+            CoScheduling.Main.MainInterface.UAVQuery();
+        }
+        public static void Sensor1Query()
+        {
+            CoScheduling.Main.MainInterface.Sensor1Query();
+        }
+        public static void BandQuery()
+        {
+            CoScheduling.Main.MainInterface.BandQuery();
+        }
 
 
+        public static void SatelliteManage()
+        {
+            CoScheduling.Main.MainInterface.SatelliteManage();
+        }
+        public static void SatQuery()
+        {
+            CoScheduling.Main.MainInterface.SatQuery();
+        }
+
+        
+        public static void AEROSHIPManage()
+        {
+            CoScheduling.Main.MainInterface.AEROSHIPManage();
+        }
+        
+        public static void AEROSHIPQuery()
+        {
+            CoScheduling.Main.MainInterface.AEROSHIPQuery();
+        }
+        
+        public static void ILLUSTRATEDCARManage()
+        {
+            CoScheduling.Main.MainInterface.ILLUSTRATEDCARManage();
+        }
+
+        public static void ILLUSTRATEDCARQuery()
+        {
+            CoScheduling.Main.MainInterface.ILLUSTRATEDCARQuery();
+        }
+
+        public static void SPYCAMManage()
+        {
+            CoScheduling.Main.MainInterface.SPYCAMManage();
+        }
+
+        public static void SPYCAMQuery()
+        {
+            CoScheduling.Main.MainInterface.SPYCAMQuery();
+        }
+
+        public static void HUMDETManage()
+        {
+            CoScheduling.Main.MainInterface.HUMDETManage();
+        }
+
+        public static void HUMDETQuery()
+        {
+            CoScheduling.Main.MainInterface.HUMDETQuery();
+        }
         #endregion
 
 

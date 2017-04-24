@@ -196,8 +196,6 @@ namespace CoScheduling.Core.Map
                 xml = null;
             }
         }
-
-
         /// <summary>
         /// 最短路径分析
         /// </summary>
@@ -291,6 +289,10 @@ namespace CoScheduling.Core.Map
             //}
         }
 
+
+
+
+
         ////几何网络
         //private IGeometricNetwork mGeometricNetwork;
         ////给定点的集合
@@ -302,6 +304,7 @@ namespace CoScheduling.Core.Map
         //private IEnumNetEID mEnumNetEID_Junctions;
         //private IEnumNetEID mEnumNetEID_Edges;
         //private double mdblPathCost;
+
 
 
 
@@ -426,6 +429,13 @@ namespace CoScheduling.Core.Map
         
         
 
+       
+        
+        
+        
+        
+        
+        
         /// <summary>
         /// 打开mxd地图文档
         /// </summary>
@@ -946,7 +956,7 @@ namespace CoScheduling.Core.Map
                     //根据地震等级和烈度计算出长短轴
                     MajorAxis = System.Math.Pow(10, (listdisapara[i].A + listdisapara[i].B * Convert.ToDouble(Descripe) - Seismic) / listdisapara[i].C) - listdisapara[i].D;//长半轴
                 else
-                    MinorAxis = System.Math.Pow(10, (listdisapara[i].A+ listdisapara[i].B * Convert.ToDouble(Descripe) - Seismic) / listdisapara[i].C) - listdisapara[i].D;//短半轴
+                    MinorAxis = System.Math.Pow(10, (listdisapara[i].A + listdisapara[i].B * Convert.ToDouble(Descripe) - Seismic) / listdisapara[i].C) - listdisapara[i].D;//短半轴
             }
 
             if (MajorAxis <= 0 || MinorAxis <= 0)
@@ -969,8 +979,8 @@ namespace CoScheduling.Core.Map
             ISegment segment = ellipticArc as ISegment;
             ISegmentCollection polygon = new Polygon() as ISegmentCollection;
             object Missing = Type.Missing;
-            polygon.AddSegment(segment, ref Missing, ref Missing);          
-            
+            polygon.AddSegment(segment, ref Missing, ref Missing);
+
 
             //图上显示
             Color color = Color.Red;

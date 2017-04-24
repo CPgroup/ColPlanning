@@ -31,6 +31,8 @@ namespace CoScheduling.Main.Map
             comboBox4.SelectedIndex = CarNO;//车
             bindCboxLayer(comboBox10);
             comboBox10.SelectedIndex = TaskNO;//车
+            bindCboxLayer(comboBox11);
+            comboBox11.SelectedIndex = satLine;//车
 
             bindCboxTable(comboBox8, comboBox1.SelectedIndex);
             bindCboxTable(comboBox7, comboBox2.SelectedIndex);
@@ -38,15 +40,21 @@ namespace CoScheduling.Main.Map
             bindCboxTable(comboBox6, comboBox3.SelectedIndex);
             bindCboxTable(comboBox5, comboBox4.SelectedIndex);
             comboBox8.SelectedIndex = 1;//卫星
+
+            comboBox12.Items.Add("面积优先");
+            comboBox12.Items.Add("权重优先");
+            comboBox12.Items.Add("面积权重");
+            comboBox12.SelectedIndex = 0;
             #endregion
 
         }
         //四类资源图层序号
-        int satNO = 4;
-        int UAVNO = 0;
-        int ASNO = 3;
-        int CarNO = 1;
-        int TaskNO = 12;
+        int satNO = 11;
+        int UAVNO = 1;
+        int ASNO = 5;
+        int CarNO = 3;
+        int TaskNO = 13;
+        int satLine = 8;
         /// <summary>
         /// 任务分解开始执行
         /// </summary>
@@ -54,7 +62,7 @@ namespace CoScheduling.Main.Map
         /// <param name="e"></param>
         private void TaskDisOkbuttoon_Click(object sender, EventArgs e)
         {
-            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
+            CoScheduling.Main.MainInterface.taskDis(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
             //CoScheduling.Main.MainInterface.delete(comboBox1.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex);
         }
         /// <summary>
@@ -69,6 +77,7 @@ namespace CoScheduling.Main.Map
             comboBox3.SelectedIndex = ASNO;//飞艇
             comboBox4.SelectedIndex = CarNO;//车
             comboBox10.SelectedIndex = TaskNO;//车
+            comboBox11.SelectedIndex = satLine;//车
         }
 
 
@@ -170,6 +179,40 @@ namespace CoScheduling.Main.Map
             bindCboxTable(comboBox5, comboBox4.SelectedIndex);
         } 
         #endregion
+
+        private void comboBox11_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        /// <summary>
+        /// 网格分解
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GirdDisButton_Click(object sender, EventArgs e)
+        {
+            CoScheduling.Main.MainInterface.GridTaskDis(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex, progressBar1);
+        }
+        /// <summary>
+        /// 规划结果显示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlanAllocationButton_Click(object sender, EventArgs e)
+        {
+            CoScheduling.Main.MainInterface.PlanAllocation("Data\\cache\\" + "UToTaUni.shp");//"Data\\CacheGrid\\" + "GirdTask.shp");//"Data\\cache\\" + "UToTaUni.shp";
+        }
+        /// <summary>
+        /// q其他方法对比 通过comboBox12选定面积优先 权重优先等
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CoScheduling.Main.MainInterface.AreaFirst(comboBox1.SelectedIndex, comboBox11.SelectedIndex, comboBox2.SelectedIndex, comboBox3.SelectedIndex, comboBox4.SelectedIndex, comboBox10.SelectedIndex, comboBox12.SelectedIndex, textBox1);
+        }
+
+       
 
     }
 

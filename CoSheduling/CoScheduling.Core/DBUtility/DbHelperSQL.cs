@@ -648,7 +648,6 @@ namespace CoScheduling.Core.DBUtility
                 {
                     try
                     {
-
                         PrepareCommand(cmd, connection, null, SQLString, cmdParms);
                         int rows = cmd.ExecuteNonQuery();
                         cmd.Parameters.Clear();

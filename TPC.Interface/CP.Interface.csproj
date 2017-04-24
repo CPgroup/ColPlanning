@@ -46,6 +46,7 @@
     <Compile Include="Subsys2\MainInterface.cs" />
     <Compile Include="Subsys3\MainInterface.cs" />
     <Compile Include="Subsys4\MainInterface.cs" />
+    <Compile Include="Subsys5\MainInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoSheduling\CoScheduling.Core\CoScheduling.Core.csproj">

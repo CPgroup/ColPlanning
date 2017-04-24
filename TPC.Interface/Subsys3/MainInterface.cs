@@ -30,7 +30,22 @@ namespace CP.Interface.Subsys3
 
 
         #region  应急事件管理
-
+        public static void TaskManage()
+        {
+            CoScheduling.Main.MainInterface.TaskManage();
+        }
+        public static void TaskQuery()
+        {
+            CoScheduling.Main.MainInterface.TaskQuery();
+        }
+        public static void TaskGenerate()
+        {
+            CoScheduling.Main.MainInterface.TaskGenerate();
+        }
+        public static void TaskResMatch()
+        {
+            CoScheduling.Main.MainInterface.TaskResMatch();
+        }
 
 
 

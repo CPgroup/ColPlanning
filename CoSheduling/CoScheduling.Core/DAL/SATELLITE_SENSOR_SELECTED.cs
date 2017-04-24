@@ -199,6 +199,40 @@ namespace CoScheduling.Core.DAL
             return DbHelperSQL.Query(strSql.ToString()).Tables[0];
         }
 
+
+        /// <summary>
+        /// 获得数据列表
+        /// </summary>
+        public List<Model.SATELLITE_SENSOR_SELECTED> GetCheckedList()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT * ");
+            strSql.Append(" FROM LHF.SATELLITE_SENSOR_SELECTED ");
+            strSql.Append(" WHERE SELECTED=1");
+            strSql.Append(" ORDER BY SENSOR_ID");
+            using (DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
+            {
+                List<Model.SATELLITE_SENSOR_SELECTED> lst = GetList(dr);
+                return lst;
+            }
+        }
+
+        public List<Model.SATELLITE_SENSOR_SELECTED> GetCheckedList2()
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT SENSOR_ID,SAT_NAME+\'~\'+SENSOR_NAME AS SENSOR_NAME,SAT_ID,SAT_NAME,SELECTED ");
+            strSql.Append(" FROM LHF.SATELLITE_SENSOR_SELECTED ");
+            strSql.Append(" WHERE SELECTED=1");
+            strSql.Append(" ORDER BY SENSOR_ID");
+            using (DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
+            {
+                List<Model.SATELLITE_SENSOR_SELECTED> lst = GetList(dr);
+                return lst;
+            }
+        }
+
+
+
 		/// <summary>
 		/// 获取泛型数据列表
 		/// </summary>

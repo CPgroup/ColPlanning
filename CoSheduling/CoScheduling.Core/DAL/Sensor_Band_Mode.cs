@@ -27,7 +27,7 @@ namespace CoScheduling.Core.DAL
         public static string connectionString;
         public Sensor_Band_Mode()
         {
-            connectionString =  @"server=(local);database=CoMonitoring; User=sa; Password=lhf2017 ";//建立的时候就确定了，连接数据库的路径
+            connectionString =  @"server=(local);database=CoMonitoring; User=sa; Password=123";//建立的时候就确定了，连接数据库的路径
         }
         /// <summary>
         /// 传感器波段添加函数,添加删除和管理的数据库连接还存在问题

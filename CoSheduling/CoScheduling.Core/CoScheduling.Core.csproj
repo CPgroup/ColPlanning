@@ -197,6 +197,7 @@
     <Compile Include="Generic\SysEnviriment.cs" />
     <Compile Include="Map\MapHelper.cs" />
     <Compile Include="Model\AEROSHIP_RANGE.cs" />
+    <Compile Include="Model\Airship.cs" />
     <Compile Include="Model\AssemblyPoint.cs" />
     <Compile Include="Model\Barries.cs" />
     <Compile Include="Model\BIGAREA_ORBIT.cs" />

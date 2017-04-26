@@ -27,7 +27,7 @@ namespace CoScheduling.Core.DAL
         //构造数据库的连接语句
         public UAV_Base()
         {
-            connectionString = @"server=(local);database=CoMonitoring; User=sa; Password=lhf2017 ";//建立的时候就确定了，连接数据库的路径
+            connectionString = @"server=(local);database=CoMonitoring; User=sa; Password=123 ";//建立的时候就确定了，连接数据库的路径
         }
 
         //该类中需要实现 通过PLATFORM_ID来查找所需的无人机速度和续航时间

@@ -406,7 +406,8 @@ namespace CoScheduling.Main
                     AirShipstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
                     AirShipstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
                 }
-
+                else
+                { MessageBox.Show("state表中没有飞艇资源“" + AirshipID + "”的状态信息！"); };
                 //幅宽信息 通过平台id从sensor中找
                 strSql.Clear();
                 strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + AirshipID);
@@ -451,7 +452,8 @@ namespace CoScheduling.Main
                     UAVstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
                     UAVstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
                 }
-
+                else
+                { MessageBox.Show("state表中没有无人机资源“" + UAVID + "”的状态信息！"); };
                 //幅宽信息 通过平台id从sensor中找
                 strSql.Clear();
                 strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + UAVID);
@@ -494,7 +496,8 @@ namespace CoScheduling.Main
                     Carstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
                     Carstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
                 }
-
+                else
+                { MessageBox.Show("state表中没有监测车资源“" + CarID + "”的状态信息！"); };
                 //幅宽信息 通过平台id从sensor中找
                 strSql.Clear();
                 strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + CarID);

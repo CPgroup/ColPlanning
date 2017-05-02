@@ -386,17 +386,17 @@ namespace CoScheduling.Main
                     AirShipstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
                 }
 
-                //幅宽信息 先确定sensorid  在通过sensorid找bandid
+                //幅宽信息 通过平台id从sensor中找
                 strSql.Clear();
                 strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + AirshipID);
                 DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
                 SensorDr.Read();
-                decimal AirShipSensorID = Convert.ToDecimal(SensorDr["SensorID"]);
-                strSql.Clear();
-                strSql.Append("Select * From SENSOR_BAND_MODE Where SensorID=" + AirShipSensorID);
-                DbDataReader BandDr = DbHelperSQL.ExecuteReader(strSql.ToString());
-                BandDr.Read();
-                decimal AirShipWidth = Convert.ToDecimal(BandDr["SwathWidth"]);
+                decimal AirShipWidth = Convert.ToDecimal(SensorDr["SwathWidth"]);
+                //strSql.Clear();
+                //strSql.Append("Select * From SENSOR_BAND_MODE Where SensorID=" + AirShipSensorID);
+                //DbDataReader BandDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                //BandDr.Read();
+                //decimal AirShipWidth = Convert.ToDecimal(BandDr["SwathWidth"]);
 
 
                 CoScheduling.Core.Model.Airship airship = new Core.Model.Airship();
@@ -409,10 +409,97 @@ namespace CoScheduling.Main
 
             }
             #endregion
-                        
-            #region 生成飞艇点shp图层
+            //无人机
+            List<CoScheduling.Core.Model.UAV> UAVList = new List<Core.Model.UAV>();//无人机所有信息
+            #region 数据库获取无人机属性信息
+
+            List<CoScheduling.Core.Model.UAV_RANGE> UAVRangeList = new List<Core.Model.UAV_RANGE>();//UAV平台信息
+            UAVRangeList = CoScheduling.Core.DAL.UAV_RANGE.GetList();//可添加where语句
+            //UAV当前位置信息 从state表中获取
+            for (int i = 0; i < UAVRangeList.Count; i++)
+            {
+                decimal UAVID = UAVRangeList[i].PLATFORM_ID;//UAVid
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("Select * From STATE ");
+                strSql.Append(" Where PLATFORM_ID=" + UAVID);
+                CoScheduling.Core.Model.STATE UAVstate = new Core.Model.STATE();
+                DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                if (dr.HasRows)//有结果
+                {
+                    dr.Read();
+                    UAVstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
+                    UAVstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
+                }
+
+                //幅宽信息 通过平台id从sensor中找
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + UAVID);
+                DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                SensorDr.Read();
+                decimal UAVWidth = Convert.ToDecimal(SensorDr["SwathWidth"]);
+
+
+
+                CoScheduling.Core.Model.UAV UAV = new Core.Model.UAV();
+                UAV.PLATFORM_ID = UAVRangeList[i].PLATFORM_ID;
+                UAV.CruisingVelocity = UAVRangeList[i].CruisingVelocity;
+                UAV.Longitude = UAVstate.Longitude;
+                UAV.Latitude = UAVstate.Latitude;
+                UAV.Voyage = UAVRangeList[i].MaxDistance;//航程
+                UAV.Radius = UAVRangeList[i].MaxDistance / 2;//可视半径
+                UAV.SwathWidth = UAVWidth;
+                UAVList.Add(UAV);
+            }
+            #endregion
+
+            //车
+            List<CoScheduling.Core.Model.ILLUSTRATEDCAR> ILLUSTRATEDCARList = new List<Core.Model.ILLUSTRATEDCAR>();
+            #region 数据库获取地面测量车属性信息
+
+            List<CoScheduling.Core.Model.ILLUSTRATEDCAR_RANGE> CarRangeList = new List<Core.Model.ILLUSTRATEDCAR_RANGE>();//车辆平台信息
+            CarRangeList = CoScheduling.Core.DAL.ILLUSTRATEDCAR_RANGE.GetList();//可添加where语句
+            //UAV当前位置信息 从state表中获取
+            for (int i = 0; i < CarRangeList.Count; i++)
+            {
+                decimal CarID = CarRangeList[i].PLATFORM_ID;//CarID
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("Select * From STATE ");
+                strSql.Append(" Where PLATFORM_ID=" + CarID);
+                CoScheduling.Core.Model.STATE Carstate = new Core.Model.STATE();
+                DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                if (dr.HasRows)//有结果
+                {
+                    dr.Read();
+                    Carstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
+                    Carstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
+                }
+
+                //幅宽信息 通过平台id从sensor中找
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + CarID);
+                DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                SensorDr.Read();
+                decimal CarWidth = Convert.ToDecimal(SensorDr["SwathWidth"]);
+
+
+
+                CoScheduling.Core.Model.ILLUSTRATEDCAR ILLUSTRATEDCAR = new Core.Model.ILLUSTRATEDCAR();
+                ILLUSTRATEDCAR.PLATFORM_ID = CarRangeList[i].PLATFORM_ID;
+                ILLUSTRATEDCAR.CruisingVelocity = CarRangeList[i].CruisingVelocity;//巡航速度
+                ILLUSTRATEDCAR.ObserveVelocity = CarRangeList[i].ObserveVelocity;//观测速度
+                ILLUSTRATEDCAR.Longitude = Carstate.Longitude;
+                ILLUSTRATEDCAR.Latitude = Carstate.Latitude;
+                ILLUSTRATEDCAR.Voyage = CarRangeList[i].MaxDistance;//航程                
+                ILLUSTRATEDCAR.SwathWidth = CarWidth;
+                ILLUSTRATEDCARList.Add(ILLUSTRATEDCAR);
+            }
+            #endregion
+
+            #region 生成资源shp图层
             //路径设置
             string strShapeFolder = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\MidData";
+            #region 生成飞艇点shp图层
+
             string strShapeFile = "AirShipPo";
             FileInfo fFile = new FileInfo(strShapeFolder + @"\" + strShapeFile + ".shp");
             if (fFile.Exists)
@@ -468,56 +555,132 @@ namespace CoScheduling.Main
                 pFeature.set_Value(pFeature.Fields.FindField("AsID"), airshipList[i].PLATFORM_ID.ToString());
                 pFeature.Store();
             }
-            
+
+            #endregion
+
+            #region 生成无人机点shp图层
+
+            string strUavShapeFile = "UAVPo";
+            FileInfo UAVFile = new FileInfo(strShapeFolder + @"\" + strUavShapeFile + ".shp");
+            if (UAVFile.Exists)
+            {
+                DirectoryInfo fold = new DirectoryInfo(strShapeFolder);
+                FileInfo[] files = fold.GetFiles(strUavShapeFile + ".*");
+                foreach (FileInfo f in files)
+                {
+                    f.Delete();
+                }
+            }
+            string UAVshapeFileFullName = strShapeFolder + "\\" + strUavShapeFile + ".shp";
+            IWorkspaceFactory UAVWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace UAVFeatureWorkspace = (IFeatureWorkspace)UAVWorkspaceFactory.OpenFromFile(strShapeFolder, 0);
+            IFeatureClass UAVFeatureClass;
+            if (File.Exists(UAVshapeFileFullName))
+            {
+                UAVFeatureClass = UAVFeatureWorkspace.OpenFeatureClass(strUavShapeFile + ".shp");
+                IDataset pDataset = (IDataset)UAVFeatureClass;
+                pDataset.Delete();
+            }
+            //设置字段及坐标环境
+            IFields UAVFields = new FieldsClass();
+            IFieldsEdit UAVFieldsEdit = (IFieldsEdit)UAVFields;
+            IField UAVField = new FieldClass();
+            IFieldEdit UAVFieldEdit = (IFieldEdit)UAVField;
+
+            //ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            //IProjectedCoordinateSystem pGCS = spatialReferenceFactory.CreateProjectedCoordinateSystem(2372);//80坐标CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            UAVFieldEdit.Name_2 = "SHAPE";
+            UAVFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            //IGeometryDefEdit pGeoDef = new GeometryDefClass();
+            //IGeometryDefEdit pGeoDefEdit = (IGeometryDefEdit)pGeoDef;
+            //pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPoint;
+            //pGeoDefEdit.SpatialReference_2 = pGCS; //new UnknownCoordinateSystemClass();
+            UAVFieldEdit.GeometryDef_2 = pGeoDef;//与飞艇一致 都是相同坐标系 都是点状图层
+            UAVFieldsEdit.AddField(UAVField);
+
+            UAVField = new FieldClass();
+            UAVFieldEdit = (IFieldEdit)UAVField;
+            UAVFieldEdit.Name_2 = "UAVID";
+            UAVFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            UAVFieldsEdit.AddField(UAVField);
+            //创建shp
+            UAVFeatureClass = UAVFeatureWorkspace.CreateFeatureClass(strUavShapeFile + ".shp", UAVFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            for (int i = 0; i < UAVList.Count; i++)
+            {
+                IPoint UAVpoint = new PointClass();
+                UAVpoint = GetFlatCoordinate(Convert.ToDouble(UAVList[i].Longitude), Convert.ToDouble(UAVList[i].Latitude));  //经纬度-投影坐标 转换
+                IFeature pFeature = UAVFeatureClass.CreateFeature();
+                pFeature.Shape = UAVpoint;
+                pFeature.set_Value(pFeature.Fields.FindField("UAVID"), UAVList[i].PLATFORM_ID.ToString());
+                pFeature.Store();
+            }
+
+            #endregion
+
+            #region 生成地面车辆点shp图层
+
+            string strCarShapeFile = "CarPo";
+            FileInfo CarFile = new FileInfo(strShapeFolder + @"\" + strCarShapeFile + ".shp");
+            if (CarFile.Exists)
+            {
+                DirectoryInfo fold = new DirectoryInfo(strShapeFolder);
+                FileInfo[] files = fold.GetFiles(strCarShapeFile + ".*");
+                foreach (FileInfo f in files)
+                {
+                    f.Delete();
+                }
+            }
+            string CarshapeFileFullName = strShapeFolder + "\\" + strCarShapeFile + ".shp";
+            IWorkspaceFactory CarWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace CarFeatureWorkspace = (IFeatureWorkspace)CarWorkspaceFactory.OpenFromFile(strShapeFolder, 0);
+            IFeatureClass CarFeatureClass;
+            if (File.Exists(CarshapeFileFullName))
+            {
+                CarFeatureClass = CarFeatureWorkspace.OpenFeatureClass(strCarShapeFile + ".shp");
+                IDataset pDataset = (IDataset)CarFeatureClass;
+                pDataset.Delete();
+            }
+            //设置字段及坐标环境
+            IFields CarFields = new FieldsClass();
+            IFieldsEdit CarFieldsEdit = (IFieldsEdit)CarFields;
+            IField CarField = new FieldClass();
+            IFieldEdit CarFieldEdit = (IFieldEdit)CarField;
+
+            //ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            //IProjectedCoordinateSystem pGCS = spatialReferenceFactory.CreateProjectedCoordinateSystem(2372);//80坐标CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            CarFieldEdit.Name_2 = "SHAPE";
+            CarFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            //IGeometryDefEdit pGeoDef = new GeometryDefClass();
+            //IGeometryDefEdit pGeoDefEdit = (IGeometryDefEdit)pGeoDef;
+            //pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPoint;
+            //pGeoDefEdit.SpatialReference_2 = pGCS; //new UnknownCoordinateSystemClass();
+            CarFieldEdit.GeometryDef_2 = pGeoDef;//与飞艇一致 都是相同坐标系 都是点状图层
+            CarFieldsEdit.AddField(CarField);
+
+            CarField = new FieldClass();
+            CarFieldEdit = (IFieldEdit)CarField;
+            CarFieldEdit.Name_2 = "CarID";
+            CarFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            CarFieldsEdit.AddField(CarField);
+            //创建shp
+            CarFeatureClass = CarFeatureWorkspace.CreateFeatureClass(strCarShapeFile + ".shp", CarFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            for (int i = 0; i < ILLUSTRATEDCARList.Count; i++)
+            {
+                IPoint Carpoint = new PointClass();
+                Carpoint = GetFlatCoordinate(Convert.ToDouble(ILLUSTRATEDCARList[i].Longitude), Convert.ToDouble(ILLUSTRATEDCARList[i].Latitude));  //经纬度-投影坐标 转换
+                IFeature pFeature = CarFeatureClass.CreateFeature();
+                pFeature.Shape = Carpoint;
+                pFeature.set_Value(pFeature.Fields.FindField("CarID"), ILLUSTRATEDCARList[i].PLATFORM_ID.ToString());
+                pFeature.Store();
+            }
+
+            #endregion
+
             #endregion
 
 
-
-            //无人机
-            List<CoScheduling.Core.Model.UAV> UAVList = new List<Core.Model.UAV>();//无人机所有信息
-
-            List<CoScheduling.Core.Model.UAV_RANGE> UAVRangeList = new List<Core.Model.UAV_RANGE>();//UAV平台信息
-            UAVRangeList = CoScheduling.Core.DAL.UAV_RANGE.GetList();//可添加where语句
-            //UAV当前位置信息 从state表中获取
-            for (int i = 0; i < UAVRangeList.Count; i++)
-            {
-                decimal UAVID = UAVRangeList[i].PLATFORM_ID;//飞艇id
-                StringBuilder strSql = new StringBuilder();
-                strSql.Append("Select * From STATE ");
-                strSql.Append(" Where PLATFORM_ID=" + UAVID);
-                CoScheduling.Core.Model.STATE UAVstate = new Core.Model.STATE();
-                DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString());
-                if (dr.HasRows)//有结果
-                {
-                    dr.Read();
-                    UAVstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
-                    UAVstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
-                }
-
-                //幅宽信息 先确定sensorid  在通过sensorid找bandid
-                strSql.Clear();
-                strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + UAVID);
-                DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
-                SensorDr.Read();
-                decimal AirShipSensorID = Convert.ToDecimal(SensorDr["SensorID"]);
-                strSql.Clear();
-                strSql.Append("Select * From SENSOR_BAND_MODE Where SensorID=" + AirShipSensorID);
-                DbDataReader BandDr = DbHelperSQL.ExecuteReader(strSql.ToString());
-                BandDr.Read();
-                decimal AirShipWidth = Convert.ToDecimal(BandDr["SwathWidth"]);
-
-
-                CoScheduling.Core.Model.Airship airship = new Core.Model.Airship();
-                airship.PLATFORM_ID = airshipRangeList[i].PLATFORM_ID;
-                airship.CruisingVelocity = airshipRangeList[i].CruisingVelocity;
-                airship.Longitude = UAVstate.Longitude;
-                airship.Latitude = UAVstate.Latitude;
-                airship.SwathWidth = AirShipWidth;
-                airshipList.Add(airship);
-
-            }
-
-            //车
 
 
 

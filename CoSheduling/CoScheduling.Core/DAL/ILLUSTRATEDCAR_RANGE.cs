@@ -239,7 +239,7 @@ namespace CoScheduling.Core.DAL
         /// 获取全部记录
         /// </summary>
         /// <returns></returns>
-        public List<CoScheduling.Core.Model.ILLUSTRATEDCAR_RANGE> GetList()
+        public static List<CoScheduling.Core.Model.ILLUSTRATEDCAR_RANGE> GetList()
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("Select * From ILLUSTRATEDCAR_RANGE order by PLATFORM_ID desc");
@@ -300,7 +300,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由一行数据得到一个实体,还有很多问题，什么时候用try catch,什么时候不用
         /// </summary>
-        private Model.ILLUSTRATEDCAR_RANGE GetModel(DbDataReader dr)
+        private static Model.ILLUSTRATEDCAR_RANGE GetModel(DbDataReader dr)
         {
 
             CoScheduling.Core.Model.ILLUSTRATEDCAR_RANGE model = new CoScheduling.Core.Model.ILLUSTRATEDCAR_RANGE();
@@ -388,8 +388,22 @@ namespace CoScheduling.Core.DAL
             {
                 model.AzimuthAngleAcceleration = Convert.ToDecimal("-1");
             }
-
-
+            try
+            {
+                model.CruisingVelocity = Convert.ToDecimal(dr["CruisingVelocity"]);
+            }
+            catch
+            {
+                model.CruisingVelocity = Convert.ToDecimal("-1");
+            }
+            try
+            {
+                model.ObserveVelocity = Convert.ToDecimal(dr["ObserveVelocity"]);
+            }
+            catch
+            {
+                model.ObserveVelocity = Convert.ToDecimal("-1");
+            }
 
             try
             {
@@ -446,7 +460,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由DbDataReader得到泛型数据列表
         /// </summary>
-        private List<Model.ILLUSTRATEDCAR_RANGE> GetList(DbDataReader dr)
+        private static List<Model.ILLUSTRATEDCAR_RANGE> GetList(DbDataReader dr)
         {
             List<Model.ILLUSTRATEDCAR_RANGE> lst = new List<Model.ILLUSTRATEDCAR_RANGE>();
             while (dr.Read())

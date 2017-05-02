@@ -214,6 +214,7 @@
     <Compile Include="Model\DisaKnowledge.cs" />
     <Compile Include="Model\DisaParameter.cs" />
     <Compile Include="Model\HUMANDETECTION_RANGE.cs" />
+    <Compile Include="Model\ILLUSTRATEDCAR.cs" />
     <Compile Include="Model\ILLUSTRATEDCAR_RANGE.cs" />
     <Compile Include="Model\ImgLayoutTempTimewindow.cs" />
     <Compile Include="Model\IMG_LAYOUT_POSITION.cs" />

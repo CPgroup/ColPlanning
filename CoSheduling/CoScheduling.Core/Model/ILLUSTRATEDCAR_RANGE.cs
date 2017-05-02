@@ -26,7 +26,7 @@ namespace CoScheduling.Core.Model
             decimal DepartureAngle, decimal MinimumGroundClearance, decimal WheelBase,
             decimal AzimuthAngle, decimal AzimuthAngleVelocity, decimal AzimuthAngleAcceleration,
             decimal PitchAngle, decimal PitchAngleVelocity, decimal PitchAngleAcceleration,
-            decimal PolarizationAngle, decimal PolarizationAngleVelocity,
+            decimal PolarizationAngle, decimal PolarizationAngleVelocity,decimal CruisingVelocity,decimal ObserveVelocity,
             decimal PolarizationAngleAcceleration)
         {
             _PLATFORM_ID = PLATFORM_ID;
@@ -49,6 +49,8 @@ namespace CoScheduling.Core.Model
             _PolarizationAngle = PolarizationAngle;
             _PolarizationAngleVelocity = PolarizationAngleVelocity;
             _PolarizationAngleAcceleration = PolarizationAngleAcceleration;
+            _CruisingVelocity = CruisingVelocity;//巡航速度
+            _ObserveVelocity = ObserveVelocity;//观测速度
         }
 
 
@@ -74,6 +76,8 @@ namespace CoScheduling.Core.Model
         private decimal _PolarizationAngle;
         private decimal _PolarizationAngleVelocity;
         private decimal _PolarizationAngleAcceleration;
+        private decimal _CruisingVelocity;
+        private decimal _ObserveVelocity;
 
 
         //定义各个成员变量的赋值和获取值的函数
@@ -81,6 +85,16 @@ namespace CoScheduling.Core.Model
         {
             set { _PLATFORM_ID = value; }
             get { return _PLATFORM_ID; }
+        }
+        public decimal CruisingVelocity
+        {
+            set { _CruisingVelocity = value; }
+            get { return _CruisingVelocity; }
+        }
+        public decimal ObserveVelocity
+        {
+            set { _ObserveVelocity = value; }
+            get { return _ObserveVelocity; }
         }
         public string PLATFORM_Name
         {

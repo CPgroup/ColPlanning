@@ -256,13 +256,13 @@ namespace CoScheduling.Core.DAL
             StringBuilder strSql = new StringBuilder();
             strSql.Append("Select * From UAV_RANGE order by PLATFORM_ID desc");
             //数据库连接
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand(strSql.ToString(), connection);
+            //SqlConnection connection = new SqlConnection(connectionString);
+            //SqlCommand cmd = new SqlCommand(strSql.ToString(), connection);
 
-            connection.Open();
-            SqlDataReader myReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            //connection.Open();
+            //SqlDataReader myReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-            using (DbDataReader dr = myReader)
+            using (DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
             {
                 List<CoScheduling.Core.Model.UAV_RANGE> lst = GetList(dr);
                 dr.Close();

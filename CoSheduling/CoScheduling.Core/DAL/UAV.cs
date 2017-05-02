@@ -63,7 +63,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[4].Value = model.RainResistance;
             cmdParms[5].Value = model.Radius;
             cmdParms[6].Value = model.Endurance;
-            cmdParms[7].Value = model.Speed;
+            cmdParms[7].Value = model.CruisingVelocity;
             cmdParms[8].Value = model.Height;
             cmdParms[9].Value = model.Voyage;
             cmdParms[10].Value = model.TakeoffMode;
@@ -138,7 +138,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[4].Value = model.RainResistance;
             cmdParms[5].Value = model.Radius;
             cmdParms[6].Value = model.Endurance;
-            cmdParms[7].Value = model.Speed;
+            cmdParms[7].Value = model.CruisingVelocity;
             cmdParms[8].Value = model.Height;
             cmdParms[9].Value = model.Voyage;
             cmdParms[10].Value = model.TakeoffMode;
@@ -151,7 +151,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[17].Value = model.isUse;
             cmdParms[18].Value = model.Company;
             cmdParms[19].Value = model.Type;
-            cmdParms[20].Value = model.ID;
+            cmdParms[20].Value = model.PLATFORM_ID;
 
             return DbHelperSQL.ExecuteSql(strSql.ToString(), cmdParms);
         }
@@ -272,7 +272,7 @@ namespace CoScheduling.Core.DAL
                 while (dr.Read())
                 {
                     Model.UAV model = new Model.UAV();
-                    model.ID = Convert.ToInt32(DbHelperSQL.GetString(dr["ID"]));
+                    model.PLATFORM_ID = Convert.ToInt32(DbHelperSQL.GetString(dr["ID"]));
                     model.Company = DbHelperSQL.GetString(dr["Company"]);
                     model.Type = DbHelperSQL.GetString(dr["Type"]);
                     lst.Add(model);
@@ -341,17 +341,17 @@ namespace CoScheduling.Core.DAL
         private Model.UAV GetModel(DbDataReader dr)
         {
             Model.UAV model = new Model.UAV();
-            model.ID = DbHelperSQL.GetInt(dr["ID"]);
+            model.PLATFORM_ID = DbHelperSQL.GetInt(dr["ID"]);
             model.Model = DbHelperSQL.GetString(dr["Model"]);
             model.Size = DbHelperSQL.GetDouble(dr["Size"]);
             model.Loads = DbHelperSQL.GetString(dr["Loads"]);
             model.WindResistance = DbHelperSQL.GetString(dr["WindResistance"]);
             model.RainResistance = DbHelperSQL.GetString(dr["RainResistance"]);
-            model.Radius = DbHelperSQL.GetDouble(dr["Radius"]);
+            model.Radius =Convert.ToDecimal( DbHelperSQL.GetDouble(dr["Radius"]));
             model.Endurance = DbHelperSQL.GetDouble(dr["Endurance"]);
-            model.Speed = DbHelperSQL.GetDouble(dr["Speed"]);
+            model.CruisingVelocity = Convert.ToDecimal( DbHelperSQL.GetDouble(dr["Speed"]));
             model.Height = DbHelperSQL.GetDouble(dr["Height"]);
-            model.Voyage = DbHelperSQL.GetDouble(dr["Voyage"]);
+            model.Voyage = Convert.ToDecimal( DbHelperSQL.GetDouble(dr["Voyage"]));
             model.TakeoffMode = DbHelperSQL.GetString(dr["TakeoffMode"]);
             model.RecycleMode = DbHelperSQL.GetString(dr["RecycleMode"]);
             model.UnfoldTime = DbHelperSQL.GetDouble(dr["UnfoldTime"]);

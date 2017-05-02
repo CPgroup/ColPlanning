@@ -24,7 +24,7 @@ namespace CoScheduling.Core.Model
 		/// <summary>
 		/// 构造函数 UAV
 		/// </summary>
-		/// <param name="iD">ID</param>
+        /// <param name="PLATFORM_ID">ID</param>
 		/// <param name="model">型号</param>
 		/// <param name="size">尺寸</param>
 		/// <param name="loads">荷载</param>
@@ -32,7 +32,7 @@ namespace CoScheduling.Core.Model
 		/// <param name="rainResistance">抗雨能力</param>
 		/// <param name="radius">控制半径</param>
 		/// <param name="endurance">续航时间</param>
-		/// <param name="speed">飞行速度</param>
+        /// <param name="CruisingVelocity">飞行速度</param>
 		/// <param name="height">最高高度</param>
 		/// <param name="voyage">航程</param>
 		/// <param name="takeoffMode">起飞模式</param>
@@ -48,9 +48,9 @@ namespace CoScheduling.Core.Model
         ///         /// <param name="Longitude">出发位置经度</param>
         ///  /// <param name="Latitude">出发纬度</param>
         ///  <param name="SwathWidth">幅宽</param>
-        public UAV(int iD, string model, double size, string loads, string windResistance, string rainResistance, double radius, double endurance, double speed, double height, double voyage, string takeoffMode, string recycleMode, double UnfoldTime, double FoldTime, string isUnload, double refulTime, string camera, Boolean isUse, string company, string type, decimal Longitude, decimal Latitude, decimal SwathWidth)
+        public UAV(decimal PLATFORM_ID, string model, double size, string loads, string windResistance, string rainResistance, decimal radius, double endurance, decimal CruisingVelocity, double height, decimal voyage, string takeoffMode, string recycleMode, double UnfoldTime, double FoldTime, string isUnload, double refulTime, string camera, Boolean isUse, string company, string type, decimal Longitude, decimal Latitude, decimal SwathWidth)
 		{
-			_iD = iD;
+            _PLATFORM_ID = PLATFORM_ID;
 			_model = model;
 			_size = size;
 			_loads = loads;
@@ -58,7 +58,7 @@ namespace CoScheduling.Core.Model
 			_rainResistance = rainResistance;
 			_radius = radius;
 			_endurance = endurance;
-			_speed = speed;
+            _CruisingVelocity = CruisingVelocity;
 			_height = height;
 			_voyage = voyage;
 			_takeoffMode = takeoffMode;
@@ -77,17 +77,17 @@ namespace CoScheduling.Core.Model
 		}
 
 		#region Model
-		private int _iD;
+        private decimal _PLATFORM_ID;
 		private string _model;
 		private double _size;
 		private string _loads;
 		private string _windResistance;
 		private string _rainResistance;
-		private double _radius;
+        private decimal _radius;
 		private double _endurance;
-		private double _speed;
+        private decimal _CruisingVelocity;
 		private double _height;
-		private double _voyage;
+        private decimal _voyage;
 		private string _takeoffMode;
 		private string _recycleMode;
 		private double _UnfoldTime;
@@ -104,10 +104,10 @@ namespace CoScheduling.Core.Model
 		/// <summary>
 		/// ID
 		/// </summary>
-		public int ID
+        public decimal PLATFORM_ID
 		{
-			set { _iD = value; }
-			get { return _iD; }
+            set { _PLATFORM_ID = value; }
+            get { return _PLATFORM_ID; }
 		}
 		/// <summary>
 		/// 型号
@@ -152,7 +152,7 @@ namespace CoScheduling.Core.Model
 		/// <summary>
 		/// 控制半径
 		/// </summary>
-		public double Radius
+        public decimal Radius
 		{
 			set { _radius = value; }
 			get { return _radius; }
@@ -168,10 +168,10 @@ namespace CoScheduling.Core.Model
 		/// <summary>
 		/// 飞行速度
 		/// </summary>
-		public double Speed
+        public decimal CruisingVelocity
 		{
-			set { _speed = value; }
-			get { return _speed; }
+            set { _CruisingVelocity = value; }
+            get { return _CruisingVelocity; }
 		}
 		/// <summary>
 		/// 最高高度
@@ -184,7 +184,7 @@ namespace CoScheduling.Core.Model
 		/// <summary>
 		/// 航程
 		/// </summary>
-		public double Voyage
+        public decimal Voyage
 		{
 			set { _voyage = value; }
 			get { return _voyage; }

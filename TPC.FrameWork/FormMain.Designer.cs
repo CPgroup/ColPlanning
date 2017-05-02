@@ -28,30 +28,31 @@ namespace CP.FrameWork
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            CP.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new CP.WinFormsUI.Docking.DockPanelSkin();
-            CP.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new CP.WinFormsUI.Docking.AutoHideStripSkin();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient1 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new CP.WinFormsUI.Docking.DockPaneStripSkin();
-            CP.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new CP.WinFormsUI.Docking.DockPaneStripGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient2 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient3 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient4 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient5 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new CP.WinFormsUI.Docking.DockPanelGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient6 = new CP.WinFormsUI.Docking.TabGradient();
-            CP.WinFormsUI.Docking.TabGradient tabGradient7 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelSkin dockPanelSkin2 = new CP.WinFormsUI.Docking.DockPanelSkin();
+            CP.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin2 = new CP.WinFormsUI.Docking.AutoHideStripSkin();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient4 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient8 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin2 = new CP.WinFormsUI.Docking.DockPaneStripSkin();
+            CP.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient2 = new CP.WinFormsUI.Docking.DockPaneStripGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient9 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient5 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient10 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new CP.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient11 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient12 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new CP.WinFormsUI.Docking.DockPanelGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient13 = new CP.WinFormsUI.Docking.TabGradient();
+            CP.WinFormsUI.Docking.TabGradient tabGradient14 = new CP.WinFormsUI.Docking.TabGradient();
             this.repositoryItemProgressBar1 = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
             this.repositoryItemCalcEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCalcEdit();
             this.repositoryItemComboBox4 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBox5 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.navbarImageListLarge = new System.Windows.Forms.ImageList();
-            this.navbarImageList = new System.Windows.Forms.ImageList();
+            this.navbarImageListLarge = new System.Windows.Forms.ImageList(this.components);
+            this.navbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
-            this.appMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu();
+            this.appMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
             this.bbiAddDisa = new DevExpress.XtraBars.BarButtonItem();
             this.bbiDelDisa = new DevExpress.XtraBars.BarButtonItem();
             this.bbiAddComp = new DevExpress.XtraBars.BarButtonItem();
@@ -61,7 +62,7 @@ namespace CP.FrameWork
             this.bbiAddUAV = new DevExpress.XtraBars.BarButtonItem();
             this.bbiModifyUAV = new DevExpress.XtraBars.BarButtonItem();
             this.bbiDelUAV = new DevExpress.XtraBars.BarButtonItem();
-            this.bbiSatResource = new DevExpress.XtraBars.BarButtonItem();
+            this.bbiSatOrbit = new DevExpress.XtraBars.BarButtonItem();
             this.bbiSatUpdateTask = new DevExpress.XtraBars.BarButtonItem();
             this.bbiSatTask = new DevExpress.XtraBars.BarButtonItem();
             this.bbiDownload = new DevExpress.XtraBars.BarButtonItem();
@@ -194,7 +195,7 @@ namespace CP.FrameWork
             this.barButtonItem56 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem57 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem58 = new DevExpress.XtraBars.BarButtonItem();
-            this.galleryDropDown1 = new DevExpress.XtraBars.Ribbon.GalleryDropDown();
+            this.galleryDropDown1 = new DevExpress.XtraBars.Ribbon.GalleryDropDown(this.components);
             this.barButtonItem59 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem60 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem61 = new DevExpress.XtraBars.BarButtonItem();
@@ -240,7 +241,8 @@ namespace CP.FrameWork
             this.barButtonSPYCAMQuery = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonHUMDETManage = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonHUMDETQuery = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection();
+            this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection(this.components);
             this.resourceManage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rpgUAV = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpgSatManage = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -266,14 +268,14 @@ namespace CP.FrameWork
             this.ribbonPageGroup13 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup14 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup15 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonImageCollection = new DevExpress.Utils.ImageCollection();
+            this.ribbonImageCollection = new DevExpress.Utils.ImageCollection(this.components);
             this.galleryControl1 = new DevExpress.XtraBars.Ribbon.GalleryControl();
             this.galleryControlClient1 = new DevExpress.XtraBars.Ribbon.GalleryControlClient();
             this.galleryControl2 = new DevExpress.XtraBars.Ribbon.GalleryControl();
             this.galleryControlClient2 = new DevExpress.XtraBars.Ribbon.GalleryControlClient();
             this.bsiMonitorTask = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -283,7 +285,7 @@ namespace CP.FrameWork
             this.DockPanel = new CP.WinFormsUI.Docking.DockPanel();
             this.vS2012LightTheme1 = new CP.WinFormsUI.Docking.VS2012LightTheme();
             this.vS2005Theme1 = new CP.WinFormsUI.Docking.VS2005Theme();
-            this.timerMonitor = new System.Windows.Forms.Timer();
+            this.timerMonitor = new System.Windows.Forms.Timer(this.components);
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -291,7 +293,6 @@ namespace CP.FrameWork
             this.barButtonItem26 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem27 = new DevExpress.XtraBars.BarButtonItem();
             this.barEditItem5 = new DevExpress.XtraBars.BarEditItem();
-            this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemProgressBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCalcEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox4)).BeginInit();
@@ -379,7 +380,7 @@ namespace CP.FrameWork
             this.bbiAddUAV,
             this.bbiModifyUAV,
             this.bbiDelUAV,
-            this.bbiSatResource,
+            this.bbiSatOrbit,
             this.bbiSatUpdateTask,
             this.bbiSatTask,
             this.bbiDownload,
@@ -659,14 +660,15 @@ namespace CP.FrameWork
             this.bbiDelUAV.ItemAppearance.Normal.Options.UseFont = true;
             this.bbiDelUAV.Name = "bbiDelUAV";
             // 
-            // bbiSatResource
+            // bbiSatOrbit
             // 
-            this.bbiSatResource.Caption = "ÎÀÐÇ×Ô¶¯¸üÐÂ";
-            this.bbiSatResource.Id = 146;
-            this.bbiSatResource.ItemAppearance.Normal.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bbiSatResource.ItemAppearance.Normal.Options.UseFont = true;
-            this.bbiSatResource.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("bbiSatResource.LargeGlyph")));
-            this.bbiSatResource.Name = "bbiSatResource";
+            this.bbiSatOrbit.Caption = "ÎÀÐÇ×Ô¶¯¸üÐÂ";
+            this.bbiSatOrbit.Id = 146;
+            this.bbiSatOrbit.ItemAppearance.Normal.Font = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bbiSatOrbit.ItemAppearance.Normal.Options.UseFont = true;
+            this.bbiSatOrbit.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("bbiSatOrbit.LargeGlyph")));
+            this.bbiSatOrbit.Name = "bbiSatOrbit";
+            this.bbiSatOrbit.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiSatOrbit_ItemClick);
             // 
             // bbiSatUpdateTask
             // 
@@ -2094,6 +2096,15 @@ namespace CP.FrameWork
             this.barButtonHUMDETQuery.Name = "barButtonHUMDETQuery";
             this.barButtonHUMDETQuery.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonHUMDETQuery_ItemClick);
             // 
+            // conflictButton
+            // 
+            this.conflictButton.Caption = "³åÍ»ÅÐ¶Ï";
+            this.conflictButton.Id = 351;
+            this.conflictButton.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("conflictButton.LargeGlyph")));
+            this.conflictButton.Name = "conflictButton";
+            this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
+            // 
             // ribbonImageCollectionLarge
             // 
             this.ribbonImageCollectionLarge.ImageSize = new System.Drawing.Size(32, 32);
@@ -2130,7 +2141,7 @@ namespace CP.FrameWork
             // 
             // rpgSatManage
             // 
-            this.rpgSatManage.ItemLinks.Add(this.bbiSatResource);
+            this.rpgSatManage.ItemLinks.Add(this.bbiSatOrbit);
             this.rpgSatManage.ItemLinks.Add(this.barSubItemSatInfoQuery);
             this.rpgSatManage.ItemLinks.Add(this.barButtonSatManage);
             this.rpgSatManage.ItemLinks.Add(this.barButtonItem10);
@@ -2471,52 +2482,52 @@ namespace CP.FrameWork
             this.DockPanel.Location = new System.Drawing.Point(0, 147);
             this.DockPanel.Name = "DockPanel";
             this.DockPanel.Size = new System.Drawing.Size(1346, 542);
-            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient1.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
-            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient1.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin1.TabGradient = tabGradient1;
-            autoHideStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
-            tabGradient2.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
-            tabGradient2.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient2.TextColor = System.Drawing.Color.White;
-            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
-            tabGradient3.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
-            tabGradient3.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient3.TextColor = System.Drawing.Color.Black;
-            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
-            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-            dockPaneStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            tabGradient4.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient4.TextColor = System.Drawing.Color.White;
-            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
-            tabGradient5.EndColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient5.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient5.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
-            dockPanelGradient3.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient3.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
-            tabGradient6.EndColor = System.Drawing.SystemColors.ControlDark;
-            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient6.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient6.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
-            tabGradient7.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient7.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient7.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
-            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
-            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-            this.DockPanel.Skin = dockPanelSkin1;
+            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
+            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient8.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin2.TabGradient = tabGradient8;
+            autoHideStripSkin2.TextFont = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9F);
+            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
+            tabGradient9.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
+            tabGradient9.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient9.TextColor = System.Drawing.Color.White;
+            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
+            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
+            tabGradient10.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
+            tabGradient10.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient10.TextColor = System.Drawing.Color.Black;
+            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
+            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
+            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Î¢ÈíÑÅºÚ", 9F);
+            tabGradient11.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient11.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient11.TextColor = System.Drawing.Color.White;
+            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
+            tabGradient12.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
+            dockPanelGradient6.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient6.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
+            tabGradient13.EndColor = System.Drawing.SystemColors.ControlDark;
+            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient13.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient13.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
+            tabGradient14.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient14.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient14.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
+            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
+            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
+            this.DockPanel.Skin = dockPanelSkin2;
             this.DockPanel.TabIndex = 17;
             this.DockPanel.Theme = this.vS2012LightTheme1;
             // 
@@ -2570,15 +2581,6 @@ namespace CP.FrameWork
             this.barEditItem5.Edit = this.repositoryItemTextEdit1;
             this.barEditItem5.Id = 323;
             this.barEditItem5.Name = "barEditItem5";
-            // 
-            // conflictButton
-            // 
-            this.conflictButton.Caption = "³åÍ»ÅÐ¶Ï";
-            this.conflictButton.Id = 351;
-            this.conflictButton.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("conflictButton.LargeGlyph")));
-            this.conflictButton.Name = "conflictButton";
-            this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
-            this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
             // 
             // FormMain
             // 
@@ -2657,7 +2659,7 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem bbiModifyUAV;
         private DevExpress.XtraBars.BarButtonItem bbiDelUAV;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup rpgTaskPlanning;
-        private DevExpress.XtraBars.BarButtonItem bbiSatResource;
+        private DevExpress.XtraBars.BarButtonItem bbiSatOrbit;
         private DevExpress.XtraBars.BarButtonItem bbiSatUpdateTask;
         private DevExpress.XtraBars.BarButtonItem bbiSatTask;
         private DevExpress.XtraBars.BarButtonItem bbiDownload;

@@ -52,6 +52,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridViewTask = new System.Windows.Forms.DataGridView();
             this.TaskID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.任务区域 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SpaceResolution = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DisasterType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RespondingTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -269,48 +270,60 @@
             this.dataGridViewTask.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTask.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TaskID,
+            this.任务区域,
             this.SpaceResolution,
             this.DisasterType,
             this.RespondingTime,
             this.ObservationFrequency,
             this.StartTime,
             this.EndTime});
-            this.dataGridViewTask.Location = new System.Drawing.Point(21, 15);
+            this.dataGridViewTask.Location = new System.Drawing.Point(9, 12);
             this.dataGridViewTask.Name = "dataGridViewTask";
             this.dataGridViewTask.RowHeadersWidth = 10;
             this.dataGridViewTask.RowTemplate.Height = 23;
-            this.dataGridViewTask.Size = new System.Drawing.Size(714, 222);
-            this.dataGridViewTask.TabIndex = 97;
+            this.dataGridViewTask.Size = new System.Drawing.Size(736, 235);
+            this.dataGridViewTask.TabIndex = 112;
             // 
             // TaskID
             // 
             this.TaskID.DataPropertyName = "TaskID";
             this.TaskID.HeaderText = "任务ID";
             this.TaskID.Name = "TaskID";
+            this.TaskID.Width = 75;
+            // 
+            // 任务区域
+            // 
+            this.任务区域.DataPropertyName = "PolygonString";
+            this.任务区域.HeaderText = "任务区域";
+            this.任务区域.Name = "任务区域";
             // 
             // SpaceResolution
             // 
             this.SpaceResolution.DataPropertyName = "SpaceResolution";
             this.SpaceResolution.HeaderText = "分辨率要求";
             this.SpaceResolution.Name = "SpaceResolution";
+            this.SpaceResolution.Width = 90;
             // 
             // DisasterType
             // 
             this.DisasterType.DataPropertyName = "DisasterType";
             this.DisasterType.HeaderText = "灾害类型";
             this.DisasterType.Name = "DisasterType";
+            this.DisasterType.Width = 80;
             // 
             // RespondingTime
             // 
             this.RespondingTime.DataPropertyName = "RespondingTime";
             this.RespondingTime.HeaderText = "响应时间";
             this.RespondingTime.Name = "RespondingTime";
+            this.RespondingTime.Width = 80;
             // 
             // ObservationFrequency
             // 
             this.ObservationFrequency.DataPropertyName = "ObservationFrequency";
             this.ObservationFrequency.HeaderText = "观测频率";
             this.ObservationFrequency.Name = "ObservationFrequency";
+            this.ObservationFrequency.Width = 80;
             // 
             // StartTime
             // 
@@ -318,18 +331,22 @@
             this.StartTime.HeaderText = "观测开始时间";
             this.StartTime.Name = "StartTime";
             this.StartTime.ToolTipText = "该时间为UTC时间";
+            this.StartTime.Width = 108;
             // 
             // EndTime
             // 
             this.EndTime.DataPropertyName = "EndTime";
             this.EndTime.HeaderText = "观测结束时间";
             this.EndTime.Name = "EndTime";
+            this.EndTime.ToolTipText = "该时间为UTC时间";
+            this.EndTime.Width = 108;
             // 
             // TaskQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(757, 439);
+            this.Controls.Add(this.dataGridViewTask);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtTaskCount);
             this.Controls.Add(this.ButtonReturn);
@@ -344,7 +361,6 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGridViewTask);
             this.Name = "TaskQuery";
             this.Text = "TaskQuery";
             this.Load += new System.EventHandler(this.TaskQuery_Load);
@@ -382,6 +398,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridViewTask;
         private System.Windows.Forms.DataGridViewTextBoxColumn TaskID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 任务区域;
         private System.Windows.Forms.DataGridViewTextBoxColumn SpaceResolution;
         private System.Windows.Forms.DataGridViewTextBoxColumn DisasterType;
         private System.Windows.Forms.DataGridViewTextBoxColumn RespondingTime;

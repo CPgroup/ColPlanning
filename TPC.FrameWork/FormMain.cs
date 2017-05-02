@@ -303,6 +303,13 @@ namespace CP.FrameWork
             CP.Interface.Subsys1.MainInterface.HUMDETQuery();
         }
 
+
+
+        private void bbiSatOrbit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            CP.Interface.Subsys1.MainInterface.SatOrbit();
+        }
+
        
         
      

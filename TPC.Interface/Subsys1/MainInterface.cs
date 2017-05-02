@@ -113,7 +113,10 @@ namespace CP.Interface.Subsys1
 
       
         #region  卫星资源管理
-
+        public static void SatOrbit()
+        {
+            CoScheduling.Main.MainInterface.SatOrbit();
+        }
 
 
 

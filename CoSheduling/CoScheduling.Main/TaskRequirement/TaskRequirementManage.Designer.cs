@@ -33,6 +33,7 @@
             this.ButtonTaskModify = new System.Windows.Forms.Button();
             this.dataGridViewTask = new System.Windows.Forms.DataGridView();
             this.TaskID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.任务区域 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SpaceResolution = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DisasterType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RespondingTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -79,6 +80,7 @@
             this.dataGridViewTask.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTask.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TaskID,
+            this.任务区域,
             this.SpaceResolution,
             this.DisasterType,
             this.RespondingTime,
@@ -89,7 +91,7 @@
             this.dataGridViewTask.Name = "dataGridViewTask";
             this.dataGridViewTask.RowHeadersWidth = 10;
             this.dataGridViewTask.RowTemplate.Height = 23;
-            this.dataGridViewTask.Size = new System.Drawing.Size(641, 368);
+            this.dataGridViewTask.Size = new System.Drawing.Size(736, 368);
             this.dataGridViewTask.TabIndex = 12;
             // 
             // TaskID
@@ -98,6 +100,12 @@
             this.TaskID.HeaderText = "任务ID";
             this.TaskID.Name = "TaskID";
             this.TaskID.Width = 75;
+            // 
+            // 任务区域
+            // 
+            this.任务区域.DataPropertyName = "PolygonString";
+            this.任务区域.HeaderText = "任务区域";
+            this.任务区域.Name = "任务区域";
             // 
             // SpaceResolution
             // 
@@ -147,7 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(664, 431);
+            this.ClientSize = new System.Drawing.Size(753, 431);
             this.Controls.Add(this.ButtonTaskAdd);
             this.Controls.Add(this.ButtonTaskDelete);
             this.Controls.Add(this.ButtonTaskModify);
@@ -167,6 +175,7 @@
         private System.Windows.Forms.Button ButtonTaskModify;
         private System.Windows.Forms.DataGridView dataGridViewTask;
         private System.Windows.Forms.DataGridViewTextBoxColumn TaskID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 任务区域;
         private System.Windows.Forms.DataGridViewTextBoxColumn SpaceResolution;
         private System.Windows.Forms.DataGridViewTextBoxColumn DisasterType;
         private System.Windows.Forms.DataGridViewTextBoxColumn RespondingTime;

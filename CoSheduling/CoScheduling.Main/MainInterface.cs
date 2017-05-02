@@ -309,6 +309,27 @@ namespace CoScheduling.Main
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
+        public static void SatOrbit()
+        {
+            System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
+            //设置外部程序名  
+            Info.FileName = "SatOrbit.exe";
+            //设置外部程序工作目录  
+            Info.WorkingDirectory = System.Windows.Forms.Application.StartupPath;
+            //最小化方式启动
+            //Info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized;
+            //声明一个程序类  
+            System.Diagnostics.Process Proc;
+            try
+            {
+                Proc = System.Diagnostics.Process.Start(Info);
+                System.Threading.Thread.Sleep(500);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                return;
+            }
+        }
 
         //public static void SPYCAMQuery()
         //{

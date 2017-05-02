@@ -36,8 +36,8 @@ namespace CoScheduling.Main.TaskRequirement
         CoScheduling.Core.Model.TaskRequirement taskrequirement = new Core.Model.TaskRequirement();
         CoScheduling.Core.DAL.TaskRequirement dal_taskrequirement = new CoScheduling.Core.DAL.TaskRequirement();
 
-        CoScheduling.Core.Model.TaskObsRegion taskobsregion = new Core.Model.TaskObsRegion();
-        CoScheduling.Core.DAL.TaskObsRegion dal_taskobsregion = new Core.DAL.TaskObsRegion();
+        //CoScheduling.Core.Model.TaskObsRegion taskobsregion = new Core.Model.TaskObsRegion();
+        //CoScheduling.Core.DAL.TaskObsRegion dal_taskobsregion = new Core.DAL.TaskObsRegion();
         //观测资源传感器相关类实例化
         CoScheduling.Core.Model.Sensor_1 sensor1 = new Core.Model.Sensor_1();//第一类传感器
         CoScheduling.Core.DAL.Sensor_1 dal_sensor1 = new Core.DAL.Sensor_1();
@@ -118,7 +118,7 @@ namespace CoScheduling.Main.TaskRequirement
             //获取需要匹配的任务需求，所需传感器类型、最大空间分辨率和范围
             string task_id = this.dataGridViewTask.CurrentRow.Cells[0].Value.ToString();
             taskrequirement = dal_taskrequirement.GetModel(Convert.ToDecimal(task_id));
-            taskobsregion = dal_taskobsregion.GetModel(Convert.ToDecimal(task_id));
+            //taskobsregion = dal_taskobsregion.GetModel(Convert.ToDecimal(task_id));
             
             decimal MaxSpaceResolution = taskrequirement.SpaceResolution;
             string SensorsNeeded = taskrequirement.SensorNeeded;
@@ -155,7 +155,7 @@ namespace CoScheduling.Main.TaskRequirement
             DataTable DTSensor1=DSSensor1QueryResult.Tables["SENSOR_1"];
 
             string whereClause_Band = "";
-            bool BandTypeConstraint=false;
+            bool BandTypeConstraint = false;
             string BandTypeNeeded = "";
             //针对经过空间分辨率和SensorTypeID查出来的传感器列表进行BandType波段类型的查询
             for (int i = DTSensor1.Rows.Count - 1; i >= 0; i--)
@@ -208,15 +208,14 @@ namespace CoScheduling.Main.TaskRequirement
 
 
             //空间范围约束条件
-            List<IPoint> lstPoint = new List<IPoint>(4);
+            string[] pointcoord = taskrequirement.PolygonString.Split(';');
+            List<IPoint> lstPoint = new List<IPoint>(pointcoord.Length);
             bool ObvRegConstraint = false;
             //将taskobsregion中的经纬度范围转化为矩形四个边界点
-            int pointcount = 4;
+            int pointcount = pointcoord.Length;
+            for (int i = 0; i < pointcount - 1;i++ )
             {
-                lstPoint.Add(GetFlatCoordinate(Convert.ToDouble(taskobsregion.MinLon), Convert.ToDouble(taskobsregion.MinLat)));
-                lstPoint.Add(GetFlatCoordinate(Convert.ToDouble(taskobsregion.MaxLon), Convert.ToDouble(taskobsregion.MinLat)));
-                lstPoint.Add(GetFlatCoordinate(Convert.ToDouble(taskobsregion.MaxLon), Convert.ToDouble(taskobsregion.MaxLat)));
-                lstPoint.Add(GetFlatCoordinate(Convert.ToDouble(taskobsregion.MinLon), Convert.ToDouble(taskobsregion.MaxLat)));
+                lstPoint.Add(GetFlatCoordinate(Convert.ToDouble(pointcoord[i].Split(',')[0]), Convert.ToDouble(pointcoord[i].Split(',')[1])));
             }
             //将边界点转化成IGeometry的多边形
             IPointCollection PCollection_ObvReg = new Multipoint();
@@ -230,11 +229,11 @@ namespace CoScheduling.Main.TaskRequirement
             for (int i = DTSensor1.Rows.Count - 1; i >= 0; i--)
             {
                 decimal platformid =Convert.ToDecimal( DTSensor1.Rows[i]["PLATFORM_ID"].ToString());
-                if (platformid.ToString().Length==5 || (platformid.ToString().Length==6 && platformid.ToString()[0]=='1'))
+                if (platformid.ToString().Length==5 || (platformid.ToString().Length==6 && platformid.ToString()[0]=='1'))//卫星
                 { 
                     ObvRegConstraint = ISMatchSTCondition(lstPoint, platformid, taskrequirement.StartTime, taskrequirement.EndTime); 
                 }
-                else if (platformid.ToString().Length == 6 && (platformid.ToString()[0] == '3' || platformid.ToString()[0] == '2'))
+                else if (platformid.ToString().Length == 6 && (platformid.ToString()[0] == '3' || platformid.ToString()[0] == '2'))//飞艇无人机
                 {
                     //计算无人机的覆盖距离
                     uav_range = dal_uav_range.GetModel(platformid);
@@ -245,8 +244,8 @@ namespace CoScheduling.Main.TaskRequirement
                     state = dal_state.GetModel(platformid);
                     decimal state_lon = state.Longitude;
                     decimal state_lat = state.Latitude;
-                    IPoint Coordinate_base = GetFlatCoordinate(Convert.ToDouble(state_lon), Convert.ToDouble(state_lat));//基站点的平面坐标
-                    decimal distance_basepoint2region =Convert.ToDecimal(GetTwoGeometryDistance(Coordinate_base as IGeometry, Polygon_ObvReg));//点到面的距离
+                    IPoint pointpostition = GetFlatCoordinate(Convert.ToDouble(state_lon), Convert.ToDouble(state_lat));//基站点的平面坐标
+                    decimal distance_basepoint2region = Convert.ToDecimal(GetTwoGeometryDistance(pointpostition as IGeometry, Polygon_ObvReg));//点到面的距离
                     if (coverdistance>=distance_basepoint2region)
                     {
                         ObvRegConstraint = true;

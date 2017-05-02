@@ -105,9 +105,7 @@ namespace CoScheduling.Main.HUMANDETECTION
             this.txtBandCenter.Text = sensor_band_mode.BandCenter.ToString();
             this.txtBandWidth.Text = sensor_band_mode.BandWidth.ToString();
             this.comboBoxPolar.SelectedItem = sensor_band_mode.PolarizationMode;
-            this.txtAzimuResolution.Text = sensor_band_mode.AzimuthDirectionResolution.ToString();
-            this.txtDistanceResolution.Text = sensor_band_mode.DistanceResolution.ToString();
-            this.txtGeometryResolution.Text = sensor_band_mode.GeometryResolution.ToString();
+
             this.txtSNR.Text = sensor_band_mode.SNRRatio.ToString();
         }
 
@@ -131,9 +129,7 @@ namespace CoScheduling.Main.HUMANDETECTION
                 sensor_band_mode.BandCenter = Convert.ToDecimal(this.txtBandCenter.Text);
                 sensor_band_mode.BandWidth = Convert.ToDecimal(this.txtBandWidth.Text);
                 sensor_band_mode.PolarizationMode = Convert.ToString(this.comboBoxPolar.SelectedItem);
-                sensor_band_mode.GeometryResolution = Convert.ToDecimal(this.txtGeometryResolution.Text);
-                sensor_band_mode.AzimuthDirectionResolution = Convert.ToDecimal(this.txtAzimuResolution.Text);
-                sensor_band_mode.DistanceResolution = Convert.ToDecimal(this.txtDistanceResolution.Text);
+
                 sensor_band_mode.SNRRatio = Convert.ToDecimal(this.txtSNR.Text);
             }
             catch (System.Exception ex)

@@ -110,9 +110,7 @@ namespace CoScheduling.Main.AEROSHIP
                 sensor_band_mode.BandCenter = Convert.ToDecimal(this.txtBandCenter.Text);
                 sensor_band_mode.BandWidth = Convert.ToDecimal(this.txtBandWidth.Text);
                 sensor_band_mode.PolarizationMode = Convert.ToString(this.comboBoxPolar.SelectedItem);
-                sensor_band_mode.GeometryResolution = Convert.ToDecimal(this.txtGeometryResolution.Text);
-                sensor_band_mode.AzimuthDirectionResolution = Convert.ToDecimal(this.txtAzimuResolution.Text);
-                sensor_band_mode.DistanceResolution = Convert.ToDecimal(this.txtDistanceResolution.Text);
+
                 sensor_band_mode.SNRRatio = Convert.ToDecimal(this.txtSNR.Text);
             }
             catch (System.Exception ex)
@@ -154,9 +152,7 @@ namespace CoScheduling.Main.AEROSHIP
             this.txtBandCenter.Text = "0.15";
             this.txtBandWidth.Text = "0.1";
             this.comboBoxPolar.SelectedItem = "TBD";
-            this.txtAzimuResolution.Text = "0.1";
-            this.txtDistanceResolution.Text = "0.1";
-            this.txtGeometryResolution.Text = "0.1";
+
             this.txtSNR.Text = "1.5";
         }
 

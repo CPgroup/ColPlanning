@@ -27,7 +27,7 @@ namespace CoScheduling.Core.DAL
         public static string connectionString;
         public Sensor_Band_Mode()
         {
-            connectionString =  @"server=(local);database=CoMonitoring; User=sa; Password=123";//建立的时候就确定了，连接数据库的路径
+            connectionString = PubConstant.GetConnectionString("");
         }
         /// <summary>
         /// 传感器波段添加函数,添加删除和管理的数据库连接还存在问题
@@ -41,10 +41,10 @@ namespace CoScheduling.Core.DAL
             strSql.Append("BandID,BAND_MODE_NAME,BandType,SensorID,SensorName,");
             strSql.Append("PLATFORM_ID,PLATFORM_NAME,SwathWidth,BandWidth,BandCenter,");
             strSql.Append("SpectralRangeMin,SpectralRangeMax,PolarizationMode,SNRRatio,");
-            strSql.Append("PixelPerLine,GeometryResolution,AzimuthDirectionResolution,DistanceResolution)");
+            strSql.Append("PixelPerLine)");
             strSql.Append(" Values(");
             strSql.Append("@in_BandID,@in_BAND_MODE_NAME,@in_BandType,@in_SensorID,@in_SensorName,@in_PLATFORM_ID,@in_PLATFORM_NAME,@in_SwathWidth,@in_BandWidth,@in_BandCenter,");
-            strSql.Append("@in_SpectralRangeMin,@in_SpectralRangeMax,@in_PolarizationMode,@in_SNRRatio,@in_PixelPerLine,@in_GeometryResolution,@in_AzimuthDirectionResolution,@in_DistanceResolution)");
+            strSql.Append("@in_SpectralRangeMin,@in_SpectralRangeMax,@in_PolarizationMode,@in_SNRRatio,@in_PixelPerLine)");
             SqlParameter[] cmdParms = new SqlParameter[]{
                 new SqlParameter("@in_BandID", SqlDbType.Decimal),
                 new SqlParameter("@in_BAND_MODE_NAME", SqlDbType.NVarChar),
@@ -60,10 +60,7 @@ namespace CoScheduling.Core.DAL
                 new SqlParameter("@in_SpectralRangeMax", SqlDbType.Decimal),
                 new SqlParameter("@in_PolarizationMode", SqlDbType.NVarChar),
                 new SqlParameter("@in_SNRRatio", SqlDbType.Decimal),
-                new SqlParameter("@in_PixelPerLine", SqlDbType.Decimal),
-                new SqlParameter("@in_GeometryResolution", SqlDbType.Decimal),
-                new SqlParameter("@in_AzimuthDirectionResolution", SqlDbType.Decimal),
-                new SqlParameter("@in_DistanceResolution", SqlDbType.Decimal) };
+                new SqlParameter("@in_PixelPerLine", SqlDbType.Decimal) };
 
             cmdParms[0].Value = model.BandID;
             cmdParms[1].Value = model.BAND_MODE_NAME;
@@ -81,9 +78,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[12].Value = model.PolarizationMode;
             cmdParms[13].Value = model.SNRRatio;
             cmdParms[14].Value = model.PixelPerLine;
-            cmdParms[15].Value = model.GeometryResolution;
-            cmdParms[16].Value = model.AzimuthDirectionResolution;
-            cmdParms[17].Value = model.DistanceResolution;
+
 
             return DbHelperSQL.ExecuteSql(strSql.ToString(), cmdParms);//执行SQL语句，还需修改数据库连接的问题
         }
@@ -112,10 +107,8 @@ namespace CoScheduling.Core.DAL
             strSql.Append("SpectralRangeMax=@in_SpectralRangeMax,");
             strSql.Append("PolarizationMode=@in_PolarizationMode,");
             strSql.Append("SNRRatio=@in_SNRRatio,");
-            strSql.Append("PixelPerLine=@in_PixelPerLine,");
-            strSql.Append("GeometryResolution=@in_GeometryResolution,");
-            strSql.Append("AzimuthDirectionResolution=@in_AzimuthDirectionResolution,");
-            strSql.Append("DistanceResolution=@in_DistanceResolution");
+            strSql.Append("PixelPerLine=@in_PixelPerLine");
+
             
             strSql.Append(" where BandID=@in_BandID");
 
@@ -134,10 +127,7 @@ namespace CoScheduling.Core.DAL
                 new SqlParameter("@in_SpectralRangeMax", SqlDbType.Decimal),
                 new SqlParameter("@in_PolarizationMode", SqlDbType.NVarChar),
                 new SqlParameter("@in_SNRRatio", SqlDbType.Decimal),
-                new SqlParameter("@in_PixelPerLine", SqlDbType.Decimal),
-                new SqlParameter("@in_GeometryResolution", SqlDbType.Decimal),
-                new SqlParameter("@in_AzimuthDirectionResolution", SqlDbType.Decimal),
-                new SqlParameter("@in_DistanceResolution", SqlDbType.Decimal) };
+                new SqlParameter("@in_PixelPerLine", SqlDbType.Decimal) };
 
             cmdParms[0].Value = model.BandID;
             cmdParms[1].Value = model.BAND_MODE_NAME;
@@ -154,9 +144,6 @@ namespace CoScheduling.Core.DAL
             cmdParms[12].Value = model.PolarizationMode;
             cmdParms[13].Value = model.SNRRatio;
             cmdParms[14].Value = model.PixelPerLine;
-            cmdParms[15].Value = model.GeometryResolution;
-            cmdParms[16].Value = model.AzimuthDirectionResolution;
-            cmdParms[17].Value = model.DistanceResolution;
 
             return DbHelperSQL.ExecuteSql(strSql.ToString(), cmdParms);
         }
@@ -396,30 +383,7 @@ namespace CoScheduling.Core.DAL
             {
                 model.PixelPerLine = Convert.ToDecimal("-1");
             }
-            try
-            {
-                model.GeometryResolution = Convert.ToDecimal(dr["GeometryResolution"]);
-            }
-            catch
-            {
-                model.GeometryResolution = Convert.ToDecimal("-1");
-            }
-            try
-            {
-                model.AzimuthDirectionResolution = Convert.ToDecimal(dr["AzimuthDirectionResolution"]);
-            }
-            catch
-            {
-                model.AzimuthDirectionResolution = Convert.ToDecimal("-1");
-            }
-            try
-            {
-                model.DistanceResolution = Convert.ToDecimal(dr["DistanceResolution"]);
-            }
-            catch
-            {
-                model.DistanceResolution = Convert.ToDecimal("-1");
-            }
+
             return model;
 
         }

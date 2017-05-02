@@ -26,8 +26,7 @@ namespace CoScheduling.Core.Model
             decimal SensorID, string SensorName, decimal PLATFORM_ID, string PLATFORM_NAME,
             decimal SwathWidth, decimal BandWidth, decimal BandCenter, decimal SpectralRangeMin,
             decimal SpectralRangeMax, string PolarizationMode, decimal SNRRatio,
-            decimal PixelPerLine, decimal GeometryResolution, decimal AzimuthDirectionResolution,
-            decimal DistanceResolution)
+            decimal PixelPerLine)
         {
 
             _BandID = BandID;
@@ -46,9 +45,7 @@ namespace CoScheduling.Core.Model
             _PolarizationMode = PolarizationMode;
             _SNRRatio = SNRRatio;
             _PixelPerLine = PixelPerLine;
-            _GeometryResolution = GeometryResolution;
-            _AzimuthDirectionResolution = AzimuthDirectionResolution;
-            _DistanceResolution = DistanceResolution;
+
         }
 
         #region Model
@@ -68,9 +65,7 @@ namespace CoScheduling.Core.Model
         private string _PolarizationMode;
         private decimal _SNRRatio;
         private decimal _PixelPerLine;
-        private decimal _GeometryResolution;
-        private decimal _AzimuthDirectionResolution;
-        private decimal _DistanceResolution;
+
 
         //定义各成员变量的赋值和获取值的函数
         public decimal BandID
@@ -148,21 +143,7 @@ namespace CoScheduling.Core.Model
             set { _PixelPerLine = value; }
             get { return _PixelPerLine; }
         }
-        public decimal GeometryResolution
-        {
-            set { _GeometryResolution = value; }
-            get { return _GeometryResolution; }
-        }
-        public decimal AzimuthDirectionResolution
-        {
-            set { _AzimuthDirectionResolution = value; }
-            get { return _AzimuthDirectionResolution; }
-        }
-        public decimal DistanceResolution
-        {
-            set { _DistanceResolution = value; }
-            get { return _DistanceResolution; }
-        }
+
         #endregion Model
 
 

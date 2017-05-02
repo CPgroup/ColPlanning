@@ -10,6 +10,7 @@ using System.Data.OracleClient;
 using CoScheduling.Core.Model;
 using CoScheduling.Core.DAL;
 
+
 namespace CoScheduling.Main.TaskRequirement
 {
     public partial class TaskQuery : Form
@@ -100,39 +101,77 @@ namespace CoScheduling.Main.TaskRequirement
             {
                 TaskQueryCondition = TaskQueryCondition + " And StartTime is not null and EndTime is not null";
             }
-            //根据待观测区域的范围判断是否在指定范围之内的观测区域矩形
-            //不加else语句，默认控件内容为空的情况下，不添加关于空间范围的条件
-            if (!string.IsNullOrEmpty(this.txtMinLon.Text) &&
-                !string.IsNullOrEmpty(this.txtMaxLon.Text) &&
-                !string.IsNullOrEmpty(this.txtMinLat.Text) &&
-                !string.IsNullOrEmpty(this.txtMaxLat.Text))
-            {
-                TaskObsRegQueryCondition += " MinLon>=" + this.txtMinLon.Text;
-                TaskObsRegQueryCondition += " And MaxLon<=" + this.txtMaxLon.Text;
-                TaskObsRegQueryCondition += " And MinLat>=" + this.txtMinLat.Text;
-                TaskObsRegQueryCondition += " And MaxLat<=" + this.txtMaxLat.Text;
-            }
-            else
-            {
-                TaskObsRegQueryCondition += " MinLon is not null";
-                TaskObsRegQueryCondition += " And MaxLon is not null";
-                TaskObsRegQueryCondition += " And MinLat is not null";
-                TaskObsRegQueryCondition += " And MaxLat is not null";
-            }
+            
             //根据除了空间范围之外的其他条件，首先获取general表中符合条件的任务
-            //再在上一步冲获取的任务集中，根据TaskID选出空间范围之内的任务
-            List<string> TaskID_Space = new List<string>();
-            List<string> TaskID_NonSpace = new List<string>();
-            string strwhere = TaskQueryCondition + " And TaskID in (Select TaskID from TaskRequirements_ObsRegion where " + TaskObsRegQueryCondition + ")";
+           
+            string strwhere = TaskQueryCondition;
             try
             {
                 DSTaskQueryResult = GetTaskInfoDataSet(strwhere);
-                this.dataGridViewTask.DataSource = DSTaskQueryResult.Tables["TaskRequirements_general"];
+                //this.dataGridViewTask.DataSource = DSTaskQueryResult.Tables["TaskRequirements_general"];
             }
             catch (System.Exception ex)
             {
                 MessageBox.Show("请输入正确的参数！");
             }
+            DataTable DTTask = DSTaskQueryResult.Tables["TaskRequirements_general"];
+
+            //根据待观测区域的范围判断是否在指定范围之内的观测区域矩形
+            //不加else语句，默认控件内容为空的情况下，不添加关于空间范围的条件
+            decimal maxLon, maxLat, minLon, minLat;//任务区域的经纬度范围
+            string taskregionstring= "";
+            bool IsInRectangle;
+            if (!string.IsNullOrEmpty(this.txtMinLon.Text) &&
+                !string.IsNullOrEmpty(this.txtMaxLon.Text) &&
+                !string.IsNullOrEmpty(this.txtMinLat.Text) &&
+                !string.IsNullOrEmpty(this.txtMaxLat.Text))//如果规定了范围
+            {
+                for(int i=DTTask.Rows.Count-1;i>=0;i--)
+                {
+                    IsInRectangle = false;
+                    taskregionstring = DTTask.Rows[i]["PolygonString"].ToString();//第i个任务的任务区域属性
+                    string[] strpointcoord = taskregionstring.Split(';');//分割后每个点的坐标对
+                    maxLon = Convert.ToDecimal(strpointcoord[0].Split(',')[0]);
+                    minLon = Convert.ToDecimal(strpointcoord[0].Split(',')[0]);
+                    maxLat = Convert.ToDecimal(strpointcoord[0].Split(',')[1]);
+                    minLat = Convert.ToDecimal(strpointcoord[0].Split(',')[1]);
+                    for(int j=1;j<strpointcoord.Length-1;j++)
+                    {
+                        if (Convert.ToDecimal(strpointcoord[j].Split(',')[0])>maxLon)
+                        {
+                            maxLon=Convert.ToDecimal(strpointcoord[j].Split(',')[0]);
+                        }
+                        else if(Convert.ToDecimal(strpointcoord[j].Split(',')[0])<minLon)
+                        {
+                            minLon=Convert.ToDecimal(strpointcoord[j].Split(',')[0]);
+                        }
+                        if(Convert.ToDecimal(strpointcoord[j].Split(',')[1])>maxLat)
+                        {
+                            maxLat = Convert.ToDecimal(strpointcoord[j].Split(',')[0]);
+                        }
+                        else if(Convert.ToDecimal(strpointcoord[j].Split(',')[1])<minLon)
+                        {
+                            minLat = Convert.ToDecimal(strpointcoord[j].Split(',')[1]);
+                        }
+                    }
+                    //如果任务区域在查询条件矩形之内，则满足条件
+                    if (maxLon<=Convert.ToDecimal(this.txtMaxLon.Text)&&
+                        minLon>=Convert.ToDecimal(this.txtMinLon.Text)&&
+                        maxLat<=Convert.ToDecimal(this.txtMaxLat.Text)&&
+                        minLat>=Convert.ToDecimal(this.txtMinLat.Text))
+                    {
+                        IsInRectangle = true;
+                    }
+                    if(IsInRectangle==false)
+                    {
+                        DTTask.Rows[i].Delete();
+                    }
+
+                }
+                DTTask.AcceptChanges();
+            }
+
+            this.dataGridViewTask.DataSource = DTTask;
             getTaskNum();
         }
         /// <summary>

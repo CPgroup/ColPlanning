@@ -49,15 +49,6 @@
             this.ButtonGenerate = new System.Windows.Forms.Button();
             this.txtTaskName = new System.Windows.Forms.TextBox();
             this.ButtonAdd = new System.Windows.Forms.Button();
-            this.groupBox_ObsRegion = new System.Windows.Forms.GroupBox();
-            this.txtMinLon = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtMaxLat = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtMaxLon = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtMinLat = new System.Windows.Forms.TextBox();
             this.txtObsFre = new System.Windows.Forms.TextBox();
             this.txtResTime = new System.Windows.Forms.TextBox();
             this.txtSpaRes = new System.Windows.Forms.TextBox();
@@ -74,6 +65,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox_ObsRegion = new System.Windows.Forms.GroupBox();
+            this.txtTaskRegion = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox_SensorTypes.SuspendLayout();
             this.groupBox_ObsRegion.SuspendLayout();
             this.SuspendLayout();
@@ -82,7 +76,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(38, 444);
+            this.label15.Location = new System.Drawing.Point(42, 397);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(125, 12);
             this.label15.TabIndex = 168;
@@ -93,7 +87,7 @@
             this.dateOccurTime.Checked = false;
             this.dateOccurTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateOccurTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateOccurTime.Location = new System.Drawing.Point(380, 11);
+            this.dateOccurTime.Location = new System.Drawing.Point(378, 35);
             this.dateOccurTime.Name = "dateOccurTime";
             this.dateOccurTime.ShowCheckBox = true;
             this.dateOccurTime.Size = new System.Drawing.Size(154, 21);
@@ -103,7 +97,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.Color.Red;
-            this.label10.Location = new System.Drawing.Point(309, 14);
+            this.label10.Location = new System.Drawing.Point(296, 38);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 12);
             this.label10.TabIndex = 166;
@@ -123,7 +117,7 @@
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARC);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_MIR);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARX);
-            this.groupBox_SensorTypes.Location = new System.Drawing.Point(302, 232);
+            this.groupBox_SensorTypes.Location = new System.Drawing.Point(302, 150);
             this.groupBox_SensorTypes.Name = "groupBox_SensorTypes";
             this.groupBox_SensorTypes.Size = new System.Drawing.Size(242, 193);
             this.groupBox_SensorTypes.TabIndex = 165;
@@ -254,14 +248,14 @@
             // 
             this.comboBox_DisaType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_DisaType.FormattingEnabled = true;
-            this.comboBox_DisaType.Location = new System.Drawing.Point(380, 187);
+            this.comboBox_DisaType.Location = new System.Drawing.Point(380, 105);
             this.comboBox_DisaType.Name = "comboBox_DisaType";
             this.comboBox_DisaType.Size = new System.Drawing.Size(154, 20);
             this.comboBox_DisaType.TabIndex = 164;
             // 
             // ButtonReturn
             // 
-            this.ButtonReturn.Location = new System.Drawing.Point(203, 402);
+            this.ButtonReturn.Location = new System.Drawing.Point(470, 352);
             this.ButtonReturn.Name = "ButtonReturn";
             this.ButtonReturn.Size = new System.Drawing.Size(75, 23);
             this.ButtonReturn.TabIndex = 163;
@@ -270,7 +264,7 @@
             // 
             // ButtonGenerate
             // 
-            this.ButtonGenerate.Location = new System.Drawing.Point(38, 402);
+            this.ButtonGenerate.Location = new System.Drawing.Point(305, 352);
             this.ButtonGenerate.Name = "ButtonGenerate";
             this.ButtonGenerate.Size = new System.Drawing.Size(75, 23);
             this.ButtonGenerate.TabIndex = 162;
@@ -287,96 +281,13 @@
             // 
             // ButtonAdd
             // 
-            this.ButtonAdd.Location = new System.Drawing.Point(120, 402);
+            this.ButtonAdd.Location = new System.Drawing.Point(387, 352);
             this.ButtonAdd.Name = "ButtonAdd";
             this.ButtonAdd.Size = new System.Drawing.Size(75, 23);
             this.ButtonAdd.TabIndex = 160;
             this.ButtonAdd.Text = "添加";
             this.ButtonAdd.UseVisualStyleBackColor = true;
             this.ButtonAdd.Click += new System.EventHandler(this.ButtonAdd_Click);
-            // 
-            // groupBox_ObsRegion
-            // 
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label14);
-            this.groupBox_ObsRegion.Controls.Add(this.label3);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLat);
-            this.groupBox_ObsRegion.Controls.Add(this.label13);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label12);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLat);
-            this.groupBox_ObsRegion.Location = new System.Drawing.Point(31, 232);
-            this.groupBox_ObsRegion.Name = "groupBox_ObsRegion";
-            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 158);
-            this.groupBox_ObsRegion.TabIndex = 159;
-            this.groupBox_ObsRegion.TabStop = false;
-            this.groupBox_ObsRegion.Text = "事件区域范围";
-            // 
-            // txtMinLon
-            // 
-            this.txtMinLon.Location = new System.Drawing.Point(89, 20);
-            this.txtMinLon.Name = "txtMinLon";
-            this.txtMinLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLon.TabIndex = 21;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(13, 136);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(65, 12);
-            this.label14.TabIndex = 28;
-            this.label14.Text = "最大纬度：";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.Red;
-            this.label3.Location = new System.Drawing.Point(12, 26);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "最小经度：";
-            // 
-            // txtMaxLat
-            // 
-            this.txtMaxLat.Location = new System.Drawing.Point(89, 133);
-            this.txtMaxLat.Name = "txtMaxLat";
-            this.txtMaxLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLat.TabIndex = 24;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.ForeColor = System.Drawing.Color.Red;
-            this.label13.Location = new System.Drawing.Point(12, 101);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 12);
-            this.label13.TabIndex = 27;
-            this.label13.Text = "最小纬度：";
-            // 
-            // txtMaxLon
-            // 
-            this.txtMaxLon.Location = new System.Drawing.Point(89, 58);
-            this.txtMaxLon.Name = "txtMaxLon";
-            this.txtMaxLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLon.TabIndex = 22;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 61);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(65, 12);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "最大经度：";
-            // 
-            // txtMinLat
-            // 
-            this.txtMinLat.Location = new System.Drawing.Point(89, 95);
-            this.txtMinLat.Name = "txtMinLat";
-            this.txtMinLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLat.TabIndex = 23;
             // 
             // txtObsFre
             // 
@@ -387,7 +298,7 @@
             // 
             // txtResTime
             // 
-            this.txtResTime.Location = new System.Drawing.Point(380, 142);
+            this.txtResTime.Location = new System.Drawing.Point(380, 60);
             this.txtResTime.Name = "txtResTime";
             this.txtResTime.Size = new System.Drawing.Size(154, 21);
             this.txtResTime.TabIndex = 157;
@@ -411,7 +322,7 @@
             this.dateEndTime.Checked = false;
             this.dateEndTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateEndTime.Location = new System.Drawing.Point(380, 97);
+            this.dateEndTime.Location = new System.Drawing.Point(120, 268);
             this.dateEndTime.Name = "dateEndTime";
             this.dateEndTime.ShowCheckBox = true;
             this.dateEndTime.Size = new System.Drawing.Size(154, 21);
@@ -422,7 +333,7 @@
             this.dateStartTime.Checked = false;
             this.dateStartTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateStartTime.Location = new System.Drawing.Point(380, 51);
+            this.dateStartTime.Location = new System.Drawing.Point(120, 229);
             this.dateStartTime.Name = "dateStartTime";
             this.dateStartTime.ShowCheckBox = true;
             this.dateStartTime.Size = new System.Drawing.Size(154, 21);
@@ -457,7 +368,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(309, 145);
+            this.label8.Location = new System.Drawing.Point(309, 63);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(65, 12);
             this.label8.TabIndex = 149;
@@ -466,7 +377,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(309, 97);
+            this.label7.Location = new System.Drawing.Point(38, 271);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(65, 12);
             this.label7.TabIndex = 148;
@@ -475,7 +386,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(309, 54);
+            this.label6.Location = new System.Drawing.Point(38, 234);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 147;
@@ -485,7 +396,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(309, 190);
+            this.label5.Location = new System.Drawing.Point(309, 108);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 146;
@@ -518,11 +429,40 @@
             this.label1.TabIndex = 143;
             this.label1.Text = "任务编号：";
             // 
+            // groupBox_ObsRegion
+            // 
+            this.groupBox_ObsRegion.Controls.Add(this.label3);
+            this.groupBox_ObsRegion.Controls.Add(this.txtTaskRegion);
+            this.groupBox_ObsRegion.ForeColor = System.Drawing.Color.Red;
+            this.groupBox_ObsRegion.Location = new System.Drawing.Point(32, 298);
+            this.groupBox_ObsRegion.Name = "groupBox_ObsRegion";
+            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 82);
+            this.groupBox_ObsRegion.TabIndex = 169;
+            this.groupBox_ObsRegion.TabStop = false;
+            this.groupBox_ObsRegion.Text = "观测区域范围";
+            // 
+            // txtTaskRegion
+            // 
+            this.txtTaskRegion.Location = new System.Drawing.Point(20, 27);
+            this.txtTaskRegion.Name = "txtTaskRegion";
+            this.txtTaskRegion.Size = new System.Drawing.Size(213, 21);
+            this.txtTaskRegion.TabIndex = 21;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 55);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 12);
+            this.label3.TabIndex = 125;
+            this.label3.Text = "输入格式：Lon,Lat;";
+            // 
             // TaskGenerate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(575, 462);
+            this.ClientSize = new System.Drawing.Size(575, 425);
+            this.Controls.Add(this.groupBox_ObsRegion);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.dateOccurTime);
             this.Controls.Add(this.label10);
@@ -532,7 +472,6 @@
             this.Controls.Add(this.ButtonGenerate);
             this.Controls.Add(this.txtTaskName);
             this.Controls.Add(this.ButtonAdd);
-            this.Controls.Add(this.groupBox_ObsRegion);
             this.Controls.Add(this.txtObsFre);
             this.Controls.Add(this.txtResTime);
             this.Controls.Add(this.txtSpaRes);
@@ -584,15 +523,6 @@
         private System.Windows.Forms.Button ButtonGenerate;
         private System.Windows.Forms.TextBox txtTaskName;
         private System.Windows.Forms.Button ButtonAdd;
-        private System.Windows.Forms.GroupBox groupBox_ObsRegion;
-        private System.Windows.Forms.TextBox txtMinLon;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtMaxLat;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txtMaxLon;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox txtMinLat;
         private System.Windows.Forms.TextBox txtObsFre;
         private System.Windows.Forms.TextBox txtResTime;
         private System.Windows.Forms.TextBox txtSpaRes;
@@ -609,5 +539,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox_ObsRegion;
+        private System.Windows.Forms.TextBox txtTaskRegion;
+        private System.Windows.Forms.Label label3;
     }
 }

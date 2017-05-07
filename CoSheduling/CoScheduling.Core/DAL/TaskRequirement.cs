@@ -203,6 +203,24 @@ namespace CoScheduling.Core.DAL
             }
         }
         /// <summary>
+        /// 得到一个对象实体 静态公用 规划用到
+        /// </summary>
+        public static Model.TaskRequirement GetModelforPlan(decimal TaskID)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT * FROM TaskRequirements_general ");
+            strSql.Append(" WHERE TaskID=" + TaskID);
+            Model.TaskRequirement model = null;
+            using (DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
+            {
+                while (dr.Read())
+                {
+                    model = GetModel(dr);//本类中的
+                }
+                return model;
+            }
+        }
+        /// <summary>
         /// 获取泛型数据列表
         /// </summary>
         public List<Model.TaskRequirement> GetList(string whereclause)
@@ -220,7 +238,7 @@ namespace CoScheduling.Core.DAL
         /// 获取全部记录
         /// </summary>
         /// <returns></returns>
-        public List<CoScheduling.Core.Model.TaskRequirement> GetList()
+        public static List<CoScheduling.Core.Model.TaskRequirement> GetList()
         {
             StringBuilder StrSql = new StringBuilder();
             StrSql.Append("SELECT * FROM TaskRequirements_general order by TaskID desc");
@@ -281,7 +299,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由一行数据得到一个实体,还有很多问题，什么时候用try catch,什么时候不用
         /// </summary>
-        private Model.TaskRequirement  GetModel(DbDataReader dr)
+        private static Model.TaskRequirement GetModel(DbDataReader dr)
         {
 
             CoScheduling.Core.Model.TaskRequirement model = new CoScheduling.Core.Model.TaskRequirement();
@@ -427,7 +445,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由DbDataReader得到泛型数据列表
         /// </summary>
-        private List<Model.TaskRequirement> GetList(DbDataReader dr)
+        private static List<Model.TaskRequirement> GetList(DbDataReader dr)
         {
             List<Model.TaskRequirement> lst = new List<Model.TaskRequirement>();
             while (dr.Read())

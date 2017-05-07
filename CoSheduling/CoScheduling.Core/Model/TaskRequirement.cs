@@ -35,7 +35,29 @@ namespace CoScheduling.Core.Model
             _MaxTemperature = 20;
             _RoadAccessability = true;
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <param name="TaskName"></param>
+        /// <param name="SubmissionTime"></param>
+        /// <param name="TaskPriority">优先级别 转化为权重</param>
+        /// <param name="DisasterType">类型</param>
+        /// <param name="TaskStage"></param>
+        /// <param name="StartTime">开始时间</param>
+        /// <param name="EndTime">结束时间</param>
+        /// <param name="RespondingTime"></param>
+        /// <param name="SensorNeeded"></param>
+        /// <param name="ObservationFrequency"></param>
+        /// <param name="Weather"></param>
+        /// <param name="Windlevel"></param>
+        /// <param name="MinTemperature"></param>
+        /// <param name="MaxTemperature"></param>
+        /// <param name="RoadAccessability"></param>
+        /// <param name="SpaceResolution"></param>
+        /// <param name="Datavolume"></param>
+        /// <param name="OccurTime"></param>
+        /// <param name="PolygonString"></param>
         public TaskRequirement(decimal TaskID,string TaskName,DateTime SubmissionTime,decimal TaskPriority,string DisasterType,string TaskStage,
             DateTime StartTime,DateTime EndTime,decimal RespondingTime,string SensorNeeded,decimal ObservationFrequency,string Weather,decimal Windlevel,
             decimal MinTemperature,decimal MaxTemperature,bool RoadAccessability,decimal SpaceResolution,decimal Datavolume,DateTime OccurTime,string PolygonString)

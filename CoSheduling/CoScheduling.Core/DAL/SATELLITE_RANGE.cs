@@ -295,7 +295,7 @@ namespace CoScheduling.Core.DAL
         /// 获取全部记录
         /// </summary>
         /// <returns></returns>
-        public List<CoScheduling.Core.Model.SATELLITE_RANGE> GetList()
+        public static List<CoScheduling.Core.Model.SATELLITE_RANGE> GetList()
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("Select * From SATELLITE_RANGE order by PLATFORM_ID desc");
@@ -370,7 +370,7 @@ namespace CoScheduling.Core.DAL
         /// </summary>
         /// <param name="dr"></param>
         /// <returns></returns>
-        private Model.SATELLITE_RANGE GetModel(DbDataReader dr)
+        private static Model.SATELLITE_RANGE GetModel(DbDataReader dr)
         {
             CoScheduling.Core.Model.SATELLITE_RANGE model = new CoScheduling.Core.Model.SATELLITE_RANGE();
             model.PLATFORM_ID = Convert.ToDecimal(dr["PLATFORM_ID"]);
@@ -524,7 +524,7 @@ namespace CoScheduling.Core.DAL
             
             return model;
         }
-        private List<Model.SATELLITE_RANGE> GetList(DbDataReader dr)
+        private static List<Model.SATELLITE_RANGE> GetList(DbDataReader dr)
         {
             List<Model.SATELLITE_RANGE> lst = new List<Model.SATELLITE_RANGE>();
             while (dr.Read())

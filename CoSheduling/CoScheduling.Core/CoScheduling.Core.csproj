@@ -141,6 +141,7 @@
     <Compile Include="DAL\SATELLITE_SENSOR_SELECTED.cs" />
     <Compile Include="DAL\SATELLITE_TEMP.cs" />
     <Compile Include="DAL\SATELLITE_UPDATE.cs" />
+    <Compile Include="DAL\SATE_RESAULT.cs" />
     <Compile Include="DAL\ScheduleResult.cs" />
     <Compile Include="DAL\SensorsMatched.cs" />
     <Compile Include="DAL\Sensor_1.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Model\SATELLITE_SENSOR_SELECTED.cs" />
     <Compile Include="Model\SATELLITE_TEMP.cs" />
     <Compile Include="Model\SATELLITE_UPDATE.cs" />
+    <Compile Include="Model\SATE_RESAULT.cs" />
     <Compile Include="Model\ScheduleResult.cs" />
     <Compile Include="Model\SensorsMatched.cs" />
     <Compile Include="Model\Sensor_1.cs" />

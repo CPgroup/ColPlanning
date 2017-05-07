@@ -519,6 +519,17 @@ namespace CoScheduling.Main
             }
             #endregion
 
+            //卫星
+            List<CoScheduling.Core.Model.SATELLITE_RANGE> Satelite = new List<Core.Model.SATELLITE_RANGE>();
+            #region 数据库获取卫星属性信息  仅从平台
+            Satelite = CoScheduling.Core.DAL.SATELLITE_RANGE.GetList();//可添加where语句
+         
+            #endregion
+
+
+
+
+
             #region 生成资源shp图层
             //路径设置
             string strShapeFolder = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\MidData";
@@ -704,8 +715,268 @@ namespace CoScheduling.Main
 
             #endregion
 
+            
+            #region 任务Task信息获取 并生成task图层
+            List<CoScheduling.Core.Model.TaskRequirement> TaskList = new List<Core.Model.TaskRequirement>();//Task所有信息
+            TaskList = CoScheduling.Core.DAL.TaskRequirement.GetList();//可添加where语句
+            #region 生成task面状图层
+            string TaskstrShapeFile = "TaskPolygon";
+            FileInfo TaskfFile = new FileInfo(strShapeFolder + @"\" + TaskstrShapeFile + ".shp");
+            if (TaskfFile.Exists)
+            {
+                DirectoryInfo fold = new DirectoryInfo(strShapeFolder);
+                FileInfo[] files = fold.GetFiles(TaskstrShapeFile + ".*");
+                foreach (FileInfo f in files)
+                {
+                    f.Delete();
+                }
+            }
+            string TaskshapeFileFullName = strShapeFolder + "\\" + TaskstrShapeFile + ".shp";
+            IWorkspaceFactory TaskWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace TaskFeatureWorkspace = (IFeatureWorkspace)TaskWorkspaceFactory.OpenFromFile(strShapeFolder, 0);
+            IFeatureClass TaskFeatureClass;
+            if (File.Exists(TaskshapeFileFullName))
+            {
+                TaskFeatureClass = TaskFeatureWorkspace.OpenFeatureClass(TaskstrShapeFile + ".shp");
+                IDataset pDataset = (IDataset)TaskFeatureClass;
+                pDataset.Delete();
+            }
+            //设置字段及坐标环境
+            IFields TaskFields = new FieldsClass();
+            IFieldsEdit TaskFieldsEdit = (IFieldsEdit)TaskFields;
+            IField taskField = new FieldClass();
+            IFieldEdit taskFieldEdit = (IFieldEdit)taskField;
+
+            //ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            //IProjectedCoordinateSystem pGCS = spatialReferenceFactory.CreateProjectedCoordinateSystem(2372);//80坐标CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            taskFieldEdit.Name_2 = "SHAPE";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            //IGeometryDefEdit pGeoDef = new GeometryDefClass();
+            IGeometryDefEdit TaskGeoDefEdit = (IGeometryDefEdit)pGeoDef;
+            TaskGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolygon;
+            TaskGeoDefEdit.SpatialReference_2 = pGCS; //new UnknownCoordinateSystemClass();
+            taskFieldEdit.GeometryDef_2 = pGeoDef;
+            TaskFieldsEdit.AddField(taskField);
+            #region 设置字段
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "TaskID";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "area";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "TaskWinS";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "TaskWinE";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "CentroidX";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "CentroidY";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "Weight";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            TaskFieldsEdit.AddField(taskField);
+
+            taskField = new FieldClass();
+            taskFieldEdit = (IFieldEdit)taskField;
+            taskFieldEdit.Name_2 = "WeiArea";
+            taskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            TaskFieldsEdit.AddField(taskField);
+            #endregion
+            //创建shp
+            TaskFeatureClass = TaskFeatureWorkspace.CreateFeatureClass(TaskstrShapeFile + ".shp", TaskFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            for (int i = 0; i < TaskList.Count; i++)
+            {
+                string taskBandstring = TaskList[i].PolygonString;
+                IPolygon TaskPolygon = CoScheduling.Core.Generic.Convertor.GeoCorPointToProPolygon(taskBandstring);
+                //List<ESRI.ArcGIS.Geometry.Point> TaskBandPoint = new List<ESRI.ArcGIS.Geometry.Point>();
+
+                //IPoint Carpoint = new PointClass();
+                //Carpoint = GetFlatCoordinate(Convert.ToDouble(ILLUSTRATEDCARList[i].Longitude), Convert.ToDouble(ILLUSTRATEDCARList[i].Latitude));  //经纬度-投影坐标 转换
+                IFeature pFeature = TaskFeatureClass.CreateFeature();
+                IArea pArea = (IArea)TaskPolygon;
+                pFeature.Shape = TaskPolygon;
+                pFeature.set_Value(pFeature.Fields.FindField("TaskID"), TaskList[i].TaskID.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("area"), pArea.Area);
+                pFeature.set_Value(pFeature.Fields.FindField("TaskWinS"), TaskList[i].StartTime.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("TaskWinE"), TaskList[i].EndTime.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("CentroidX"), pArea.Centroid.X);
+                pFeature.set_Value(pFeature.Fields.FindField("CentroidY"), pArea.Centroid.Y);
+                pFeature.set_Value(pFeature.Fields.FindField("Weight"), (11 - Convert.ToDouble(TaskList[i].TaskPriority)) / 10);//优先度转为权重  优先度1-10  对应权重1-0
+                pFeature.set_Value(pFeature.Fields.FindField("WeiArea"), pArea.Area * (11 - Convert.ToDouble(TaskList[i].TaskPriority)) / 10);
+                pFeature.Store();
+            }
+            #endregion 
+            #endregion
 
 
+            #region 卫星覆盖任务区域信息获取 并生成ElementTask图层 SatTaskFeatureClass
+            List<CoScheduling.Core.Model.SATE_RESAULT> SatTaskList = new List<Core.Model.SATE_RESAULT>();//卫星覆盖Task所有信息
+            SatTaskList = CoScheduling.Core.DAL.SATE_RESAULT.GetList();//可添加where语句
+            #region 生成卫星覆盖任务区域面状图层
+            string SatTaskstrShapeFile = "SatElement";
+            FileInfo SatTaskfFile = new FileInfo(strShapeFolder + @"\" + SatTaskstrShapeFile + ".shp");
+            if (SatTaskfFile.Exists)
+            {
+                DirectoryInfo fold = new DirectoryInfo(strShapeFolder);
+                FileInfo[] files = fold.GetFiles(SatTaskstrShapeFile + ".*");
+                foreach (FileInfo f in files)
+                {
+                    f.Delete();
+                }
+            }
+            string SatTaskshapeFileFullName = strShapeFolder + "\\" + SatTaskstrShapeFile + ".shp";
+            IWorkspaceFactory SatTaskWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace SatTaskFeatureWorkspace = (IFeatureWorkspace)SatTaskWorkspaceFactory.OpenFromFile(strShapeFolder, 0);
+            IFeatureClass SatTaskFeatureClass;
+            if (File.Exists(SatTaskshapeFileFullName))
+            {
+                SatTaskFeatureClass = SatTaskFeatureWorkspace.OpenFeatureClass(SatTaskstrShapeFile + ".shp");
+                IDataset pDataset = (IDataset)SatTaskFeatureClass;
+                pDataset.Delete();
+            }
+            //设置字段及坐标环境
+            IFields SatTaskFields = new FieldsClass();
+            IFieldsEdit SatTaskFieldsEdit = (IFieldsEdit)SatTaskFields;
+            IField SattaskField = new FieldClass();
+            IFieldEdit SattaskFieldEdit = (IFieldEdit)SattaskField;
+
+            //ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            //IProjectedCoordinateSystem pGCS = spatialReferenceFactory.CreateProjectedCoordinateSystem(2372);//80坐标CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            SattaskFieldEdit.Name_2 = "SHAPE";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            //IGeometryDefEdit pGeoDef = new GeometryDefClass();
+            IGeometryDefEdit SatTaskGeoDefEdit = (IGeometryDefEdit)pGeoDef;
+            SatTaskGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPolygon;
+            SatTaskGeoDefEdit.SpatialReference_2 = pGCS; //new UnknownCoordinateSystemClass();
+            SattaskFieldEdit.GeometryDef_2 = pGeoDef;
+            SatTaskFieldsEdit.AddField(SattaskField);
+            #region 设置字段
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "TaskID";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "SatID";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "area";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "TaskWinS";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "TaskWinE";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "SatWinS";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "SatWinE";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "Angel";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "Vangel";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "Weight";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            SatTaskFieldsEdit.AddField(SattaskField);
+
+            SattaskField = new FieldClass();
+            SattaskFieldEdit = (IFieldEdit)SattaskField;
+            SattaskFieldEdit.Name_2 = "WeiArea";
+            SattaskFieldEdit.Type_2 = esriFieldType.esriFieldTypeDouble;
+            SatTaskFieldsEdit.AddField(SattaskField);
+            #endregion
+            //创建shp
+            SatTaskFeatureClass = SatTaskFeatureWorkspace.CreateFeatureClass(SatTaskstrShapeFile + ".shp", SatTaskFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            for (int i = 0; i < SatTaskList.Count; i++)
+            {
+                string taskBandstring = SatTaskList[i].POLYGONSTRING;
+                IPolygon TaskPolygon = CoScheduling.Core.Generic.Convertor.GeoCorPointToProPolygon(taskBandstring);
+                //List<ESRI.ArcGIS.Geometry.Point> TaskBandPoint = new List<ESRI.ArcGIS.Geometry.Point>();
+
+                //IPoint Carpoint = new PointClass();
+                //Carpoint = GetFlatCoordinate(Convert.ToDouble(ILLUSTRATEDCARList[i].Longitude), Convert.ToDouble(ILLUSTRATEDCARList[i].Latitude));  //经纬度-投影坐标 转换
+                IFeature pFeature = SatTaskFeatureClass.CreateFeature();
+                IArea pArea = (IArea)TaskPolygon;
+                pFeature.Shape = TaskPolygon;
+
+                decimal taskId = Convert.ToDecimal(SatTaskList[i].TASKID);//观测任务id
+                CoScheduling.Core.Model.TaskRequirement TaskRq = new Core.Model.TaskRequirement();//Task所有信息
+                TaskRq = CoScheduling.Core.DAL.TaskRequirement.GetModelforPlan(taskId);//通过taskid获取当前任务
+
+                pFeature.set_Value(pFeature.Fields.FindField("TaskID"), taskId.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("SatID"), SatTaskList[i].SATID.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("area"), pArea.Area);
+                pFeature.set_Value(pFeature.Fields.FindField("TaskWinS"), TaskRq.StartTime.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("TaskWinE"), TaskRq.EndTime.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("SatWinS"), SatTaskList[i].STARTTIME.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("SatWinE"), SatTaskList[i].ENDTIME.ToString());
+                pFeature.set_Value(pFeature.Fields.FindField("Angel"), SatTaskList[i].SLEW_ANGLE);
+                pFeature.set_Value(pFeature.Fields.FindField("Vangel"),SatTaskList[i].AngularVelocity);
+                pFeature.set_Value(pFeature.Fields.FindField("Weight"), (11 - Convert.ToDouble(TaskRq.TaskPriority)) / 10);//优先度转为权重  优先度1-10  对应权重1-0
+                pFeature.set_Value(pFeature.Fields.FindField("WeiArea"), pArea.Area * (11 - Convert.ToDouble(TaskRq.TaskPriority)) / 10);
+                pFeature.Store();
+            }
+            #endregion 
+            #endregion
 
 
             //图层加载

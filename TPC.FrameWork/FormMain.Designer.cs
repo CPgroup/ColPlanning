@@ -49,10 +49,7 @@ namespace CP.FrameWork
             this.repositoryItemCalcEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCalcEdit();
             this.repositoryItemComboBox4 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBox5 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.navbarImageListLarge = new System.Windows.Forms.ImageList(this.components);
-            this.navbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
-            this.appMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
             this.bbiAddDisa = new DevExpress.XtraBars.BarButtonItem();
             this.bbiDelDisa = new DevExpress.XtraBars.BarButtonItem();
             this.bbiAddComp = new DevExpress.XtraBars.BarButtonItem();
@@ -242,7 +239,6 @@ namespace CP.FrameWork
             this.barButtonHUMDETManage = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonHUMDETQuery = new DevExpress.XtraBars.BarButtonItem();
             this.conflictButton = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonImageCollectionLarge = new DevExpress.Utils.ImageCollection(this.components);
             this.resourceManage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.rpgUAV = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpgSatManage = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -268,37 +264,35 @@ namespace CP.FrameWork
             this.ribbonPageGroup13 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup14 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup15 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonImageCollection = new DevExpress.Utils.ImageCollection(this.components);
-            this.galleryControl1 = new DevExpress.XtraBars.Ribbon.GalleryControl();
-            this.galleryControlClient1 = new DevExpress.XtraBars.Ribbon.GalleryControlClient();
             this.galleryControl2 = new DevExpress.XtraBars.Ribbon.GalleryControl();
             this.galleryControlClient2 = new DevExpress.XtraBars.Ribbon.GalleryControlClient();
             this.bsiMonitorTask = new DevExpress.XtraBars.BarSubItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.vS2012LightTheme1 = new CP.WinFormsUI.Docking.VS2012LightTheme();
+            this.timerMonitor = new System.Windows.Forms.Timer(this.components);
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup11 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.barButtonItem26 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem27 = new DevExpress.XtraBars.BarButtonItem();
+            this.barEditItem5 = new DevExpress.XtraBars.BarEditItem();
+            this.navbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tslMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslCoor = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.DockPanel = new CP.WinFormsUI.Docking.DockPanel();
-            this.vS2012LightTheme1 = new CP.WinFormsUI.Docking.VS2012LightTheme();
-            this.vS2005Theme1 = new CP.WinFormsUI.Docking.VS2005Theme();
-            this.timerMonitor = new System.Windows.Forms.Timer(this.components);
-            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.ribbonPageGroup11 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.barButtonItem26 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem27 = new DevExpress.XtraBars.BarButtonItem();
-            this.barEditItem5 = new DevExpress.XtraBars.BarEditItem();
+            this.DockPanel = new CP.WinFormsUI.Docking.DockPanel();
+            this.galleryControl1 = new DevExpress.XtraBars.Ribbon.GalleryControl();
+            this.galleryControlClient1 = new DevExpress.XtraBars.Ribbon.GalleryControlClient();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemProgressBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCalcEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.appMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.galleryDropDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
@@ -308,13 +302,11 @@ namespace CP.FrameWork
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTimeEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonImageCollectionLarge)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonImageCollection)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.galleryControl1)).BeginInit();
-            this.galleryControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.galleryControl2)).BeginInit();
             this.galleryControl2.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.galleryControl1)).BeginInit();
+            this.galleryControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // repositoryItemProgressBar1
@@ -344,31 +336,12 @@ namespace CP.FrameWork
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.repositoryItemComboBox5.Name = "repositoryItemComboBox5";
             // 
-            // navbarImageListLarge
-            // 
-            this.navbarImageListLarge.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("navbarImageListLarge.ImageStream")));
-            this.navbarImageListLarge.TransparentColor = System.Drawing.Color.Transparent;
-            this.navbarImageListLarge.Images.SetKeyName(0, "Mail_16x16.png");
-            this.navbarImageListLarge.Images.SetKeyName(1, "Organizer_16x16.png");
-            // 
-            // navbarImageList
-            // 
-            this.navbarImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("navbarImageList.ImageStream")));
-            this.navbarImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.navbarImageList.Images.SetKeyName(0, "Inbox_16x16.png");
-            this.navbarImageList.Images.SetKeyName(1, "Outbox_16x16.png");
-            this.navbarImageList.Images.SetKeyName(2, "Drafts_16x16.png");
-            this.navbarImageList.Images.SetKeyName(3, "Trash_16x16.png");
-            this.navbarImageList.Images.SetKeyName(4, "Calendar_16x16.png");
-            this.navbarImageList.Images.SetKeyName(5, "Tasks_16x16.png");
-            // 
             // ribbonControl
             // 
-            this.ribbonControl.ApplicationButtonDropDownControl = this.appMenu;
             this.ribbonControl.ApplicationButtonText = null;
             this.ribbonControl.ExpandCollapseItem.Id = 0;
             this.ribbonControl.ForeColor = System.Drawing.Color.Black;
-            this.ribbonControl.Images = this.navbarImageListLarge;
+            this.ribbonControl.Images = this.navbarImageList;
             this.ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.ribbonControl.ExpandCollapseItem,
             this.bbiAddDisa,
@@ -552,7 +525,7 @@ namespace CP.FrameWork
             this.barButtonHUMDETManage,
             this.barButtonHUMDETQuery,
             this.conflictButton});
-            this.ribbonControl.LargeImages = this.ribbonImageCollectionLarge;
+            this.ribbonControl.LargeImages = this.navbarImageList;
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
             this.ribbonControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ribbonControl.MaxItemId = 352;
@@ -578,12 +551,6 @@ namespace CP.FrameWork
             this.ribbonControl.Size = new System.Drawing.Size(1346, 147);
             this.ribbonControl.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
             this.ribbonControl.SelectedPageChanged += new System.EventHandler(this.ribbonControl_SelectedPageChanged);
-            // 
-            // appMenu
-            // 
-            this.appMenu.Name = "appMenu";
-            this.appMenu.Ribbon = this.ribbonControl;
-            this.appMenu.ShowRightPane = true;
             // 
             // bbiAddDisa
             // 
@@ -2105,20 +2072,6 @@ namespace CP.FrameWork
             this.conflictButton.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             this.conflictButton.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.conflictButton_ItemClick);
             // 
-            // ribbonImageCollectionLarge
-            // 
-            this.ribbonImageCollectionLarge.ImageSize = new System.Drawing.Size(32, 32);
-            this.ribbonImageCollectionLarge.ImageStream = ((DevExpress.Utils.ImageCollectionStreamer)(resources.GetObject("ribbonImageCollectionLarge.ImageStream")));
-            this.ribbonImageCollectionLarge.Images.SetKeyName(0, "Ribbon_New_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(1, "Ribbon_Open_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(2, "Ribbon_Close_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(3, "Ribbon_Find_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(4, "Ribbon_Save_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(5, "Ribbon_SaveAs_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(6, "Ribbon_Exit_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(7, "Ribbon_Content_32x32.png");
-            this.ribbonImageCollectionLarge.Images.SetKeyName(8, "Ribbon_Info_32x32.png");
-            // 
             // resourceManage
             // 
             this.resourceManage.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -2347,44 +2300,6 @@ namespace CP.FrameWork
             this.ribbonPageGroup15.Name = "ribbonPageGroup15";
             this.ribbonPageGroup15.Text = "规划报告";
             // 
-            // ribbonImageCollection
-            // 
-            this.ribbonImageCollection.ImageStream = ((DevExpress.Utils.ImageCollectionStreamer)(resources.GetObject("ribbonImageCollection.ImageStream")));
-            this.ribbonImageCollection.Images.SetKeyName(0, "Ribbon_New_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(1, "Ribbon_Open_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(2, "Ribbon_Close_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(3, "Ribbon_Find_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(4, "Ribbon_Save_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(5, "Ribbon_SaveAs_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(6, "Ribbon_Exit_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(7, "Ribbon_Content_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(8, "Ribbon_Info_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(9, "Ribbon_Bold_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(10, "Ribbon_Italic_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(11, "Ribbon_Underline_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(12, "Ribbon_AlignLeft_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(13, "Ribbon_AlignCenter_16x16.png");
-            this.ribbonImageCollection.Images.SetKeyName(14, "Ribbon_AlignRight_16x16.png");
-            // 
-            // galleryControl1
-            // 
-            this.galleryControl1.Controls.Add(this.galleryControlClient1);
-            this.galleryControl1.DesignGalleryGroupIndex = 0;
-            this.galleryControl1.DesignGalleryItemIndex = 0;
-            this.galleryControl1.Location = new System.Drawing.Point(133, 239);
-            this.galleryControl1.LookAndFeel.SkinName = "Office 2016 Colorful";
-            this.galleryControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.galleryControl1.Name = "galleryControl1";
-            this.galleryControl1.Size = new System.Drawing.Size(171, 142);
-            this.galleryControl1.TabIndex = 7;
-            // 
-            // galleryControlClient1
-            // 
-            this.galleryControlClient1.GalleryControl = this.galleryControl1;
-            this.galleryControlClient1.Location = new System.Drawing.Point(2, 2);
-            this.galleryControlClient1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.galleryControlClient1.Size = new System.Drawing.Size(150, 138);
-            // 
             // galleryControl2
             // 
             this.galleryControl2.Controls.Add(this.galleryControlClient2);
@@ -2416,120 +2331,6 @@ namespace CP.FrameWork
             // 
             this.barButtonItem2.Id = 80;
             this.barButtonItem2.Name = "barButtonItem2";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tslMain,
-            this.toolStripStatusLabel2,
-            this.tslCoor,
-            this.tslProgress,
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 689);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1346, 23);
-            this.statusStrip1.TabIndex = 14;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // tslMain
-            // 
-            this.tslMain.AutoSize = false;
-            this.tslMain.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.tslMain.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.tslMain.Image = ((System.Drawing.Image)(resources.GetObject("tslMain.Image")));
-            this.tslMain.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.tslMain.Name = "tslMain";
-            this.tslMain.Size = new System.Drawing.Size(300, 18);
-            this.tslMain.Text = "就绪.";
-            this.tslMain.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.AutoSize = false;
-            this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(231, 18);
-            this.toolStripStatusLabel2.Text = "研发：中南大学地信院. ";
-            // 
-            // tslCoor
-            // 
-            this.tslCoor.AutoSize = false;
-            this.tslCoor.Name = "tslCoor";
-            this.tslCoor.Size = new System.Drawing.Size(180, 18);
-            // 
-            // tslProgress
-            // 
-            this.tslProgress.Name = "tslProgress";
-            this.tslProgress.Size = new System.Drawing.Size(150, 17);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 18);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // DockPanel
-            // 
-            this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DockPanel.DockBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.DockPanel.DocumentTabStripLocation = CP.WinFormsUI.Docking.DocumentTabStripLocation.Bottom;
-            this.DockPanel.Location = new System.Drawing.Point(0, 147);
-            this.DockPanel.Name = "DockPanel";
-            this.DockPanel.Size = new System.Drawing.Size(1346, 542);
-            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
-            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient8.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin2.TabGradient = tabGradient8;
-            autoHideStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
-            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
-            tabGradient9.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
-            tabGradient9.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient9.TextColor = System.Drawing.Color.White;
-            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
-            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
-            tabGradient10.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
-            tabGradient10.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient10.TextColor = System.Drawing.Color.Black;
-            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
-            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
-            dockPaneStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
-            tabGradient11.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
-            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient11.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            tabGradient11.TextColor = System.Drawing.Color.White;
-            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
-            tabGradient12.EndColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient12.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient12.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
-            dockPanelGradient6.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient6.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
-            tabGradient13.EndColor = System.Drawing.SystemColors.ControlDark;
-            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient13.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient13.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
-            tabGradient14.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient14.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient14.TextColor = System.Drawing.SystemColors.GrayText;
-            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
-            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
-            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
-            this.DockPanel.Skin = dockPanelSkin2;
-            this.DockPanel.TabIndex = 17;
-            this.DockPanel.Theme = this.vS2012LightTheme1;
             // 
             // timerMonitor
             // 
@@ -2582,9 +2383,156 @@ namespace CP.FrameWork
             this.barEditItem5.Id = 323;
             this.barEditItem5.Name = "barEditItem5";
             // 
+            // navbarImageList
+            // 
+            this.navbarImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("navbarImageList.ImageStream")));
+            this.navbarImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.navbarImageList.Images.SetKeyName(0, "Inbox_16x16.png");
+            this.navbarImageList.Images.SetKeyName(1, "Outbox_16x16.png");
+            this.navbarImageList.Images.SetKeyName(2, "Drafts_16x16.png");
+            this.navbarImageList.Images.SetKeyName(3, "Trash_16x16.png");
+            this.navbarImageList.Images.SetKeyName(4, "Calendar_16x16.png");
+            this.navbarImageList.Images.SetKeyName(5, "Tasks_16x16.png");
+            // 
+            // tslMain
+            // 
+            this.tslMain.AutoSize = false;
+            this.tslMain.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslMain.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.tslMain.Image = ((System.Drawing.Image)(resources.GetObject("tslMain.Image")));
+            this.tslMain.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tslMain.Name = "tslMain";
+            this.tslMain.Size = new System.Drawing.Size(300, 18);
+            this.tslMain.Text = "就绪.";
+            this.tslMain.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.AutoSize = false;
+            this.toolStripStatusLabel2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabel2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(231, 18);
+            this.toolStripStatusLabel2.Text = "研发：中南大学地信院. ";
+            // 
+            // tslCoor
+            // 
+            this.tslCoor.AutoSize = false;
+            this.tslCoor.Name = "tslCoor";
+            this.tslCoor.Size = new System.Drawing.Size(180, 18);
+            // 
+            // tslProgress
+            // 
+            this.tslProgress.Name = "tslProgress";
+            this.tslProgress.Size = new System.Drawing.Size(150, 17);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(131, 18);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tslMain,
+            this.toolStripStatusLabel2,
+            this.tslCoor,
+            this.tslProgress,
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 689);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1346, 23);
+            this.statusStrip1.TabIndex = 14;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // DockPanel
+            // 
+            this.DockPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DockPanel.DockBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.DockPanel.DocumentTabStripLocation = CP.WinFormsUI.Docking.DocumentTabStripLocation.Bottom;
+            this.DockPanel.Location = new System.Drawing.Point(0, 147);
+            this.DockPanel.Name = "DockPanel";
+            this.DockPanel.Size = new System.Drawing.Size(1346, 542);
+            dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient4.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
+            tabGradient8.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient8.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin2.TabGradient = tabGradient8;
+            autoHideStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
+            tabGradient9.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(206)))), ((int)(((byte)(219)))));
+            tabGradient9.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient9.TextColor = System.Drawing.Color.White;
+            dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
+            dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
+            tabGradient10.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(151)))), ((int)(((byte)(234)))));
+            tabGradient10.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient10.TextColor = System.Drawing.Color.Black;
+            dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
+            dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
+            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            tabGradient11.EndColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(170)))), ((int)(((byte)(220)))));
+            tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient11.StartColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            tabGradient11.TextColor = System.Drawing.Color.White;
+            dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
+            tabGradient12.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient12.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
+            dockPanelGradient6.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient6.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
+            tabGradient13.EndColor = System.Drawing.SystemColors.ControlDark;
+            tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient13.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient13.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
+            tabGradient14.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient14.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient14.TextColor = System.Drawing.SystemColors.GrayText;
+            dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
+            dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
+            dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
+            this.DockPanel.Skin = dockPanelSkin2;
+            this.DockPanel.TabIndex = 17;
+            this.DockPanel.Theme = this.vS2012LightTheme1;
+            // 
+            // galleryControl1
+            // 
+            this.galleryControl1.Controls.Add(this.galleryControlClient1);
+            this.galleryControl1.DesignGalleryGroupIndex = 0;
+            this.galleryControl1.DesignGalleryItemIndex = 0;
+            this.galleryControl1.Location = new System.Drawing.Point(133, 239);
+            this.galleryControl1.LookAndFeel.SkinName = "Office 2016 Colorful";
+            this.galleryControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.galleryControl1.Name = "galleryControl1";
+            this.galleryControl1.Size = new System.Drawing.Size(171, 142);
+            this.galleryControl1.TabIndex = 7;
+            this.galleryControl1.Visible = false;
+            // 
+            // galleryControlClient1
+            // 
+            this.galleryControlClient1.GalleryControl = this.galleryControl1;
+            this.galleryControlClient1.Location = new System.Drawing.Point(2, 2);
+            this.galleryControlClient1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.galleryControlClient1.Size = new System.Drawing.Size(150, 138);
+            // 
             // FormMain
             // 
+            this.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.Appearance.Options.UseBackColor = true;
             this.Appearance.Options.UseFont = true;
             this.Appearance.Options.UseForeColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2599,7 +2547,6 @@ namespace CP.FrameWork
             this.IsMdiContainer = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormMain";
-            this.ribbonControl.SetPopupContextMenu(this, this.appMenu);
             this.Ribbon = this.ribbonControl;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Tag = "                                ";
@@ -2610,7 +2557,6 @@ namespace CP.FrameWork
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.appMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.galleryDropDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).EndInit();
@@ -2620,14 +2566,12 @@ namespace CP.FrameWork
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemDateEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTimeEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonImageCollectionLarge)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonImageCollection)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.galleryControl1)).EndInit();
-            this.galleryControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.galleryControl2)).EndInit();
             this.galleryControl2.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.galleryControl1)).EndInit();
+            this.galleryControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2637,14 +2581,7 @@ namespace CP.FrameWork
 
         private DevExpress.XtraBars.Ribbon.RibbonControl ribbonControl;
         private DevExpress.XtraBars.Ribbon.RibbonPage CoSchedulingpage;
-        private DevExpress.XtraBars.Ribbon.ApplicationMenu appMenu;
-        private DevExpress.Utils.ImageCollection ribbonImageCollection;
-        private DevExpress.Utils.ImageCollection ribbonImageCollectionLarge;
-        private System.Windows.Forms.ImageList navbarImageList;
-        private System.Windows.Forms.ImageList navbarImageListLarge;
-        private DevExpress.XtraBars.Ribbon.GalleryControl galleryControl1;
         private DevExpress.XtraBars.Ribbon.GalleryControl galleryControl2;
-        private DevExpress.XtraBars.Ribbon.GalleryControlClient galleryControlClient1;
         private DevExpress.XtraBars.Ribbon.GalleryControlClient galleryControlClient2;
         private DevExpress.XtraBars.BarSubItem bsiMonitorTask;
         private DevExpress.XtraBars.BarButtonItem barButtonItem2;
@@ -2705,7 +2642,6 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem bbiDisaAreaInfor;
         private DevExpress.XtraBars.BarButtonItem bbiDisaAreaPosition;
         private DevExpress.XtraBars.BarButtonItem bbiDisaAreaRefresh;
-        private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private DevExpress.XtraBars.BarButtonItem bbiModifyDisat;
         private DevExpress.XtraBars.BarStaticItem bsiMain;
         private DevExpress.XtraBars.BarStaticItem bsiSysinfor;
@@ -2713,15 +2649,8 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem btnHelp;
         private DevExpress.XtraBars.BarButtonItem btnAbout;
         private DevExpress.XtraBars.BarEditItem bsiProgress;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        public System.Windows.Forms.ToolStripStatusLabel tslMain;
-        public System.Windows.Forms.ToolStripProgressBar tslProgress;
-        private CP.WinFormsUI.Docking.DockPanel DockPanel;
-        private CP.WinFormsUI.Docking.VS2005Theme vS2005Theme1;
         //private WinFormsUI.Docking.VS2012LightTheme vS2012LightTheme1;
         private CP.WinFormsUI.Docking.VS2012LightTheme vS2012LightTheme1;
-        private System.Windows.Forms.ToolStripStatusLabel tslCoor;
         private DevExpress.XtraBars.BarButtonItem bbiClearScreen;
         private DevExpress.XtraBars.BarButtonItem bbiSatPlaning;
         private DevExpress.XtraBars.Ribbon.RibbonPage resourceManage;
@@ -2760,7 +2689,6 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem barButtonSPYCAMManage;
         private DevExpress.XtraBars.BarButtonItem barButtonItem14;
         private DevExpress.XtraBars.BarButtonItem barButtonItem15;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem16;
         private DevExpress.XtraBars.BarButtonItem barButtonItem17;
         private DevExpress.XtraBars.BarButtonItem barButtonItem18;
@@ -2802,7 +2730,6 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem barButtonItem45;
         private DevExpress.XtraBars.BarButtonItem barButtonItem46;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup7;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private DevExpress.XtraBars.BarButtonItem taskDisButton;
         private DevExpress.XtraBars.Ribbon.RibbonPage PlanCoScheduling;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage1;
@@ -2829,7 +2756,6 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem barButtonItem66;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup8;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup9;
-        private DevExpress.XtraBars.Ribbon.GalleryDropDown galleryDropDown1;
         private DevExpress.XtraBars.BarButtonItem barButtonItem50;
         private DevExpress.XtraBars.BarButtonItem barButtonItem67;
         private DevExpress.XtraBars.BarButtonItem barButtonItem68;
@@ -2885,6 +2811,19 @@ namespace CP.FrameWork
         private DevExpress.XtraBars.BarButtonItem barButtonHUMDETQuery;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup17;
         private DevExpress.XtraBars.BarButtonItem conflictButton;
+        private DevExpress.XtraBars.Ribbon.GalleryDropDown galleryDropDown1;
+        private System.Windows.Forms.ImageList navbarImageList;
+        private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
+        public System.Windows.Forms.ToolStripStatusLabel tslMain;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel tslCoor;
+        public System.Windows.Forms.ToolStripProgressBar tslProgress;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private WinFormsUI.Docking.DockPanel DockPanel;
+        private DevExpress.XtraBars.Ribbon.GalleryControl galleryControl1;
+        private DevExpress.XtraBars.Ribbon.GalleryControlClient galleryControlClient1;
 
     }
 }

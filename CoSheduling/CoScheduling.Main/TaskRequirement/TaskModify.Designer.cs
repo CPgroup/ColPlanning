@@ -43,15 +43,6 @@
             this.checkBox_SARX = new System.Windows.Forms.CheckBox();
             this.comboBox_DisaType = new System.Windows.Forms.ComboBox();
             this.txtTaskName = new System.Windows.Forms.TextBox();
-            this.groupBox_ObsRegion = new System.Windows.Forms.GroupBox();
-            this.txtMinLon = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtMaxLat = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtMaxLon = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtMinLat = new System.Windows.Forms.TextBox();
             this.txtObsFre = new System.Windows.Forms.TextBox();
             this.txtResTime = new System.Windows.Forms.TextBox();
             this.txtSpaRes = new System.Windows.Forms.TextBox();
@@ -70,6 +61,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ButtonReturn = new System.Windows.Forms.Button();
             this.ButtonModify = new System.Windows.Forms.Button();
+            this.groupBox_ObsRegion = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtTaskRegion = new System.Windows.Forms.TextBox();
             this.groupBox_SensorTypes.SuspendLayout();
             this.groupBox_ObsRegion.SuspendLayout();
             this.SuspendLayout();
@@ -88,7 +82,7 @@
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARC);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_MIR);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARX);
-            this.groupBox_SensorTypes.Location = new System.Drawing.Point(299, 195);
+            this.groupBox_SensorTypes.Location = new System.Drawing.Point(299, 110);
             this.groupBox_SensorTypes.Name = "groupBox_SensorTypes";
             this.groupBox_SensorTypes.Size = new System.Drawing.Size(242, 201);
             this.groupBox_SensorTypes.TabIndex = 156;
@@ -228,7 +222,7 @@
             "海上溢油",
             "暴恐事件",
             "人群聚集"});
-            this.comboBox_DisaType.Location = new System.Drawing.Point(377, 148);
+            this.comboBox_DisaType.Location = new System.Drawing.Point(377, 63);
             this.comboBox_DisaType.Name = "comboBox_DisaType";
             this.comboBox_DisaType.Size = new System.Drawing.Size(154, 20);
             this.comboBox_DisaType.TabIndex = 155;
@@ -241,87 +235,6 @@
             this.txtTaskName.Size = new System.Drawing.Size(154, 21);
             this.txtTaskName.TabIndex = 154;
             // 
-            // groupBox_ObsRegion
-            // 
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label14);
-            this.groupBox_ObsRegion.Controls.Add(this.label3);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLat);
-            this.groupBox_ObsRegion.Controls.Add(this.label13);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label12);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLat);
-            this.groupBox_ObsRegion.Location = new System.Drawing.Point(28, 238);
-            this.groupBox_ObsRegion.Name = "groupBox_ObsRegion";
-            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 158);
-            this.groupBox_ObsRegion.TabIndex = 153;
-            this.groupBox_ObsRegion.TabStop = false;
-            this.groupBox_ObsRegion.Text = "观测区域范围";
-            // 
-            // txtMinLon
-            // 
-            this.txtMinLon.Location = new System.Drawing.Point(89, 20);
-            this.txtMinLon.Name = "txtMinLon";
-            this.txtMinLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLon.TabIndex = 21;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(13, 136);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(65, 12);
-            this.label14.TabIndex = 28;
-            this.label14.Text = "最大纬度：";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 26);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "最小经度：";
-            // 
-            // txtMaxLat
-            // 
-            this.txtMaxLat.Location = new System.Drawing.Point(89, 133);
-            this.txtMaxLat.Name = "txtMaxLat";
-            this.txtMaxLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLat.TabIndex = 24;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 101);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 12);
-            this.label13.TabIndex = 27;
-            this.label13.Text = "最小纬度：";
-            // 
-            // txtMaxLon
-            // 
-            this.txtMaxLon.Location = new System.Drawing.Point(89, 58);
-            this.txtMaxLon.Name = "txtMaxLon";
-            this.txtMaxLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLon.TabIndex = 22;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 61);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(65, 12);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "最大经度：";
-            // 
-            // txtMinLat
-            // 
-            this.txtMinLat.Location = new System.Drawing.Point(89, 95);
-            this.txtMinLat.Name = "txtMinLat";
-            this.txtMinLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLat.TabIndex = 23;
-            // 
             // txtObsFre
             // 
             this.txtObsFre.Location = new System.Drawing.Point(117, 193);
@@ -331,7 +244,7 @@
             // 
             // txtResTime
             // 
-            this.txtResTime.Location = new System.Drawing.Point(377, 103);
+            this.txtResTime.Location = new System.Drawing.Point(377, 18);
             this.txtResTime.Name = "txtResTime";
             this.txtResTime.Size = new System.Drawing.Size(154, 21);
             this.txtResTime.TabIndex = 151;
@@ -354,7 +267,7 @@
             // 
             this.dateEndTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateEndTime.Location = new System.Drawing.Point(377, 63);
+            this.dateEndTime.Location = new System.Drawing.Point(117, 280);
             this.dateEndTime.Name = "dateEndTime";
             this.dateEndTime.Size = new System.Drawing.Size(154, 21);
             this.dateEndTime.TabIndex = 148;
@@ -363,7 +276,7 @@
             // 
             this.dateStartTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateStartTime.Location = new System.Drawing.Point(377, 17);
+            this.dateStartTime.Location = new System.Drawing.Point(117, 231);
             this.dateStartTime.Name = "dateStartTime";
             this.dateStartTime.Size = new System.Drawing.Size(154, 21);
             this.dateStartTime.TabIndex = 147;
@@ -396,7 +309,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(306, 106);
+            this.label8.Location = new System.Drawing.Point(306, 21);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(65, 12);
             this.label8.TabIndex = 143;
@@ -405,7 +318,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(306, 63);
+            this.label7.Location = new System.Drawing.Point(36, 280);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(65, 12);
             this.label7.TabIndex = 142;
@@ -414,7 +327,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(306, 20);
+            this.label6.Location = new System.Drawing.Point(36, 237);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 141;
@@ -423,7 +336,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(306, 151);
+            this.label5.Location = new System.Drawing.Point(306, 66);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 140;
@@ -458,7 +371,7 @@
             // 
             // ButtonReturn
             // 
-            this.ButtonReturn.Location = new System.Drawing.Point(377, 419);
+            this.ButtonReturn.Location = new System.Drawing.Point(391, 375);
             this.ButtonReturn.Name = "ButtonReturn";
             this.ButtonReturn.Size = new System.Drawing.Size(75, 23);
             this.ButtonReturn.TabIndex = 136;
@@ -467,7 +380,7 @@
             // 
             // ButtonModify
             // 
-            this.ButtonModify.Location = new System.Drawing.Point(107, 419);
+            this.ButtonModify.Location = new System.Drawing.Point(391, 325);
             this.ButtonModify.Name = "ButtonModify";
             this.ButtonModify.Size = new System.Drawing.Size(75, 23);
             this.ButtonModify.TabIndex = 135;
@@ -475,15 +388,42 @@
             this.ButtonModify.UseVisualStyleBackColor = true;
             this.ButtonModify.Click += new System.EventHandler(this.ButtonModify_Click);
             // 
+            // groupBox_ObsRegion
+            // 
+            this.groupBox_ObsRegion.Controls.Add(this.label3);
+            this.groupBox_ObsRegion.Controls.Add(this.txtTaskRegion);
+            this.groupBox_ObsRegion.Location = new System.Drawing.Point(32, 325);
+            this.groupBox_ObsRegion.Name = "groupBox_ObsRegion";
+            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 87);
+            this.groupBox_ObsRegion.TabIndex = 157;
+            this.groupBox_ObsRegion.TabStop = false;
+            this.groupBox_ObsRegion.Text = "观测区域范围";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 61);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(113, 12);
+            this.label3.TabIndex = 125;
+            this.label3.Text = "输入格式：Lon,Lat;";
+            // 
+            // txtTaskRegion
+            // 
+            this.txtTaskRegion.Location = new System.Drawing.Point(20, 27);
+            this.txtTaskRegion.Name = "txtTaskRegion";
+            this.txtTaskRegion.Size = new System.Drawing.Size(213, 21);
+            this.txtTaskRegion.TabIndex = 21;
+            // 
             // TaskModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 458);
+            this.ClientSize = new System.Drawing.Size(568, 421);
+            this.Controls.Add(this.groupBox_ObsRegion);
             this.Controls.Add(this.groupBox_SensorTypes);
             this.Controls.Add(this.comboBox_DisaType);
             this.Controls.Add(this.txtTaskName);
-            this.Controls.Add(this.groupBox_ObsRegion);
             this.Controls.Add(this.txtObsFre);
             this.Controls.Add(this.txtResTime);
             this.Controls.Add(this.txtSpaRes);
@@ -531,15 +471,6 @@
         private System.Windows.Forms.CheckBox checkBox_SARX;
         private System.Windows.Forms.ComboBox comboBox_DisaType;
         private System.Windows.Forms.TextBox txtTaskName;
-        private System.Windows.Forms.GroupBox groupBox_ObsRegion;
-        private System.Windows.Forms.TextBox txtMinLon;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtMaxLat;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txtMaxLon;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox txtMinLat;
         private System.Windows.Forms.TextBox txtObsFre;
         private System.Windows.Forms.TextBox txtResTime;
         private System.Windows.Forms.TextBox txtSpaRes;
@@ -558,5 +489,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ButtonReturn;
         private System.Windows.Forms.Button ButtonModify;
+        private System.Windows.Forms.GroupBox groupBox_ObsRegion;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtTaskRegion;
     }
 }

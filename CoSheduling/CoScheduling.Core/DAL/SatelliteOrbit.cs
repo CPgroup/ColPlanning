@@ -32,7 +32,7 @@ namespace CoScheduling.Core.DAL
         public int Add(Model.SatelliteOrbit model)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("INSERT INTO LHF.T_PUB_SATELLITEORBIT(");
+            strSql.Append("INSERT INTO T_PUB_SATELLITEORBIT(");
             strSql.Append("SAT_ID,SAT_ORBITEPOCH,SAT_MEANMOTION,SAT_ECCENTRICITY,SAT_INCLINATION,SAT_ARGOFPERIGEE,SAT_RAAN,SAT_MEANANOMALY,SAT_MEANMOTIONDOT,SAT_MEANMOTIONDOTDOT,SAT_BSTAR,SAT_ORBITDATE,SAT_TLE1,SAT_TLE2)");
             strSql.Append(" VALUES (");
             strSql.Append("@in_SAT_ID,@in_SAT_ORBITEPOCH,@in_SAT_MEANMOTION,@in_SAT_ECCENTRICITY,@in_SAT_INCLINATION,@in_SAT_ARGOFPERIGEE,@in_SAT_RAAN,@in_SAT_MEANANOMALY,@in_SAT_MEANMOTIONDOT,@in_SAT_MEANMOTIONDOTDOT,@in_SAT_BSTAR,@in_SAT_ORBITDATE,@in_SAT_TLE1,@in_SAT_TLE2)");
@@ -75,7 +75,7 @@ namespace CoScheduling.Core.DAL
         public int Update(Model.SatelliteOrbit model)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("UPDATE LHF.T_PUB_SATELLITEORBIT SET ");
+            strSql.Append("UPDATE T_PUB_SATELLITEORBIT SET ");
             strSql.Append("SAT_ORBITEPOCH=@in_SAT_ORBITEPOCH,");
             strSql.Append("SAT_MEANMOTION=@in_SAT_MEANMOTION,");
             strSql.Append("SAT_ECCENTRICITY=@in_SAT_ECCENTRICITY,");
@@ -128,7 +128,7 @@ namespace CoScheduling.Core.DAL
         public int Delete(decimal SAT_ID)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("DELETE FROM LHF.T_PUB_SATELLITEORBIT ");
+            strSql.Append("DELETE FROM T_PUB_SATELLITEORBIT ");
             strSql.Append(" WHERE SAT_ID=@in_SAT_ID");
             SqlParameter[] cmdParms = new SqlParameter[]{
 				new SqlParameter("@in_SAT_ID", SqlDbType.Decimal)};
@@ -142,7 +142,7 @@ namespace CoScheduling.Core.DAL
         public bool Exists(decimal SAT_ID)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT COUNT(1) FROM LHF.T_PUB_SATELLITEORBIT");
+            strSql.Append("SELECT COUNT(1) FROM T_PUB_SATELLITEORBIT");
             strSql.Append(" WHERE SAT_ID="+SAT_ID);
             return DbHelperSQL.Exists(strSql.ToString());
         }
@@ -154,7 +154,7 @@ namespace CoScheduling.Core.DAL
         public bool Exists(DateTime orbitDate)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT COUNT(1) FROM LHF.T_PUB_SATELLITEORBIT");
+            strSql.Append("SELECT COUNT(1) FROM T_PUB_SATELLITEORBIT");
             strSql.Append(" WHERE SAT_ORBITDATE='"+orbitDate+"'");
             return DbHelperSQL.Exists(strSql.ToString());
         }
@@ -179,7 +179,7 @@ namespace CoScheduling.Core.DAL
             }*/
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT TOP 1 * FROM LHF.T_PUB_SATELLITEORBIT ");
+            strSql.Append("SELECT TOP 1 * FROM T_PUB_SATELLITEORBIT ");
             strSql.Append(" WHERE SAT_ID=" + SAT_ID);
             strSql.Append(" AND SAT_ORBITDATE<='" + time.ToString("yyyy-MM-dd HH:mm:ss") + "'");
             strSql.Append(" ORDER BY SAT_ORBITDATE DESC");
@@ -200,7 +200,7 @@ namespace CoScheduling.Core.DAL
         /// </summary>
         public List<Model.SatelliteOrbit> GetList()
         {
-            StringBuilder strSql = new StringBuilder("SELECT * FROM LHF.T_PUB_SATELLITEORBIT");
+            StringBuilder strSql = new StringBuilder("SELECT * FROM T_PUB_SATELLITEORBIT");
             using (SqlDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
             {
                 List<Model.SatelliteOrbit> lst = GetList(dr);
@@ -210,11 +210,12 @@ namespace CoScheduling.Core.DAL
 
         /// <summary>
         /// 获取所有日期
+        /// 
         /// </summary>
         /// <returns></returns>
         public List<DateTime> GetDate()
         {
-            StringBuilder strSql = new StringBuilder("SELECT DISTINCT SAT_ORBITDATE FROM LHF.T_PUB_SATELLITEORBIT");
+            StringBuilder strSql = new StringBuilder("SELECT DISTINCT SAT_ORBITDATE FROM T_PUB_SATELLITEORBIT");
             strSql.Append(" ORDER BY SAT_ORBITDATE DESC");
             using (SqlDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString()))
             {
@@ -234,7 +235,7 @@ namespace CoScheduling.Core.DAL
         /// <returns></returns>
         public DateTime GetNearestDate(DateTime date)
         {
-            StringBuilder strSql = new StringBuilder("SELECT MAX(SAT_ORBITDATE) FROM LHF.T_PUB_SATELLITEORBIT");
+            StringBuilder strSql = new StringBuilder("SELECT MAX(SAT_ORBITDATE) FROM T_PUB_SATELLITEORBIT");
             strSql.Append(" WHERE SAT_ORBITDATE<=@in_SAT_ORBITDATE");
             SqlParameter[] cmdParms = new SqlParameter[]{
 				new SqlParameter("@in_SAT_ORBITDATE", SqlDbType.DateTime)};
@@ -246,7 +247,7 @@ namespace CoScheduling.Core.DAL
         /// </summary>
         public int GetCount(string condition)
         {
-            return DbHelperSQL.GetCount("LHF.T_PUB_SATELLITEORBIT", condition);
+            return DbHelperSQL.GetCount("T_PUB_SATELLITEORBIT", condition);
         }
         #region 对相关其他表操作
         /// <summary>
@@ -256,7 +257,7 @@ namespace CoScheduling.Core.DAL
         public int ClearPrivateOrbit()
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("DELETE FROM LHF.T_PUB_NEWORBIT ");
+            strSql.Append("DELETE FROM T_PUB_NEWORBIT ");
             return DbHelperSQL.ExecuteSql(strSql.ToString());
         }
         /// <summary>
@@ -265,7 +266,7 @@ namespace CoScheduling.Core.DAL
         public int AddtoPrivate(Model.SatelliteOrbit model)
         {
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("INSERT INTO LHF.T_PUB_NEWORBIT(");
+            strSql.Append("INSERT INTO T_PUB_NEWORBIT(");
             strSql.Append("SAT_ID,SAT_ORBITEPOCH,SAT_MEANMOTION,SAT_ECCENTRICITY,SAT_INCLINATION,SAT_ARGOFPERIGEE,SAT_RAAN,SAT_MEANANOMALY,SAT_MEANMOTIONDOT,SAT_MEANMOTIONDOTDOT,SAT_BSTAR)");
             strSql.Append(" VALUES (");
             strSql.Append("@in_SAT_ID,@in_SAT_ORBITEPOCH,@in_SAT_MEANMOTION,@in_SAT_ECCENTRICITY,@in_SAT_INCLINATION,@in_SAT_ARGOFPERIGEE,@in_SAT_RAAN,@in_SAT_MEANANOMALY,@in_SAT_MEANMOTIONDOT,@in_SAT_MEANMOTIONDOTDOT,@in_SAT_BSTAR)");

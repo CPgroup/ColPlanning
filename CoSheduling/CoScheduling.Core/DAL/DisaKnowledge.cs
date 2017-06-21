@@ -27,7 +27,7 @@ namespace CoScheduling.Core.DAL
         //构造数据库的连接语句
         public DisaKnowledge()
         {
-            connectionString = @"server=(local);database=disas_knowledge; User=sa; Password=lhf2017 ";//建立的时候就确定了，连接数据库的路径
+            connectionString = @"server=(local);database=disas_knowledge; User=sa; Password=123 ";//建立的时候就确定了，连接数据库的路径
         }
         //public decimal taskid = "";
 

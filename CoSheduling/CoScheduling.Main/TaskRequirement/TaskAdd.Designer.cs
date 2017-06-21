@@ -47,14 +47,8 @@
             this.txtTaskName = new System.Windows.Forms.TextBox();
             this.ButtonAdd = new System.Windows.Forms.Button();
             this.groupBox_ObsRegion = new System.Windows.Forms.GroupBox();
-            this.txtMinLon = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtMaxLat = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtMaxLon = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtMinLat = new System.Windows.Forms.TextBox();
+            this.txtTaskRegion = new System.Windows.Forms.TextBox();
             this.txtObsFre = new System.Windows.Forms.TextBox();
             this.txtResTime = new System.Windows.Forms.TextBox();
             this.txtSpaRes = new System.Windows.Forms.TextBox();
@@ -89,7 +83,7 @@
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARC);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_MIR);
             this.groupBox_SensorTypes.Controls.Add(this.checkBox_SARX);
-            this.groupBox_SensorTypes.Location = new System.Drawing.Point(298, 201);
+            this.groupBox_SensorTypes.Location = new System.Drawing.Point(295, 115);
             this.groupBox_SensorTypes.Name = "groupBox_SensorTypes";
             this.groupBox_SensorTypes.Size = new System.Drawing.Size(242, 201);
             this.groupBox_SensorTypes.TabIndex = 139;
@@ -230,14 +224,14 @@
             "海上溢油",
             "暴恐事件",
             "人群聚集"});
-            this.comboBox_DisaType.Location = new System.Drawing.Point(376, 154);
+            this.comboBox_DisaType.Location = new System.Drawing.Point(373, 68);
             this.comboBox_DisaType.Name = "comboBox_DisaType";
             this.comboBox_DisaType.Size = new System.Drawing.Size(154, 20);
             this.comboBox_DisaType.TabIndex = 138;
             // 
             // ButtonReturn
             // 
-            this.ButtonReturn.Location = new System.Drawing.Point(467, 417);
+            this.ButtonReturn.Location = new System.Drawing.Point(462, 355);
             this.ButtonReturn.Name = "ButtonReturn";
             this.ButtonReturn.Size = new System.Drawing.Size(75, 23);
             this.ButtonReturn.TabIndex = 137;
@@ -246,7 +240,7 @@
             // 
             // ButtonReset
             // 
-            this.ButtonReset.Location = new System.Drawing.Point(385, 417);
+            this.ButtonReset.Location = new System.Drawing.Point(380, 355);
             this.ButtonReset.Name = "ButtonReset";
             this.ButtonReset.Size = new System.Drawing.Size(75, 23);
             this.ButtonReset.TabIndex = 136;
@@ -262,7 +256,7 @@
             // 
             // ButtonAdd
             // 
-            this.ButtonAdd.Location = new System.Drawing.Point(304, 417);
+            this.ButtonAdd.Location = new System.Drawing.Point(299, 355);
             this.ButtonAdd.Name = "ButtonAdd";
             this.ButtonAdd.Size = new System.Drawing.Size(75, 23);
             this.ButtonAdd.TabIndex = 134;
@@ -272,84 +266,30 @@
             // 
             // groupBox_ObsRegion
             // 
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label14);
             this.groupBox_ObsRegion.Controls.Add(this.label3);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLat);
-            this.groupBox_ObsRegion.Controls.Add(this.label13);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMaxLon);
-            this.groupBox_ObsRegion.Controls.Add(this.label12);
-            this.groupBox_ObsRegion.Controls.Add(this.txtMinLat);
-            this.groupBox_ObsRegion.Location = new System.Drawing.Point(27, 244);
+            this.groupBox_ObsRegion.Controls.Add(this.txtTaskRegion);
+            this.groupBox_ObsRegion.Location = new System.Drawing.Point(36, 316);
             this.groupBox_ObsRegion.Name = "groupBox_ObsRegion";
-            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 158);
+            this.groupBox_ObsRegion.Size = new System.Drawing.Size(255, 87);
             this.groupBox_ObsRegion.TabIndex = 133;
             this.groupBox_ObsRegion.TabStop = false;
             this.groupBox_ObsRegion.Text = "观测区域范围";
             // 
-            // txtMinLon
-            // 
-            this.txtMinLon.Location = new System.Drawing.Point(89, 20);
-            this.txtMinLon.Name = "txtMinLon";
-            this.txtMinLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLon.TabIndex = 21;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(13, 136);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(65, 12);
-            this.label14.TabIndex = 28;
-            this.label14.Text = "最大纬度：";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 26);
+            this.label3.Location = new System.Drawing.Point(18, 61);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "最小经度：";
+            this.label3.Size = new System.Drawing.Size(113, 12);
+            this.label3.TabIndex = 125;
+            this.label3.Text = "输入格式：Lon,Lat;";
             // 
-            // txtMaxLat
+            // txtTaskRegion
             // 
-            this.txtMaxLat.Location = new System.Drawing.Point(89, 133);
-            this.txtMaxLat.Name = "txtMaxLat";
-            this.txtMaxLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLat.TabIndex = 24;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 101);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(65, 12);
-            this.label13.TabIndex = 27;
-            this.label13.Text = "最小纬度：";
-            // 
-            // txtMaxLon
-            // 
-            this.txtMaxLon.Location = new System.Drawing.Point(89, 58);
-            this.txtMaxLon.Name = "txtMaxLon";
-            this.txtMaxLon.Size = new System.Drawing.Size(154, 21);
-            this.txtMaxLon.TabIndex = 22;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 61);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(65, 12);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "最大经度：";
-            // 
-            // txtMinLat
-            // 
-            this.txtMinLat.Location = new System.Drawing.Point(89, 95);
-            this.txtMinLat.Name = "txtMinLat";
-            this.txtMinLat.Size = new System.Drawing.Size(154, 21);
-            this.txtMinLat.TabIndex = 23;
+            this.txtTaskRegion.Location = new System.Drawing.Point(20, 27);
+            this.txtTaskRegion.Name = "txtTaskRegion";
+            this.txtTaskRegion.Size = new System.Drawing.Size(213, 21);
+            this.txtTaskRegion.TabIndex = 21;
             // 
             // txtObsFre
             // 
@@ -360,7 +300,7 @@
             // 
             // txtResTime
             // 
-            this.txtResTime.Location = new System.Drawing.Point(376, 109);
+            this.txtResTime.Location = new System.Drawing.Point(373, 23);
             this.txtResTime.Name = "txtResTime";
             this.txtResTime.Size = new System.Drawing.Size(154, 21);
             this.txtResTime.TabIndex = 131;
@@ -383,7 +323,7 @@
             // 
             this.dateEndTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateEndTime.Location = new System.Drawing.Point(376, 69);
+            this.dateEndTime.Location = new System.Drawing.Point(116, 289);
             this.dateEndTime.Name = "dateEndTime";
             this.dateEndTime.Size = new System.Drawing.Size(154, 21);
             this.dateEndTime.TabIndex = 128;
@@ -392,7 +332,7 @@
             // 
             this.dateStartTime.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             this.dateStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateStartTime.Location = new System.Drawing.Point(376, 23);
+            this.dateStartTime.Location = new System.Drawing.Point(116, 243);
             this.dateStartTime.Name = "dateStartTime";
             this.dateStartTime.Size = new System.Drawing.Size(154, 21);
             this.dateStartTime.TabIndex = 127;
@@ -425,7 +365,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(305, 112);
+            this.label8.Location = new System.Drawing.Point(302, 26);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(65, 12);
             this.label8.TabIndex = 123;
@@ -434,7 +374,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(305, 69);
+            this.label7.Location = new System.Drawing.Point(34, 292);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(65, 12);
             this.label7.TabIndex = 122;
@@ -443,7 +383,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(305, 26);
+            this.label6.Location = new System.Drawing.Point(34, 249);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 121;
@@ -452,7 +392,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(305, 157);
+            this.label5.Location = new System.Drawing.Point(302, 71);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 120;
@@ -489,7 +429,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 462);
+            this.ClientSize = new System.Drawing.Size(568, 415);
             this.Controls.Add(this.groupBox_SensorTypes);
             this.Controls.Add(this.comboBox_DisaType);
             this.Controls.Add(this.ButtonReturn);
@@ -546,14 +486,7 @@
         private System.Windows.Forms.TextBox txtTaskName;
         private System.Windows.Forms.Button ButtonAdd;
         private System.Windows.Forms.GroupBox groupBox_ObsRegion;
-        private System.Windows.Forms.TextBox txtMinLon;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtMaxLat;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txtMaxLon;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox txtMinLat;
+        private System.Windows.Forms.TextBox txtTaskRegion;
         private System.Windows.Forms.TextBox txtObsFre;
         private System.Windows.Forms.TextBox txtResTime;
         private System.Windows.Forms.TextBox txtSpaRes;
@@ -570,5 +503,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
     }
 }

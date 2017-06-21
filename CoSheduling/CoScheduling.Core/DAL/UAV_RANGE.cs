@@ -28,7 +28,7 @@ namespace CoScheduling.Core.DAL
         //构造数据库的连接语句
         public UAV_RANGE()
         {
-            connectionString = @"server=(local);database=CoMonitoring; User=sa; Password=lhf2017 ";//建立的时候就确定了，连接数据库的路径
+            connectionString = @"server=(local);database=CoMonitoring; User=sa; Password=123 ";//建立的时候就确定了，连接数据库的路径
         }
         
         /// <summary>
@@ -251,7 +251,7 @@ namespace CoScheduling.Core.DAL
         /// 获取全部记录
         /// </summary>
         /// <returns></returns>
-        public List<CoScheduling.Core.Model.UAV_RANGE> GetList()
+        public static List<CoScheduling.Core.Model.UAV_RANGE> GetList()
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("Select * From UAV_RANGE order by PLATFORM_ID desc");
@@ -317,7 +317,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由一行数据得到一个实体,还有很多问题，什么时候用try catch,什么时候不用
         /// </summary>
-        private Model.UAV_RANGE GetModel(DbDataReader dr)
+        private static Model.UAV_RANGE GetModel(DbDataReader dr)
         {
 
             CoScheduling.Core.Model.UAV_RANGE model = new CoScheduling.Core.Model.UAV_RANGE();
@@ -346,7 +346,7 @@ namespace CoScheduling.Core.DAL
         /// <summary>
         /// 由DbDataReader得到泛型数据列表
         /// </summary>
-        private List<Model.UAV_RANGE> GetList(DbDataReader dr)
+        private static List<Model.UAV_RANGE> GetList(DbDataReader dr)
         {
             List<Model.UAV_RANGE> lst = new List<Model.UAV_RANGE>();
             while (dr.Read())

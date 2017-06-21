@@ -45,7 +45,10 @@ namespace CoScheduling.Core.Model
 		/// <param name="isUse">是否使用</param>
 		/// <param name="company">所属公司</param>
 		/// <param name="type">无人机类型</param>
-		public UAV(int iD, string model, double size, string loads, string windResistance, string rainResistance, double radius, double endurance, double speed, double height, double voyage, string takeoffMode, string recycleMode, double UnfoldTime, double FoldTime, string isUnload, double refulTime, string camera, Boolean isUse, string company, string type)
+        ///         /// <param name="Longitude">出发位置经度</param>
+        ///  /// <param name="Latitude">出发纬度</param>
+        ///  <param name="SwathWidth">幅宽</param>
+        public UAV(int iD, string model, double size, string loads, string windResistance, string rainResistance, double radius, double endurance, double speed, double height, double voyage, string takeoffMode, string recycleMode, double UnfoldTime, double FoldTime, string isUnload, double refulTime, string camera, Boolean isUse, string company, string type, decimal Longitude, decimal Latitude, decimal SwathWidth)
 		{
 			_iD = iD;
 			_model = model;
@@ -68,6 +71,9 @@ namespace CoScheduling.Core.Model
 			_isUse = isUse;
 			_company = company;
 			_type = type;
+             _Longitude = Longitude;
+            _Latitude = Latitude;
+            _SwathWidth = SwathWidth;
 		}
 
 		#region Model
@@ -92,6 +98,9 @@ namespace CoScheduling.Core.Model
 		private Boolean _isUse;
 		private string _company;
 		private string _type;
+         private decimal _Longitude;
+        private decimal _Latitude;
+        private decimal _SwathWidth;
 		/// <summary>
 		/// ID
 		/// </summary>
@@ -260,6 +269,21 @@ namespace CoScheduling.Core.Model
 			set { _type = value; }
 			get { return _type; }
 		}
+         public decimal Longitude
+        {
+            set { _Longitude = value; }
+            get { return _Longitude; }
+        }
+        public decimal Latitude
+        {
+            set { _Latitude = value; }
+            get { return _Latitude; }
+        }
+        public decimal SwathWidth
+        {
+            set { _SwathWidth = value; }
+            get { return _SwathWidth; }
+        }
 		#endregion Model
 	}
 }

@@ -28,7 +28,6 @@ namespace CoScheduling.Core.DAL
         public TaskRequirement()
         {
             connectionString = PubConstant.GetConnectionString("");
-            //connectionString = @"server=HYCSIM51DM4IL8B;database=CoMonitoring; integrated security=SSPI ";//建立的时候就确定了，连接数据库的路径
         }
         /// <summary>
         /// 任务需求记录添加函数
@@ -39,9 +38,9 @@ namespace CoScheduling.Core.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("INSERT INTO TaskRequirements_general(");
-            strSql.Append("TaskID,TaskName,SubmissionTime,TaskPriority,DisasterType,TaskStage,StartTime,EndTime,RespondingTime,SensorNeeded,ObservationFrequency,Weather,Windlevel,MinTemperature,MaxTemperature,RoadAccessability,SpaceResolution,Datavolume,OccurTime)");
+            strSql.Append("TaskID,TaskName,SubmissionTime,TaskPriority,DisasterType,TaskStage,StartTime,EndTime,RespondingTime,SensorNeeded,ObservationFrequency,Weather,Windlevel,MinTemperature,MaxTemperature,RoadAccessability,SpaceResolution,Datavolume,OccurTime,PolygonString)");
             strSql.Append(" VALUES (");
-            strSql.Append("@in_TaskID,@in_TaskName,@in_SubmissionTime,@in_TaskPriority,@in_DisasterType,@in_TaskStage,@in_StartTime,@in_EndTime,@in_RespondingTime,@in_SensorNeeded,@in_ObservationFrequency,@in_Weather,@in_Windlevel,@in_MinTemperature,@in_MaxTemperature,@in_RoadAccessability,@in_SpaceResolution,@in_Datavolume,@in_OccurTime)");
+            strSql.Append("@in_TaskID,@in_TaskName,@in_SubmissionTime,@in_TaskPriority,@in_DisasterType,@in_TaskStage,@in_StartTime,@in_EndTime,@in_RespondingTime,@in_SensorNeeded,@in_ObservationFrequency,@in_Weather,@in_Windlevel,@in_MinTemperature,@in_MaxTemperature,@in_RoadAccessability,@in_SpaceResolution,@in_Datavolume,@in_OccurTime,@in_PolygonString)");
             SqlParameter[] cmdParms = new SqlParameter[]{
 				new SqlParameter("@in_TaskID", SqlDbType.Decimal),
                 new SqlParameter("@in_TaskName", SqlDbType.NVarChar),
@@ -61,7 +60,8 @@ namespace CoScheduling.Core.DAL
 				new SqlParameter("@in_RoadAccessability", SqlDbType.Bit),
 				new SqlParameter("@in_SpaceResolution", SqlDbType.Decimal),
 				new SqlParameter("@in_Datavolume", SqlDbType.Decimal),
-				new SqlParameter("@in_OccurTime", SqlDbType.DateTime)};
+				new SqlParameter("@in_OccurTime", SqlDbType.DateTime),
+                new SqlParameter("@in_PolygonString", SqlDbType.NVarChar)};
             
             cmdParms[0].Value = model.TaskID;
             cmdParms[1].Value = model.TaskName;
@@ -82,6 +82,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[16].Value = model.SpaceResolution;
             cmdParms[17].Value = model.Datavolume;
             cmdParms[18].Value = model.OccurTime;
+            cmdParms[19].Value = model.PolygonString;
 
             return DbHelperSQL.ExecuteSql(strSql.ToString(), cmdParms);//使用更改过的执行语句
         }
@@ -112,7 +113,8 @@ namespace CoScheduling.Core.DAL
             strSql.Append("RoadAccessability=@in_RoadAccessability,");
             strSql.Append("SpaceResolution=@in_SpaceResolution,");
             strSql.Append("Datavolume=@in_Datavolume,");
-            strSql.Append("OccurTime=@in_OccurTime");
+            strSql.Append("OccurTime=@in_OccurTime,");
+            strSql.Append("PolygonString=@in_PolygonString");
             strSql.Append(" WHERE TaskID=@in_TaskID");
             SqlParameter[] cmdParms = new SqlParameter[]{
 				new SqlParameter("@in_TaskID", SqlDbType.Decimal),
@@ -133,7 +135,8 @@ namespace CoScheduling.Core.DAL
 				new SqlParameter("@in_RoadAccessability", SqlDbType.Bit),
 				new SqlParameter("@in_SpaceResolution", SqlDbType.Decimal),
 				new SqlParameter("@in_Datavolume", SqlDbType.Decimal),
-				new SqlParameter("@in_OccurTime", SqlDbType.DateTime)};
+				new SqlParameter("@in_OccurTime", SqlDbType.DateTime),
+                new SqlParameter("@in_PolygonString", SqlDbType.NVarChar)};
 
             cmdParms[0].Value = model.TaskID;
             cmdParms[1].Value = model.TaskName;
@@ -153,6 +156,7 @@ namespace CoScheduling.Core.DAL
             cmdParms[15].Value = model.RoadAccessability;
             cmdParms[16].Value = model.SpaceResolution;
             cmdParms[18].Value = model.OccurTime;
+            cmdParms[19].Value = model.PolygonString;
             return DbHelperSQL.ExecuteSql(strSql.ToString(), cmdParms);
         }
         /// <summary>
@@ -335,6 +339,14 @@ namespace CoScheduling.Core.DAL
             }
             try
             {
+                model.SpaceResolution = Convert.ToDecimal(dr["SpaceResolution"]);
+            }
+            catch
+            {
+                model.SpaceResolution = Convert.ToDecimal("-1");
+            }
+            try
+            {
                 model.Weather = Convert.ToString(dr["Weather"]);
             }
             catch
@@ -373,14 +385,7 @@ namespace CoScheduling.Core.DAL
             {
                 //model.RoadAccessability = Convert.ToBoolean("-1");
             }
-            try
-            {
-                model.SpaceResolution = Convert.ToDecimal(dr["SpaceResolution"]);
-            }
-            catch
-            {
-                model.SpaceResolution = Convert.ToDecimal("-1");
-            }
+            
             try
             {
                 model.Datavolume = Convert.ToDecimal(dr["Datavolume"]);
@@ -397,7 +402,14 @@ namespace CoScheduling.Core.DAL
             {
                 model.OccurTime = Convert.ToDateTime("2013-01-01");
             }
-
+            try
+            {
+                model.TaskName=Convert.ToString(dr["TaskName"]);
+            }
+            catch
+            {
+                model.TaskName = "未命名任务";
+            }
             try
             {
                 model.SensorNeeded = Convert.ToString(dr["SensorNeeded"]);
@@ -406,6 +418,9 @@ namespace CoScheduling.Core.DAL
             {
                 model.SensorNeeded = "可见光";
             }
+            model.PolygonString = Convert.ToString(dr["PolygonString"]);
+
+            
             return model;
         }
 

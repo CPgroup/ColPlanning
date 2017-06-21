@@ -23,8 +23,8 @@ namespace CoScheduling.Main.TaskRequirement
         CoScheduling.Core.Model.TaskRequirement task_requirement = new Core.Model.TaskRequirement();
         CoScheduling.Core.DAL.TaskRequirement dal_task_requirement = new Core.DAL.TaskRequirement();
         //任务观测区域实体类和访问类对象的建立
-        CoScheduling.Core.Model.TaskObsRegion task_obsregion = new Core.Model.TaskObsRegion();
-        CoScheduling.Core.DAL.TaskObsRegion dal_task_obsregion = new Core.DAL.TaskObsRegion();
+        //CoScheduling.Core.Model.TaskObsRegion task_obsregion = new Core.Model.TaskObsRegion();
+        //CoScheduling.Core.DAL.TaskObsRegion dal_task_obsregion = new Core.DAL.TaskObsRegion();
         //灾害知识实体类和访问类的建立
         CoScheduling.Core.Model.DisaKnowledge disa_knowledge = new Core.Model.DisaKnowledge();
         CoScheduling.Core.DAL.DisaKnowledge dal_disa_knowledge = new Core.DAL.DisaKnowledge();
@@ -155,7 +155,7 @@ namespace CoScheduling.Main.TaskRequirement
 
         private void ButtonGenerate_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtMinLon.Text) || string.IsNullOrEmpty(this.txtMinLon.Text) ||
+            if (string.IsNullOrEmpty(this.txtTaskRegion.Text) ||
                 this.dateOccurTime.Checked == false || this.comboBox_DisaType.SelectedItem.ToString() == "ALL")
             {
                 MessageBox.Show("请输入完整的参数！");
@@ -184,7 +184,7 @@ namespace CoScheduling.Main.TaskRequirement
                 int TaskNum = DSTaskIDQueryResult.Tables["TaskRequirements_general"].Rows.Count+1;
                 string strNum = TaskNum.ToString().PadLeft(2, '0');
                 task_requirement.TaskID = Convert.ToDecimal(strTaskID + strNum);
-                task_obsregion.TaskID = task_requirement.TaskID;
+                
                 //提交时间
                 task_requirement.SubmissionTime = dt;
                 //任务名称
@@ -226,19 +226,9 @@ namespace CoScheduling.Main.TaskRequirement
                 }
 
                 //观测区域的生成
-                task_obsregion.MinLon = Convert.ToDecimal(this.txtMinLon.Text);
-                task_obsregion.MinLat = Convert.ToDecimal(this.txtMinLat.Text);
-                if (!string.IsNullOrEmpty(this.txtMaxLon.Text) && !string.IsNullOrEmpty(this.txtMaxLat.Text))
-                {
-                    task_obsregion.MaxLon = Convert.ToDecimal(this.txtMaxLon.Text);
-                    task_obsregion.MaxLat = Convert.ToDecimal(this.txtMaxLat.Text);
-                }
-                else
-                {
-                    task_obsregion.MaxLon = task_obsregion.MinLon;
-                    task_obsregion.MaxLat = task_obsregion.MinLat;
-                }
+                task_requirement.PolygonString = this.txtTaskRegion.Text;
 
+                //传感器类型生成
                 task_requirement.DisasterType = this.comboBox_DisaType.SelectedItem.ToString();
                 //根据灾害类型获取所需要的传感器类型和最大空间分辨率
                 disa_knowledge = dal_disa_knowledge.GetModel(DisasTypeID);
@@ -282,8 +272,8 @@ namespace CoScheduling.Main.TaskRequirement
                 this.txtResTime.Text = task_requirement.RespondingTime.ToString();
                 //组合框中成员的选中
                 this.comboBox_DisaType.SelectedIndex = Convert.ToInt32(DisasTypeID);
-                this.txtMaxLat.Text = task_obsregion.MaxLat.ToString();
-                this.txtMaxLon.Text = task_obsregion.MaxLon.ToString();
+                this.txtTaskRegion.Text = task_requirement.PolygonString;
+
                 //遥感数据类型的选中显示
                 string[] SensorsType =task_requirement.SensorNeeded.Split(' ');//按空格分隔各种传感器类型
                 foreach (Control control in groupBox_SensorTypes.Controls)
@@ -317,7 +307,6 @@ namespace CoScheduling.Main.TaskRequirement
             try
             {
                 dal_task_requirement.AddRecord(task_requirement);
-                dal_task_obsregion.Add(task_obsregion);
                 MessageBox.Show("任务记录添加成功！");
             }
             catch (Exception es)

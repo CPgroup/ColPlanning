@@ -38,7 +38,7 @@ namespace CoScheduling.Core.Model
         
         public TaskRequirement(decimal TaskID,string TaskName,DateTime SubmissionTime,decimal TaskPriority,string DisasterType,string TaskStage,
             DateTime StartTime,DateTime EndTime,decimal RespondingTime,string SensorNeeded,decimal ObservationFrequency,string Weather,decimal Windlevel,
-            decimal MinTemperature,decimal MaxTemperature,bool RoadAccessability,decimal SpaceResolution,decimal Datavolume,DateTime OccurTime)
+            decimal MinTemperature,decimal MaxTemperature,bool RoadAccessability,decimal SpaceResolution,decimal Datavolume,DateTime OccurTime,string PolygonString)
         {
             _TaskID = TaskID;
             _TaskName = TaskName;
@@ -59,6 +59,7 @@ namespace CoScheduling.Core.Model
             _SpaceResolution = SpaceResolution;
             _Datavolume = Datavolume;
             _OccurTime = OccurTime;
+            _PolygonString = PolygonString;
         }
 
         #region Model
@@ -81,6 +82,8 @@ namespace CoScheduling.Core.Model
         private decimal _SpaceResolution;
         private decimal _Datavolume;
         private DateTime _OccurTime;
+        private string _PolygonString;
+        
         
         //定义各成员变量的赋值和获取值的函数
         public decimal TaskID
@@ -177,6 +180,12 @@ namespace CoScheduling.Core.Model
         {
             set { _OccurTime = value; }
             get { return _OccurTime; }
+        }
+
+        public string PolygonString
+        {
+            set { _PolygonString = value; }
+            get { return _PolygonString; }
         }
         #endregion Model
 

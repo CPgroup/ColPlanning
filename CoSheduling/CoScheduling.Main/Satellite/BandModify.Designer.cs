@@ -31,9 +31,6 @@
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.ButtonModify = new System.Windows.Forms.Button();
             this.txtSNR = new System.Windows.Forms.TextBox();
-            this.txtGeometryResolution = new System.Windows.Forms.TextBox();
-            this.txtDistanceResolution = new System.Windows.Forms.TextBox();
-            this.txtAzimuResolution = new System.Windows.Forms.TextBox();
             this.comboBoxPolar = new System.Windows.Forms.ComboBox();
             this.txtBandWidth = new System.Windows.Forms.TextBox();
             this.txtBandCenter = new System.Windows.Forms.TextBox();
@@ -44,9 +41,6 @@
             this.txtBandID = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -84,27 +78,6 @@
             this.txtSNR.Name = "txtSNR";
             this.txtSNR.Size = new System.Drawing.Size(123, 21);
             this.txtSNR.TabIndex = 113;
-            // 
-            // txtGeometryResolution
-            // 
-            this.txtGeometryResolution.Location = new System.Drawing.Point(407, 220);
-            this.txtGeometryResolution.Name = "txtGeometryResolution";
-            this.txtGeometryResolution.Size = new System.Drawing.Size(121, 21);
-            this.txtGeometryResolution.TabIndex = 112;
-            // 
-            // txtDistanceResolution
-            // 
-            this.txtDistanceResolution.Location = new System.Drawing.Point(407, 179);
-            this.txtDistanceResolution.Name = "txtDistanceResolution";
-            this.txtDistanceResolution.Size = new System.Drawing.Size(121, 21);
-            this.txtDistanceResolution.TabIndex = 111;
-            // 
-            // txtAzimuResolution
-            // 
-            this.txtAzimuResolution.Location = new System.Drawing.Point(407, 137);
-            this.txtAzimuResolution.Name = "txtAzimuResolution";
-            this.txtAzimuResolution.Size = new System.Drawing.Size(121, 21);
-            this.txtAzimuResolution.TabIndex = 110;
             // 
             // comboBoxPolar
             // 
@@ -194,33 +167,6 @@
             this.label12.Size = new System.Drawing.Size(53, 12);
             this.label12.TabIndex = 100;
             this.label12.Text = "信噪比：";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(299, 220);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(77, 12);
-            this.label11.TabIndex = 99;
-            this.label11.Text = "空间分辨率：";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(299, 179);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(77, 12);
-            this.label10.TabIndex = 98;
-            this.label10.Text = "距离分辨率：";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(299, 140);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(77, 12);
-            this.label9.TabIndex = 97;
-            this.label9.Text = "方位分辨率：";
             // 
             // label7
             // 
@@ -320,9 +266,6 @@
             this.Controls.Add(this.ButtonCancel);
             this.Controls.Add(this.ButtonModify);
             this.Controls.Add(this.txtSNR);
-            this.Controls.Add(this.txtGeometryResolution);
-            this.Controls.Add(this.txtDistanceResolution);
-            this.Controls.Add(this.txtAzimuResolution);
             this.Controls.Add(this.comboBoxPolar);
             this.Controls.Add(this.txtBandWidth);
             this.Controls.Add(this.txtBandCenter);
@@ -333,9 +276,6 @@
             this.Controls.Add(this.txtBandID);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -357,9 +297,6 @@
         private System.Windows.Forms.Button ButtonCancel;
         private System.Windows.Forms.Button ButtonModify;
         private System.Windows.Forms.TextBox txtSNR;
-        private System.Windows.Forms.TextBox txtGeometryResolution;
-        private System.Windows.Forms.TextBox txtDistanceResolution;
-        private System.Windows.Forms.TextBox txtAzimuResolution;
         private System.Windows.Forms.ComboBox comboBoxPolar;
         private System.Windows.Forms.TextBox txtBandWidth;
         private System.Windows.Forms.TextBox txtBandCenter;
@@ -370,9 +307,6 @@
         private System.Windows.Forms.TextBox txtBandID;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;

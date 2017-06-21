@@ -74,7 +74,7 @@ namespace CoScheduling.Main.TaskRequirement
                 try
                 {
                     dal_taskrequirement.Delete(Convert.ToDecimal(task_id));
-                    dal_taskobsregion.Delete(Convert.ToDecimal(task_id));
+                    //dal_taskobsregion.Delete(Convert.ToDecimal(task_id));
                 }
                 catch (System.Exception ex)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Text;
 using System.IO;
@@ -24,6 +25,8 @@ using ESRI.ArcGIS.NetworkAnalysis;
 using ESRI.ArcGIS.NetworkAnalyst;
 using ESRI.ArcGIS.AnalysisTools;
 using CP.WinFormsUI;
+using CoScheduling.Core.DBUtility;
+using System.Data.SqlClient;
 
 namespace CoScheduling.Main
 {
@@ -202,6 +205,7 @@ namespace CoScheduling.Main
 
         #endregion
         #endregion
+        #region 资源、任务管理窗口
 
         public static void TaskManage()
         {
@@ -269,28 +273,29 @@ namespace CoScheduling.Main
             newform.Show();
         }
 
-        
+
+
         public static void AEROSHIPManage()
         {
             AEROSHIP.AEROSHIPManage newform = new AEROSHIP.AEROSHIPManage();
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
-       
+
         public static void AEROSHIPQuery()
         {
             AEROSHIP.AEROSHIPQuery newform = new AEROSHIP.AEROSHIPQuery();
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
-       
+
         public static void ILLUSTRATEDCARManage()
         {
             ILLUSTRATEDCAR.ILLUSTRATEDCARManage newform = new ILLUSTRATEDCAR.ILLUSTRATEDCARManage();
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
-     
+
         public static void ILLUSTRATEDCARQuery()
         {
             ILLUSTRATEDCAR.ILLUSTRATEDCARQuery newform = new ILLUSTRATEDCAR.ILLUSTRATEDCARQuery();
@@ -304,7 +309,28 @@ namespace CoScheduling.Main
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
-       
+        public static void SatOrbit()
+        {
+            System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
+            //设置外部程序名  
+            Info.FileName = "SatOrbit.exe";
+            //设置外部程序工作目录  
+            Info.WorkingDirectory = System.Windows.Forms.Application.StartupPath;
+            //最小化方式启动
+            //Info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Minimized;
+            //声明一个程序类  
+            System.Diagnostics.Process Proc;
+            try
+            {
+                Proc = System.Diagnostics.Process.Start(Info);
+                System.Threading.Thread.Sleep(500);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                return;
+            }
+        }
+
         //public static void SPYCAMQuery()
         //{
         //    SPYCAM_RANGE.SPYCAMQuery newform = new SPYCAM_RANGE.SPYCAMQuery();
@@ -330,6 +356,8 @@ namespace CoScheduling.Main
             newform.StartPosition = FormStartPosition.CenterScreen;
             newform.Show();
         }
+        #endregion
+
         #region 任务规划调度
 
         #region 任务规划
@@ -353,6 +381,176 @@ namespace CoScheduling.Main
             //matlab.Execute("clear all");//<span style="color:#ff6666;">//这条语句也很重要，先注释掉，下面讲解</span> 
             ////MWNumericArray ReturnMadt = new MWNumericArray(MWArrayComplexity.Real, 1, 1);//收益矩阵 行：资源  列：元任务 
             #endregion
+            //数据库连接字符串(web.config来配置)，可以动态更改connectionString支持多数据库.		
+            string constr = PubConstant.GetConnectionString("");
+            SqlConnection con = new SqlConnection(constr);
+            con.Open();
+            //飞艇信息获取
+            List<CoScheduling.Core.Model.Airship> airshipList = new List<Core.Model.Airship>();//飞艇所有信息
+            #region 数据库中获取飞艇信息
+            List<CoScheduling.Core.Model.AEROSHIP_RANGE> airshipRangeList = new List<Core.Model.AEROSHIP_RANGE>();//飞艇平台信息
+            airshipRangeList = CoScheduling.Core.DAL.AEROSHIP_RANGE.GetList();//可添加where语句
+
+            //飞艇位置信息 从state表中获取
+            for (int i = 0; i < airshipRangeList.Count; i++)
+            {
+                decimal AirshipID = airshipRangeList[i].PLATFORM_ID;//飞艇id
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("Select * From STATE ");
+                strSql.Append(" Where PLATFORM_ID=" + AirshipID);
+                CoScheduling.Core.Model.STATE AirShipstate = new Core.Model.STATE();
+                DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                if (dr.HasRows)//有结果
+                {
+                    dr.Read();
+                    AirShipstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
+                    AirShipstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
+                }
+
+                //幅宽信息 先确定sensorid  在通过sensorid找bandid
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + AirshipID);
+                DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                SensorDr.Read();
+                decimal AirShipSensorID = Convert.ToDecimal(SensorDr["SensorID"]);
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_BAND_MODE Where SensorID=" + AirShipSensorID);
+                DbDataReader BandDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                BandDr.Read();
+                decimal AirShipWidth = Convert.ToDecimal(BandDr["SwathWidth"]);
+
+
+                CoScheduling.Core.Model.Airship airship = new Core.Model.Airship();
+                airship.PLATFORM_ID = airshipRangeList[i].PLATFORM_ID;
+                airship.CruisingVelocity = airshipRangeList[i].CruisingVelocity;
+                airship.Longitude = AirShipstate.Longitude;
+                airship.Latitude = AirShipstate.Latitude;
+                airship.SwathWidth = AirShipWidth;
+                airshipList.Add(airship);
+
+            }
+            #endregion
+                        
+            #region 生成飞艇点shp图层
+            //路径设置
+            string strShapeFolder = System.AppDomain.CurrentDomain.BaseDirectory + "Data\\MidData";
+            string strShapeFile = "AirShipPo";
+            FileInfo fFile = new FileInfo(strShapeFolder + @"\" + strShapeFile + ".shp");
+            if (fFile.Exists)
+            {
+                DirectoryInfo fold = new DirectoryInfo(strShapeFolder);
+                FileInfo[] files = fold.GetFiles(strShapeFile + ".*");
+                foreach (FileInfo f in files)
+                {
+                    f.Delete();
+                }
+            }
+            string shapeFileFullName = strShapeFolder + "\\" + strShapeFile + ".shp";
+            IWorkspaceFactory ASWorkspaceFactory = new ShapefileWorkspaceFactory();
+            IFeatureWorkspace ASFeatureWorkspace = (IFeatureWorkspace)ASWorkspaceFactory.OpenFromFile(strShapeFolder, 0);
+            IFeatureClass ASFeatureClass;
+            if (File.Exists(shapeFileFullName))
+            {
+                ASFeatureClass = ASFeatureWorkspace.OpenFeatureClass(strShapeFile + ".shp");
+                IDataset pDataset = (IDataset)ASFeatureClass;
+                pDataset.Delete();
+            }
+            //设置字段及坐标环境
+            IFields pFields = new FieldsClass();
+            IFieldsEdit pFieldsEdit = (IFieldsEdit)pFields;
+            IField pField = new FieldClass();
+            IFieldEdit pFieldEdit = (IFieldEdit)pField;
+
+            ISpatialReferenceFactory spatialReferenceFactory = new SpatialReferenceEnvironment();
+            IProjectedCoordinateSystem pGCS = spatialReferenceFactory.CreateProjectedCoordinateSystem(2372);//80坐标CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
+            pFieldEdit.Name_2 = "SHAPE";
+            pFieldEdit.Type_2 = esriFieldType.esriFieldTypeGeometry;
+
+            IGeometryDefEdit pGeoDef = new GeometryDefClass();
+            IGeometryDefEdit pGeoDefEdit = (IGeometryDefEdit)pGeoDef;
+            pGeoDefEdit.GeometryType_2 = esriGeometryType.esriGeometryPoint;
+            pGeoDefEdit.SpatialReference_2 = pGCS; //new UnknownCoordinateSystemClass();
+            pFieldEdit.GeometryDef_2 = pGeoDef;
+            pFieldsEdit.AddField(pField);
+
+            pField = new FieldClass();
+            pFieldEdit = (IFieldEdit)pField;
+            pFieldEdit.Name_2 = "AsID";
+            pFieldEdit.Type_2 = esriFieldType.esriFieldTypeString;
+            pFieldsEdit.AddField(pField);
+            //创建shp
+            ASFeatureClass = ASFeatureWorkspace.CreateFeatureClass(strShapeFile + ".shp", pFields, null, null, esriFeatureType.esriFTSimple, "SHAPE", "");
+            for (int i = 0; i < airshipList.Count; i++)
+            {
+                IPoint ASpoint = new PointClass();
+                ASpoint = GetFlatCoordinate(Convert.ToDouble(airshipList[i].Longitude), Convert.ToDouble(airshipList[i].Latitude));  //经纬度-投影坐标 转换
+                IFeature pFeature = ASFeatureClass.CreateFeature();
+                pFeature.Shape = ASpoint;
+                pFeature.set_Value(pFeature.Fields.FindField("AsID"), airshipList[i].PLATFORM_ID.ToString());
+                pFeature.Store();
+            }
+            
+            #endregion
+
+
+
+            //无人机
+            List<CoScheduling.Core.Model.UAV> UAVList = new List<Core.Model.UAV>();//无人机所有信息
+
+            List<CoScheduling.Core.Model.UAV_RANGE> UAVRangeList = new List<Core.Model.UAV_RANGE>();//UAV平台信息
+            UAVRangeList = CoScheduling.Core.DAL.UAV_RANGE.GetList();//可添加where语句
+            //UAV当前位置信息 从state表中获取
+            for (int i = 0; i < UAVRangeList.Count; i++)
+            {
+                decimal UAVID = UAVRangeList[i].PLATFORM_ID;//飞艇id
+                StringBuilder strSql = new StringBuilder();
+                strSql.Append("Select * From STATE ");
+                strSql.Append(" Where PLATFORM_ID=" + UAVID);
+                CoScheduling.Core.Model.STATE UAVstate = new Core.Model.STATE();
+                DbDataReader dr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                if (dr.HasRows)//有结果
+                {
+                    dr.Read();
+                    UAVstate.Longitude = Convert.ToDecimal(dr["Longitude"]);//读取某个字段
+                    UAVstate.Latitude = Convert.ToDecimal(dr["Alititude"]);
+                }
+
+                //幅宽信息 先确定sensorid  在通过sensorid找bandid
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_1 Where PLATFORM_ID=" + UAVID);
+                DbDataReader SensorDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                SensorDr.Read();
+                decimal AirShipSensorID = Convert.ToDecimal(SensorDr["SensorID"]);
+                strSql.Clear();
+                strSql.Append("Select * From SENSOR_BAND_MODE Where SensorID=" + AirShipSensorID);
+                DbDataReader BandDr = DbHelperSQL.ExecuteReader(strSql.ToString());
+                BandDr.Read();
+                decimal AirShipWidth = Convert.ToDecimal(BandDr["SwathWidth"]);
+
+
+                CoScheduling.Core.Model.Airship airship = new Core.Model.Airship();
+                airship.PLATFORM_ID = airshipRangeList[i].PLATFORM_ID;
+                airship.CruisingVelocity = airshipRangeList[i].CruisingVelocity;
+                airship.Longitude = UAVstate.Longitude;
+                airship.Latitude = UAVstate.Latitude;
+                airship.SwathWidth = AirShipWidth;
+                airshipList.Add(airship);
+
+            }
+
+            //车
+
+
+
+            //图层加载
+            IFeatureLayer ASFeaturelayer = new FeatureLayerClass();
+            ASFeaturelayer.FeatureClass = ASFeatureClass;
+            ASFeaturelayer.Name = "AirShipLayer";
+            //subTaskLayer = OpenFile_LayerFile(UavToTaUnionPath);
+            Program.myMap.AddLayer(ASFeaturelayer as ILayer, 0);
+
+
+
 
 
 
@@ -6339,7 +6537,7 @@ namespace CoScheduling.Main
         /// <param name="out_features"></param>
         private static void GPCreatFishnetTool(IFeature in_features, string out_features, double length)
         {
-            
+
             Geoprocessor GP = new Geoprocessor();
 
             ESRI.ArcGIS.DataManagementTools.CreateFishnet CreatFishnetTool = new ESRI.ArcGIS.DataManagementTools.CreateFishnet();
@@ -8392,11 +8590,25 @@ namespace CoScheduling.Main
             return mindis;
         }
 
+        // 将经纬度点转换为平面坐标
+        private static IPoint GetFlatCoordinate(double x, double y)
+        {
+            //投影坐标系转换，经纬度到平面坐标
+            ISpatialReferenceFactory SRFactory = new SpatialReferenceEnvironment();
+            IProjectedCoordinateSystem flatref = SRFactory.CreateProjectedCoordinateSystem(2372);//80坐标
+            IGeographicCoordinateSystem earthref = SRFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);//输入坐标
 
+            IPoint pt = new PointClass();
+            pt.PutCoords(x, y);
+            IGeometry geo = (IGeometry)pt;
+            geo.SpatialReference = earthref;
+            geo.Project(flatref);
+            return pt;
+        }
 
         #endregion
 
-     
+
 
         #endregion
 
